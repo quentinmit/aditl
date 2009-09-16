@@ -100,7 +100,7 @@ sub getEmail {
 
     my $conn = $self->{connection};
 
-    my @row = $conn->selectrow_rray("select email from users where uid = ?", undef, $uid);
+    my @row = $conn->selectrow_array("select email from users where uid = ?", undef, $uid);
 
     return 0 unless(@row);
 
