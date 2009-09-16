@@ -35,7 +35,7 @@ $settings{"photoURL"} = $settings{"urlBase"} . "/dyn/photo";
 
 $settings{"friendLimit"} = 4;
 
-$settings{"exiftagsCommand"} = "/usr/local/bin/exiftags -a";
+$settings{"exiftagsCommand"} = "/usr/bin/exiftags -a";
 $settings{"unzip"} = "/usr/bin/unzip";
 $settings{"convert"} = "/usr/bin/convert";
 $settings{"identify"} = "/usr/bin/identify";

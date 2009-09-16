@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 
-use lib "/usr/local/aditl2/perl/lib";
+use lib "../lib";
 use Database;
 use Template;
 use Cookie;
@@ -12,11 +12,11 @@ use Utils;
 use CGI qw(-debug :standard);
 use CGI::Carp('fatalsToBrowser');
 $CGI::DISABLE_UPLOADS = 0;
-$CGI::POST_MAX=1024 * 1024 * 3; #3M
+$CGI::POST_MAX=1024 * 1024 * 20; #20M
 
 my $cgi = CGI->new();
 my $db = Database->new();
-my $status = $db->connect("aditl2");
+my $status = $db->connect(Settings::settings("dbName"));
 
 use vars qw($LOGFILE);
 $LOGFILE = Settings::settings("logDirectory") . "/phototest.log";
@@ -79,7 +79,7 @@ sub showForm {
 
     my $template = Settings::settings("templateLib") . "/phototest.html";
     my @emptylist;
-    my $html = Template::fillTemplate($template, \@emptylist);
+    my $html = Template::fillTemplate($template, [Settings::settings("urlBase")]);
     print $cgi->header();
     print $html;
 }

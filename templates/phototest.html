@@ -1,14 +1,15 @@
+urlBase
 <template>
 
 <html>
 <head><title>ADITL check your camera</title>
-<link rel="StyleSheet" href="/aditl2/aditl.css" type="text/css" />
+<link rel="StyleSheet" href="urlBase/aditl.css" type="text/css" />
 </head>
 <body bgcolor=#ffffff>
 
 <left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
-<img border=0 name="bannerimg" src="/aditl2/logo1.jpg" onMouseOver = "document.bannerimg.src = '/aditl2/logo2.jpg'"
-onMouseOut = "document.bannerimg.src = '/aditl2/logo1.jpg'">
+<img border=0 name="bannerimg" src="urlBase/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = 'urlBase/logo1.jpg'">
 </a></div></left>
 
 <br><br><br>
@@ -21,10 +22,10 @@ You can use this page to test whether your camera produces these timestamps
 and to check the date and time embedded in a photo.
 <br><br>
 To use this page, upload a single jpg file from your digital camera (no larger
-than 3MB).
+than 20MB).
 <br>
 <br>
-<form method=post action="/aditl2/dyn/phototest" enctype="multipart/form-data">
+<form method=post action="urlBase/dyn/phototest" enctype="multipart/form-data">
 <input type="file" name="dafile" size="40">
 <br>
 <input type="submit" value="Upload">
