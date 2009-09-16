@@ -9,7 +9,7 @@ require Exporter;
 
 use strict;
 
-use Pg; #for DB conectivity.
+use DBI;
 
 #good random seed. from programming perl.
 srand ( time() ^ ($$ + ($$ << 15)) ); 
@@ -28,10 +28,13 @@ sub new {
 sub connect {
     my $self = shift;
     my $dbname = shift;
-    my $conn = Pg::setdb("localhost", "", "", "", $dbname);
+    my $conn = DBI->connect("dbi:Pg:dbname=$dbname", '', '', {AutoCommit => 1});
     $self->{connection} = $conn;
-    my $status = ($conn->status == 0)? 1 : 0;
-    return $status
+    if (!$conn) {
+	warn $DBI::errstr;
+	return 0;
+    }
+    return 1;
 }
 
 # adds the given authToken and returns the token index (used to later retrieve the token),
@@ -47,19 +50,15 @@ sub addAuthToken {
 
     my $conn = $self->{connection};
 
-    $conn->exec("delete from cookies where uid = '$uid';");
+    $conn->do("delete from cookies where uid = ?;", undef, $uid);
     # remove user's other cookies.
 
-    my $result = $conn->exec("select nextval('cookies_seq');");
-    my @row = $result->fetchrow();
+    my @row = $conn->selectrow_array("select nextval('cookies_seq')");
     return 0 unless(@row);
     my $cid = $row[0];
 
     #not we're not implementing cookies that expire.
-    my $query = "insert into cookies (cookie_id, uid, cookie_value)
-values ($cid, $uid, $tokenValue);";
-
-    $conn->exec($query);
+    $conn->do("insert into cookies (cookie_id, uid, cookie_value) values (?,?,?)", undef, $cid, $uid, $tokenValue);
     return $cid;
 }
 
@@ -72,10 +71,7 @@ sub getAuthToken {
 
     my $conn = $self->{connection};
 
-    my $query = "select cookie_value, uid from cookies where cookie_id = '$tokenId';";
-    my $res = $conn->exec($query);
-
-    my @row = $res->fetchrow();
+    my @row = $conn->selectrow_array("select cookie_value, uid from cookies where cookie_id = ?", undef, $tokenId);
 
     return 0 unless(@row);
 
@@ -90,10 +86,7 @@ sub getPermission {
 
     my $conn = $self->{connection};
 
-    my $query = "select perm_type from permissions where uid = $uid;";
-    my $res = $conn->exec($query);
-
-    my @row = $res->fetchrow();
+    my @row = $conn->selectrow_array("select perm_type from permissions where uid = ?", undef, $uid);
 
     return $row[0] or 0;
 }
@@ -107,10 +100,7 @@ sub getEmail {
 
     my $conn = $self->{connection};
 
-    my $query = "select email from users where uid = '$uid';";
-    my $res = $conn->exec($query);
-
-    my @row = $res->fetchrow();
+    my @row = $conn->selectrow_rray("select email from users where uid = ?", undef, $uid);
 
     return 0 unless(@row);
 
@@ -123,8 +113,7 @@ sub userExists {
     my $email = shift;
     
     my $conn = $self->{connection};
-    my $res = $conn->exec("select uid from users where email = '$email';");
-    my @rows = $res->fetchrow();
+    my @rows = $conn->selectrow_array("select uid from users where email = ?", undef, $email);
     if(scalar(@rows) == 0) {
 	return 0;
     } else {
@@ -148,8 +137,7 @@ sub validUser {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select password from users where email = '$email' and validated = 1;");
-    my @row = $res->fetchrow();
+    my @row = $conn->selectrow_array("select password from users where email = ? and validated = 1", undef, $email);
     if(scalar(@row) == 0) {
 	return 0;
     }
@@ -173,13 +161,10 @@ sub registerUser {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select nextval('users_seq');");
-    my @row = $res->fetchrow();
-    return 0 unless(@row);
-    my $uid = $row[0];
-    my $query = "insert into users (uid, email, first_name, last_name, password, affiliation, validate_token) values ($uid, '$email', '$fn', '$ln', '$pw', '$affil', '$tk');";
-    $res = $conn->exec($query);
-    return $uid;
+    $conn->do("insert into users (uid, email, first_name, last_name, password, affiliation, validate_token) values (nextval('users_seq'), ?,?,?,?,?,?)", undef, $email, $fn, $ln, $pw, $affil, $tk);
+
+    my @row = $conn->selectrow_array("select currval('users_seq')");
+    return $row[0] or 0;
 }
 
 sub completeRegistration {
@@ -189,21 +174,8 @@ sub completeRegistration {
 
     my $conn = $self->{connection};
 
-    my $query = "select validate_token from users where uid = $uid;";
-    my $res = $conn->exec($query);
-    my @row = $res->fetchrow();
-    if(scalar(@row) == 0) {
-	return 0;
-    }
-
-    my $foundTk = $row[0];
-    if($token == $foundTk) {
-	$query = "update users set validated = 1 where uid = $uid;";
-	$conn->exec($query);
-	return 1;
-    } else {
-	return 0;
-    }
+    # N.B. do() returns the number of affected rows, so 1 = success, 0 = failure
+    return $conn->do("update users set validated = 1 where uid = ? and validate_token = ?", undef, $uid, $token);
 }
 	
 
@@ -224,9 +196,7 @@ sub howManyRegistered {
 
     my $conn = $self->{connection};
 
-    my $query = "select count(*) from users;";
-    my $res = $conn->exec($query);
-    my @row = $res->fetchrow();
+    my @row = $conn->selectrow_array("select count(*) from users;");
     if(scalar(@row) == 0) {
 	return 0;
     }
@@ -242,12 +212,7 @@ sub zipFilePath {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select uid from users2 where uid = '$uid';");
-    if($res->fetchrow()) {
-	$conn->exec("update users2 set uploadzippath = '$path' where uid = '$uid';");
-    } else {
-	$conn->exec("insert into users2 (uid, uploadzippath) values ($uid, '$path');");
-    }
+    $conn->do("update users set uploadzippath = ? where uid = ?", undef, $path, $uid);
 }
 
 # sets the howheard attribute in the users2 table.
@@ -258,12 +223,7 @@ sub setHowHeard {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select uid from users2 where uid = '$uid';");
-    if($res->fetchrow()) {
-	$conn->exec("update users2 set howheard = '$howheard' where uid = '$uid';");
-    } else {
-	$conn->exec("insert into users2 (uid, howheard) values ($uid, '$howheard');");
-    }
+    $conn->do("update users set howheard = ? where uid = ?", undef, $howheard, $uid);
 }
 
 # populates refd list with references to hash objects.
@@ -273,10 +233,11 @@ sub getAllEmails {
     my $listref = shift;
 
     my $conn = $self->{connection};
-    my $res = $conn->exec("select uid, first_name, last_name, email from users;");
 
-    my @row;
-    while(@row = $res->fetchrow()) {
+    my $sth = $conn->prepare("select uid, first_name, last_name, email from users;");
+    $conn->execute;
+
+    while(my @row = $sth->fetchrow_array()) {
 	my %hash;
 	$hash{uid} = $row[0];
 	$hash{email} = $row[3];
@@ -299,9 +260,9 @@ sub search {
     my $conn = $self->{connection};
 
 
-    my @row;
-    my $res = $conn->exec("select uid, first_name, last_name, email from users where $column like '%$search%';");
-    while(@row = $res->fetchrow()) {
+    my $sth = $conn->prepare("select uid, first_name, last_name, email from users where $column like ?");
+    $sth->execute("%$search%");
+    while(my @row = $sth->fetchrow_array()) {
 	my %hash;
 	$hash{uid} = $row[0];
 	$hash{email} = $row[3];
@@ -322,8 +283,7 @@ sub getinfo {
     
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select first_name, last_name, email from users where uid = $uid;");
-    return $res->fetchrow();
+    return ($conn->selectrow_array("select first_name, last_name, email from users where uid = ?", undef, $uid));
 }
 
 #returns (total # photos, total captions, total comments)
@@ -333,15 +293,9 @@ sub getinfo2 {
     
     my $conn = $self->{connection};
 
-    my @ret;
-    my @row;
+    my @row = $conn->selectrow_array("select count(*) from med_photos where uid = ?", undef, $uid);
 
-    my $res = $conn->exec("select count(*) from med_photos where uid = '$uid';");
-    @row = $res->fetchrow();
-    push(@ret, $row[0]);
-
-
-    return @ret;
+    return @row or 0;
 }
 
 
@@ -358,11 +312,7 @@ sub friends {
     my $conn = $self->{connection};
 
     my @row;
-    my @uids;
-    my $res = $conn->exec("select friend_uid from friends where uid = $uid;");
-    while(@row = $res->fetchrow()) {
-	push(@uids, $row[0]);
-    }
+    my @uids = map { @$_ } $conn->selectall_arrayref("select friend_uid from friends where uid = ?", undef, $uid);
 
     foreach(@uids) {
 	my @info = $self->getinfo($_);
@@ -392,29 +342,13 @@ sub addfriend {
     
     my $conn = $self->{connection};
 
-    my @row;
-    my $res = $conn->exec("select count(*) from friends where uid = $uid;");
-    @row = $res->fetchrow();
+    my @row = $conn->selectrow_array("select count(*) from friends where uid = ?", undef, $uid);
     if($row[0] >= $n) {
 	return 1;
     }
 
-    $res = $conn->exec("select friend_uid from friends where uid = $uid and friend_uid = $fruid;");
-    if($res->fetchrow()) {
-	return 0;
-    }
-
-    $res = $conn->exec("select count(*) from users where uid = $fruid;");
-    @row = $res->fetchrow();
-    unless($row[0] == 1) {
-	return 0;
-    }
-    
-    $res = $conn->exec("select nextval('friends_seq');");
-    @row = $res->fetchrow();
-    my $next = $row[0];
-    
-    $conn->exec("insert into friends (friend_id, uid, friend_uid) values ($next, $uid, $fruid);");
+    #NB: Constraints on the table prevent duplicates or non-existing uids
+    $conn->do("insert into friends (uid, friend_uid) values (?, ?)", undef, $uid, $fruid);
     return 0;
 }
 
@@ -425,7 +359,7 @@ sub delfriend {
 
     my $conn = $self->{connection};
 
-    $conn->exec("delete from friends where uid = $uid and friend_uid = $fruid;");
+    $conn->do("delete from friends where uid = ? and friend_uid = ?", undef, $uid, $fruid);
 }
 
 sub friendcount {
@@ -434,9 +368,8 @@ sub friendcount {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select count(*) from friends where uid = $uid;");
-    my @row = $res->fetchrow();
-    return $row[0];
+    my @row = $conn->selectrow_array("select count(*) from friends where uid = ?", undef, $uid);
+    return $row[0] or 0;
 }
 
 sub setImportStatus {
@@ -446,12 +379,9 @@ sub setImportStatus {
 
     my $conn = $self->{connection};
 
-    my $res = $conn->exec("select uid from import_status where uid = '$uid';");
-    if($res->fetchrow()) {
-	$conn->exec("update import_status set last_success = '$message' where uid = '$uid';");
-    } else {
-	$conn->exec("insert into import_status (uid, last_success) values ($uid, '$message');");
-    }
+    # N.B. We can just ignore the error if there's a dupe
+    $conn->do("insert into import_status (last_success, uid) values (?, ?)", undef, $message, $uid);
+    $conn->do("update import_status set last_success = ? where uid = ?", undef, $message, $uid);
 }
 
 
@@ -465,16 +395,12 @@ sub getRandomFrontPhoto {
 
     #date_written is used to keep track of which frontpage images were recently selected, so we don't 
     #reshow them.
-    my $res = $conn->exec("select phid from circles where circle_type = 1 order by last_date limit 30");
-    my @images;
-    while(my @row = $res->fetchrow) {
-	push(@images, $row[0]);
-    }
+    my @images = @{$conn->selectcol_arrayref("select phid from circles where circle_type = 1 order by last_date limit 30")};
 
     my $i = int(rand(scalar(@images)));
     my $phid = $images[$i];
 
-    $conn->exec("update circles set last_date = now() where phid = $phid");
+    $conn->do("update circles set last_date = now() where phid = ?", undef, $phid);
 
     $self->photoInfo($phid, $table, $hashref);
 }
@@ -491,19 +417,7 @@ sub randomImage {
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my $res = $conn->exec("select phid from large_photos;");
-
-    my @phids;
-    my @row;
-
-
-    while(@row = $res->fetchrow()) {
-	push(@phids, $row[0]);
-    }
-
-    my $i = rand(scalar(@phids));
-    my $phid = $phids[$i];
-
+    my ($phid) = $conn->selectrow_array("select phid from large_photos order by random() limit 1");
 
     $self->photoInfo($phid, $table, $hashref);
 }
@@ -515,22 +429,12 @@ sub photoInfo {
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my $q = "select phid, uid, width, height, time, time_offset, url, path from $table where phid = $phid;";
-
-    my $res = $conn->exec($q);
-    my @row = $res->fetchrow();
-
+    my $sth = $conn->prepare("select phid, uid, width, height, time, time_offset as offset, url, path as file from $table where phid = ?");
+    $sth->execute($phid);
     
-    
-    $hashref->{phid} = $row[0];
-    $hashref->{uid} = $row[1];
-    $hashref->{width} = $row[2];
-    $hashref->{height} = $row[3];
-    $hashref->{time} = $row[4];
-    $hashref->{offset} = $row[5];
-    $hashref->{url} = $row[6];
-    $hashref->{file} = $row[7];
+    my $row = $sth->fetchrow_hashref;
 
+    @{$hashref}{keys %$row} = values %$row;
 }
 
 # takes a uid, a beginning time "yyyy-mm-dd hh:mm:ss", and ending time (same format)
@@ -544,21 +448,9 @@ sub getPhotosBetween {
     my $conn = $self->{connection};
 
     my $query;
-    #if($uid == -2) {
-	#$query = "select phid from large_photos where time > '$start' and time <= '$end' order by time;";
-    #} else {
-	$query = "select phid from large_photos where uid = $uid and time > '$start' and time <= '$end' order by time;";
-    #}
+    my $phids = $conn->selectcol_arrayref("select phid from large_photos where uid = ? and time > ? and time <= ? order by time", undef, $uid, $start, $end);
     
-    #print $query;
-    my $res = $conn->exec($query);
-    my @phids;
-    my @row;
-    while(@row = $res->fetchrow()) {
-	push(@phids, $row[0]);
-    }
-
-    return @phids;
+    return @$phids;
 }
 
 sub photoVote {
@@ -568,14 +460,15 @@ sub photoVote {
     my $type = shift;
 
     my $conn = $self->{connection};
-    my $res = $conn->exec("select circle_type from circles where phid = $phid;");
     my $query;
-    if($res->fetchrow()) {
-	$query = "update circles set circle_type = $type where phid = $phid;";
+
+    if ($conn->selectrow_array("select circle_type from circles where phid = ?", undef, $phid)) {
+	$query = "update circles set circle_type = ? where phid = ?";
     } else {
-	$query = "insert into circles (phid, circle_type, last_date) values ($phid, $type, now());";
+	$query = "insert into circles (circle_type, phid, last_date) values (?, ?, now())";
     }
-    $conn->exec($query);
+
+    $conn->do($query, undef, $type, $phid);
 }
 
 #populates list with uids of users with photos in the db.
@@ -584,13 +477,7 @@ sub usersWithPhotos {
     my $ref = shift;
 
     my $conn = $self->{connection};
-    my $query = "select distinct uid from med_photos;";
-    my $res = $conn->exec($query);
-
-    my @rows;
-    while(@rows = $res->fetchrow()) {
-	push(@$ref, $rows[0]);
-    }
+    return @{$conn->selectcol_arrayref("select distinct uid from med_photos")};
 }
 
 #returns list of friends' uids.
@@ -599,17 +486,7 @@ sub getFriends {
     my $uid = shift;
     
     my $conn = $self->{connection};
-    my $query = "select friend_uid from friends where uid = $uid order by friend_uid;";
-    my $res = $conn->exec($query);
-    
-    my @row;
-    my @ret;
-
-    while(@row = $res->fetchrow()) {
-	push(@ret, $row[0]);
-    }
-
-    return @ret;
+    return @{$conn->selectcol_arrayref("select friend_uid from friends where uid = ? order by friend_uid", undef, $uid)};
 }
 
 sub getCaption {
@@ -617,10 +494,7 @@ sub getCaption {
     my $phid = shift;
 
     my $conn = $self->{connection};
-    my $query = "select caption from captions where phid = $phid;";
-    my $res = $conn->exec($query);
-    my @row = $res->fetchrow();
-    return $row[0];
+    return $conn->selectrow_array("select caption from captions where phid = ?", undef, $phid);
 }
 
 #assumes caption has already been made safe...i.e no unescaped ' characters.
@@ -630,8 +504,6 @@ sub setCaption {
     my $caption = shift;
 
     my $conn = $self->{connection};
-    my $query = "delete from captions where phid = $phid;";
-    $conn->exec($query);
-    $query = "insert into captions values ($phid, '$caption');";
-    $conn->exec($query);
+    $conn->do("delete from captions where phid = ?", undef, $phid);
+    $conn->do("insert into captions values (?, ?)", undef, $phid, $caption);
 }
