@@ -11,7 +11,7 @@ use Utils;
 use CGI qw(-debug :standard);
 use CGI::Carp('fatalsToBrowser');
 
-CGI::DISABLE_UPLOADS = 1;
+$CGI::DISABLE_UPLOADS = 1;
 use vars qw($cgi $redirect $db);
 $cgi = CGI->new();
 

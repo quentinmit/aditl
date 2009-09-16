@@ -12,7 +12,7 @@ $CGI::DISABLE_UPLOADS = 1;
 use vars ('%OPTIONS', '$OPTIONS', '$DB',
 	  '$CGI');
 %OPTIONS = Options::getOptions;
-CGI::DISABLE_UPLOADS = 1;
+$CGI::DISABLE_UPLOADS = 1;
 my $CGI = new CGI;
 
 $DB = Database->new($OPTIONS{thumbnailsPerPage});

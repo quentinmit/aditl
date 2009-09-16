@@ -6,7 +6,7 @@ use Database;
 
 use CGI qw(-debug :standard);
 use CGI::Carp('fatalsToBrowser');
-CGI::DISABLE_UPLOADS = 1;
+$CGI::DISABLE_UPLOADS = 1;
 
 my $cgi = CGI->new();
 
