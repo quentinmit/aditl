@@ -6,15 +6,15 @@ $settings{"email"} = "aditl\@mit.edu";
 
 $settings{"dbName"} = "aditl2009";
 $settings{"pathBase"} = "/usr/local/aditl2009";
-$settings{"urlBase"} = "http://aditl.mit.edu/aditl2009";
+$settings{"urlBase"} = "http://aditl.mit.edu";
 
 $settings{"templateLib"} = $settings{"pathBase"} . "/templates";
 $settings{"logDirectory"} = $settings{"pathBase"} . "/logs";
-$settings{"scratchDirectory"} = "/mnt/data/aditl2009/scratch";
-$settings{"zipFileRoot"} = "/mnt/data/aditl2009/rawUpload";
-$settings{"scratch2"} = "/mnt/data/aditl2009/scratch2";
-$settings{"rootPhotoDir"} = "/mnt/data/aditl2009/photoroot";
-$settings{"tinyBarcodePath"} = "/mnt/data/aditl2009/photoroot/tiny-barcodes";
+$settings{"scratchDirectory"} = "/srv/aditl2009/scratch";
+$settings{"zipFileRoot"} = "/srv/aditl2009/rawUpload";
+$settings{"scratch2"} = "/srv/aditl2009/scratch2";
+$settings{"rootPhotoDir"} = "/srv/aditl2009/photoroot";
+$settings{"tinyBarcodePath"} = "/srv/aditl2009/photoroot/tiny-barcodes";
 
 $settings{"SMTPHost"} = "outgoing.mit.edu";
 
