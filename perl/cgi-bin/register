@@ -96,7 +96,7 @@ my $uid = $db->registerUser("$fn", "$ln", "$email", "$pw", "$affiliation", $vali
 my $validateURL = Settings::settings("validateURL");
 Utils::email($email, "ADITL\@aditl.mit.edu", "Complete ADITL registration--do not reply",
 "To complete the registration for ADITL, visit the URL below. We will email you a reminder before the day of the event.
-Email aditl\@mit.edu if you have questions or comments. Thanks for signing up.\n\n" .
+Your passsword is '$pw'. Email aditl\@mit.edu if you have questions or comments. Thanks for signing up.\n\n" .
 
 $validateURL . "?uid=$uid&token=$validateToken");
 
