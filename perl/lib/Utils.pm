@@ -34,7 +34,7 @@ sub message {
     my $msg = shift;
 
     my $template = Settings::settings("templateLib") . "\/message.html";
-    my $html = Template::fillTemplate($template, [$msg]);
+    my $html = Template::fillTemplate($template, [Settings::settings("urlBase"), $msg]);
     return $html;
 }
 
