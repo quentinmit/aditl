@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "/usr/local/aditl2/perl/lib";
+use Database;
+use Template;
+use Cookie;
+use Settings;
+use Utils;
+
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+$CGI::DISABLE_UPLOADS = 0;
+$CGI::POST_MAX=1024 * 1024 * 3; #3M
+
+my $cgi = CGI->new();
+my $db = Database->new();
+my $status = $db->connect("aditl2");
+
+use vars qw($LOGFILE);
+$LOGFILE = Settings::settings("logDirectory") . "/phototest.log";
+
+my $uid;
+
+unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
+    print $cgi->header();
+    print Utils::redirect(Settings::settings("loginURL") . "?message=You%20must%20log%20in%20first.&redirect=" . Settings::settings("phototestURL"));
+    exit;
+}
+
+if(defined($cgi->param("dafile"))) {
+    getFile($cgi, $db, $uid);
+} else {
+    showForm($cgi);
+}
+
+sub getFile {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $file = $cgi->param("dafile");
+    my $data;
+
+    my $email = $db->getEmail($uid);
+    my $datime = Utils::nicetime();
+
+    my $tmpfile = Settings::settings("scratchDirectory") . "/" . Utils::uniqueInt();
+    open(FILE, ">$tmpfile") or die $!;
+    while(read($file, $data, 4096)) {
+	print FILE $data;
+    }
+    close(FILE);
+
+    my @timeinfo;
+    my $success = Utils::exiftime($tmpfile, \@timeinfo);
+
+    my $html;
+    if($success) {
+
+	#year, month, day, hour, minute, second
+	$html = Utils::message("We successfully read the image's exif tag. The timestamp says the photo was taken at <b>" . Utils::timeformat(\@timeinfo)
+			       . "</b>.<br>Is this the date and time you were expecting? You should make sure your camera's clock is set correctly.");
+	Utils::log($LOGFILE, "[$datime] $email successfully tested photo $tmpfile");
+
+    } else {
+	$html = Utils::message("Could not read the exif tag from your image. Did the image come straight from your camera (sometimes putting an image through a" .
+			       " program like Photoshop can corrupt the exif tag. If you're still having problems, email aditl\@mit.edu");
+      Utils::log($LOGFILE, "[$datime] $email UNsuccessfully tested photo $tmpfile");
+    }
+
+    #unlink($tmpfile);
+    print $cgi->header();
+    print $html;
+}
+			   
+sub showForm {
+    my $cgi = shift;
+
+    my $template = Settings::settings("templateLib") . "/phototest.html";
+    my @emptylist;
+    my $html = Template::fillTemplate($template, \@emptylist);
+    print $cgi->header();
+    print $html;
+}

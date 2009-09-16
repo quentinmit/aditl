@@ -1,0 +1,107 @@
+#!/usr/bin/perl
+
+use strict;
+
+use lib "../lib";
+use Database;
+use Settings;
+use Template;
+use Colors;
+use Utils;
+use Cookie;
+
+use CGI qw(-debug :standard);
+$CGI::DISABLE_UPLOADS = 1;
+
+use vars qw($cgi $db);
+
+$cgi = new CGI;
+
+my $doedit = $cgi->param("editcaption");
+
+$db = Database->new();
+$db->connect(Settings::settings("dbName"));
+
+print $cgi->header();
+
+my $visitoruid = Cookie::isUserLoggedIn($cgi, $db);
+
+my %image;
+my $phid = $cgi->param("phid");
+
+$phid = int($phid);
+
+$db->photoInfo($phid, "large_photos", \%image);
+
+
+my $setcaption = $cgi->param("setcaption");
+if($setcaption && $visitoruid == $image{uid}) {
+    my $caption = $cgi->param("caption");
+    $db->setCaption($phid, Utils::escapeCaption($caption));
+}
+
+
+my @photographer = $db->getinfo($image{uid});
+my $fn = $photographer[0];
+my $ln = $photographer[1];
+
+my $photogName = lc($fn) . " " . lc($ln);
+
+my @time = Utils::sqlTime($image{time}, $image{offset});
+my $tstring = "$time[0]:$time[1]:$time[2]";
+
+my @numphotos = $db->getinfo2($image{uid});
+
+
+my %tinyImage;
+$db->photoInfo($image{phid}, "small_photos", \%tinyImage);
+
+my @color = Colors::grabColor($tinyImage{file});
+
+my $lightness = Settings::settings("colorManipLightness");
+my $sat = Settings::settings("colorManipSat");
+my @bgColor = Colors::slightGray(@color, $lightness, $sat);
+
+my $wbgcolor = Utils::toWebColor(@bgColor);
+
+
+
+
+
+my $aditlLeft = 550 - $image{width};
+
+my @vals = (Settings::settings("urlBase"), $image{url}, $wbgcolor, $tstring, $photogName,
+	    $aditlLeft, $image{width}, $image{phid}, $numphotos[0]);
+
+
+if($visitoruid == $image{uid} && !$doedit) {
+    push(@vals, "<a style=\"color:#333333\" href=\"" . Settings::settings("photoURL") . "?editcaption=1&phid=" . $image{phid} . "\">[edit caption]</a>");
+} else {
+    push(@vals, "");
+}
+
+my $caption = "";
+
+{
+    my $caption = $db->getCaption($image{phid});
+    my $html = "";
+    if($doedit) {
+	$html .= "<form method=\"post\"><textarea cols=\"40\" rows=\"3\" name=\"caption\">$caption</textarea>";
+	$html .= "<input type=\"hidden\" name=\"phid\" value=\"" . $image{phid} . "\">";
+	$html .= "<input type=\"hidden\" name=\"setcaption\" value=\"1\">";
+	$html .= "<br><input type=\"submit\" value=\"update caption\"></form>";
+    } else {
+	$html = $caption;
+    }
+
+    push(@vals, $html);
+}
+	
+my $html = Template::fillTemplate(Settings::settings("templateLib") . "/photo.html", \@vals);
+
+print $html;
+exit;
+
+
+
+

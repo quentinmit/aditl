@@ -1,0 +1,199 @@
+urlBase
+tImage
+tbgColor
+tTime
+tPhotog
+tWidth
+tRealWidth
+tPhid
+tNumPhotos
+tCaptionEdit
+tCaptionText
+<template>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">	
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>
+A Day in the Life of MIT 2005
+</title>
+
+<!-- phid is tPhid -->
+
+<link rel="SHORTCUT ICON" href="http://aditl.mit.edu/favicon.ico">
+
+<style type="text/css">
+body {
+background-color:#ffffff;
+color:#292929;
+font-family:helvetica, sans-serif;
+}
+
+a {text-decoration:none;}
+
+.header-area {
+width:50%;
+height:3em;
+}
+
+.aditl-head1 {
+font-size:50px;
+color:#333333;
+position:absolute;
+left:tWidthpx;
+top:52px;
+margin:0px;
+padding:0px;
+}
+
+.aditl-head2 {
+font-size:23px;
+position:absolute;
+left:tWidthpx;
+top:75px;
+margin-left:145px;
+}
+
+
+.main-area {
+position:absolute;
+top:100px;
+left:0px;
+background-color:#tbgColor;
+width:100%;
+height:352px;
+margin:0px;
+padding:0px;
+}
+
+.main-image {
+position:absolute;
+left:tWidthpx;
+top:0px;
+border-right: 1px solid #333333;
+border-left: 1px solid #333333;
+border-top: 1px solid #333333;
+border-bottom: 1px solid #333333;
+}
+
+.time-text {
+position:absolute;
+top:5px;
+left:565px;
+font-size:65px;
+letter-spacing:.03em;
+color:#tColor;
+}
+
+.name-text {
+position:absolute;
+top:66px;
+left:565px;
+font-size:2em;
+width:500px;
+}
+
+.caption-text {
+font-size:12px;
+position:absolute;
+top:130px;
+left:565px;
+width:250px;
+text-align:left;
+}
+
+.caption-edit {
+font-size:16px;
+position:absolute;
+left:565px;
+top:320px;
+}
+
+.info-text {
+margin-top:30px;
+font-size:1.1em;
+line-height:1.1em;
+}
+
+a.plus-button:link {
+position:absolute;
+top:305px;
+left:565px;
+font-size:2em;
+color:#333333;
+text-decoration:none;
+}
+
+a.plus-button:hover {
+position:absolute;
+top:305px;
+left:565px;
+font-size:2em;
+color:#333333;
+text-decoration:none;
+font-weight:bold;
+}
+
+.footer-bar {
+position:absolute;
+left:tWidthpx;
+top:455px;
+}
+
+.navitem {
+position:absolute;
+top:0px;
+color:tColor;
+font-size:20px;
+}
+
+.moreitem {
+position:absolute;
+top:-40px;
+left:0px;
+padding-top:2px;
+font-size:25px;
+visibility:hidden;
+filter:alpha(opacity=.6); 
+-moz-opacity:.6; 
+opacity: .6;
+color:#tColor;
+width:tRealWidthpx;
+background-color:#ffffff;
+}
+
+A {
+color:#tColor;
+}
+
+A:link {
+color:#tColor;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="aditl-head1"><a style="color:#333333;" href="urlBase/dyn/front">ADITL</a></div>
+
+
+<div class="main-area">
+<img id="mainImage" class="main-image" alt="front page image" src="tImage"></img>
+<div class="time-text">tTime</div>
+<div class="name-text">tPhotog</div>
+<div class="name-text" style="top:100px; font-size:23px;">tNumPhotos photos</div>
+<div class="caption-text">tCaptionText</div>
+<div class="caption-edit">tCaptionEdit</div>
+
+</div>
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+currentPpl
+searchPpl
+<template>
+
+<html>
+<head><title>ADITL Add ppl</title>
+<link rel="StyleSheet" href="/aditl2/aditl.css" type="text/css" />
+<style type="text/css">
+.associatesCell1 {
+        font-size:15px;
+	color:#77746B;
+	padding-left:10px;
+}
+
+.associatesCell2 {
+        font-size:15px;
+	color:#ffa963;
+	padding-left:10px;
+}
+
+.mainarea {
+        padding:5px;
+	border-style:solid; 
+	border-width:1px; 
+	border-color:#FFA963;
+	float:left;
+	width:50%;
+	
+}
+
+.lookuparea {
+	border-style:solid; 
+	border-width:1px; 
+	border-color:#FFA963;
+	padding:5px;
+	margin-left:10px;	
+	float:left;
+	width:40%;
+}
+
+.tab {
+        color:#37342b;
+        padding:0px;
+        text-align:center;
+        float:left;
+	width:20%;
+}
+
+.selectedtab {
+        color:#37342b;
+        padding:0px;
+        text-align:center;
+        float:left;
+        background-color:#ffa963;
+	width:20%;
+}
+
+a.link1 {font-size:17px; color:#ffa963}
+a.link1:hover {text-decoration:underline}
+
+</style>
+
+</head>
+<body onLoad="email1()" bgcolor=#ffffff>
+
+<left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
+<img border=0 name="bannerimg" src="/aditl2/logo1.jpg" onMouseOver = "document.bannerimg.src = '/aditl2/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '/aditl2/logo1.jpg'">
+</a></div></left>
+
+<br><br><br>
+
+<div class="stdgray" style="font-size:20px">[Step 3 of 4] Who are the others?</div>
+<div class="stdgray" style="font-size:15px; width:600px">
+The website we're working on will have a nifty feature where you can view your day
+alongside other peoples' day (be they friends, enemies, random people). We want to gauge the interest in this feature and get a
+sense of how many people doing this thing know other people doing this thing. So please select 
+up to 4 cohorts. You will be able to change this as often as you like once the website is up. This isn't
+friendster: no approval is required and the link is not reciprocal. It just determines what other timelines
+will appear on the same page as your timeline.
+</div>
+
+<div style="margin-top:10px">
+
+<div class="mainarea">
+<div class="stdgray" style="font-weight:bold">Current Cohorts</div>
+<br>
+<div style="text-align:center">
+<table cellspacing=0 cellpadding=0>
+currentPpl
+</table>
+</div>
+<br>
+<form method=post action="/aditl2/dyn/upload">
+<input type="submit" name="null" value="next">
+<input type="hidden" name="ppldone" value="1">
+</form>
+</div>
+
+<div class="lookuparea">
+<div class="stdgray" style="size:15px">Search by name / email</div>
+<table cellspacing="0" cellpadding="0">
+<tr><td>
+
+<form method=post action="/aditl2/dyn/upload">
+<input name="search" size="15" value=""></td></tr>
+<tr><td><input type="submit" name="null" value="search"></td></tr>
+</form>
+</table>
+<br><br>
+<div>
+<table cellspacing=0 cellpadding=0>
+searchPpl
+</table>
+</div>
+</div>
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,1 @@
+change CGI::POST_MAX to $CGI::POST_MAX

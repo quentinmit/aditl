@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "../lib";
+use Database;
+use Template;
+use Cookie;
+use Settings;
+use Utils;
+use Mail::RFC822::Address qw(valid validlist);
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+CGI::DISABLE_UPLOADS = 1;
+
+my $cgi = CGI->new();
+print $cgi->header();
+
+my @params = $cgi->param();
+unless(@params) {
+    noParams();
+}
+
+
+my $fn = $cgi->param("firstname");
+my $ln = $cgi->param("lastname");
+my $email = $cgi->param("email");
+my $pw = $cgi->param("password");
+my $pw2 = $cgi->param("password2");
+my $affiliation = $cgi->param("affiliation");
+
+if($fn =~ /[^\w-]/ || $ln =~ /[^\w-]/) {
+    formatError("your first and last name must contain only letters and numbers (and no spaces).", $fn, $ln, $email);
+}
+
+if($fn eq "" || $ln eq "") {
+    formatError("your first and last name cannot be empty.", $fn, $ln, $email);
+}
+
+if(length($fn) > 30 || length($ln) > 30) {
+    formatError("your first and last names cannot be longer than 30 characters", $fn, $ln, $email);
+}
+
+unless($affiliation eq "undergrad" ||
+       $affiliation eq "gradstudent" ||
+       $affiliation eq "faculty" ||
+       $affiliation eq "staff" ||
+       $affiliation eq "admin" ||
+       $affiliation eq "alum" ||
+       $affiliation eq "other") {
+    formatError("please select an affiliation", $fn, $ln, $email);
+}
+
+if($email =~ /\'/ || $email =~ /\"/) {
+    formatError("your email address doesn't look valid", $fn, $ln, $email);
+}
+
+unless(valid($email)) {
+    formatError("your email address doesn't look valid", $fn, $ln, $email);
+}
+
+unless($email =~ /mit\.edu$/i) {
+    formatError("you must have an email address that ends in mit.edu", $fn, $ln, $email);
+}
+
+if($pw =~ /\W/) {
+    formatError("your password must contain only letters and numbers (and no spaces).", $fn, $ln, $email);
+}
+
+if(length($pw) < 5) {
+    formatError("your password must be at least 5 characters long.", $fn, $ln, $email);
+}
+
+if(length($pw) > 30) {
+    formatError("your password cannot be longer than 30 characters.", $fn, $ln, $email);
+}
+
+if($pw ne $pw2) {
+    formatError("the passwords you entered do not match.", $fn, $ln, $email);
+}
+
+my $db = Database->new();
+my $status = $db->connect(Settings::settings("dbName"));
+unless($status) {
+    formatError("there was an error in processing your registration. it's not you, it's me. really.", $fn, $ln, $email);
+}
+
+if($db->userExists($email)) {
+    formatError("a user with this email address has already registered.<br>If you've forgotten your password, you're in trouble.<br>
+(just kidding, email " . Settings::settings("email") . " to recover your password.)", $fn, $ln, $email);
+}
+
+my $validateToken = Cookie::createAuthToken();
+my $uid = $db->registerUser("$fn", "$ln", "$email", "$pw", "$affiliation", $validateToken);
+
+my $validateURL = Settings::settings("validateURL");
+Utils::email($email, "ADITL\@aditl.mit.edu", "Complete ADITL registration--do not reply",
+"To complete the registration for ADITL, visit the URL below. We will email you a reminder before the day of the event.
+Email aditl\@mit.edu if you have questions or comments. Thanks for signing up.\n\n" .
+
+$validateURL . "?uid=$uid&token=$validateToken");
+
+print Utils::message("Your information looks good. We have sent an email to $email to verify the email address. To complete your registration, check your email and follow the instructions.");
+
+exit;
+
+sub noParams {
+    my $template = Settings::settings("templateLib") . "\/createprofile.html";
+    my $msg = "registering with ADITL lets you upload your photos after the event and post comments. 
+you will also receive reminder emails before the day of the event in april. you must have a valid email ending in .mit.edu to register. please note
+that this site does not use encryption, so you probably don't want to use your athena password.";
+    my $html = Template::fillTemplate($template, [Settings::settings("urlBase"), $msg, "", "", ""]);
+    print $html;
+    exit;
+}
+
+sub formatError {
+    my $msg = shift;
+    my $fn = shift;
+    my $ln = shift;
+    my $email = shift;
+    my $template = Settings::settings("templateLib") . "\/createprofile.html";
+    my $html = Template::fillTemplate($template, [Settings::settings("urlBase"), $msg, $fn, $ln, $email]);
+    print $html;
+    exit;
+}

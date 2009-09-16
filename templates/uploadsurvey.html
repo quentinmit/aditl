@@ -1,0 +1,42 @@
+urlBase
+<template>
+
+<html>
+<head><title>ADITL Upload Survey</title>
+<link rel="StyleSheet" href="urlBase/static/aditl.css" type="text/css" />
+</head>
+<body bgcolor=#ffffff>
+
+<left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
+<img border=0 name="bannerimg" src="urlBase/static/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/static/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
+</a></div></left>
+
+<br><br><br>
+
+<div class="stdgray" style="font-size:20px">[Step 2 of 3] Tell us some info</div>
+<br>
+<div class="orangebox" style="font-size:10px; width:43em">
+<div class="stdgray" style="font-size:15px;">
+<form method=post action="urlBase/dyn/upload">
+<table cellspacing=0 cellpadding=4>
+<tr>
+<td class="stdgray">How did you hear about ADITL?</td><td>
+<select name="howheard">
+<option value="---" selected>---
+<option value="poster">poster
+<option value="spotlight">web.mit.edu spotlight
+<option value="emaillist">email list
+<option value="wordofmouth">word of mouth
+<option value="other">other
+</select>
+</td></tr>
+<tr><td></td>
+<td><input type="submit" name="null" value="next">
+</table>
+
+</form>
+</div>
+</div>
+
+</body></html>

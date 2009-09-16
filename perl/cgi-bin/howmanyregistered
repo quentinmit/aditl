@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "/usr/local/aditl2/perl/lib";
+use Database;
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+CGI::DISABLE_UPLOADS = 1;
+
+my $cgi = CGI->new();
+
+print $cgi->header();
+my $db = Database->new();
+my $status = $db->connect("aditl2");
+
+print $db->howManyRegistered();

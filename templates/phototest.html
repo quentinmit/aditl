@@ -1,0 +1,34 @@
+<template>
+
+<html>
+<head><title>ADITL check your camera</title>
+<link rel="StyleSheet" href="/aditl2/aditl.css" type="text/css" />
+</head>
+<body bgcolor=#ffffff>
+
+<left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
+<img border=0 name="bannerimg" src="/aditl2/logo1.jpg" onMouseOver = "document.bannerimg.src = '/aditl2/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '/aditl2/logo1.jpg'">
+</a></div></left>
+
+<br><br><br>
+
+<div class="stdgray" style="font-size:20px;">Check your camera</div>
+<div class="orangebox" style="font-size:10px; width:43em">
+<div class="stdgray" style="font-size:12px">
+The ADITL website uses timestamps embedded in jpg files by your digital camera.
+You can use this page to test whether your camera produces these timestamps
+and to check the date and time embedded in a photo.
+<br><br>
+To use this page, upload a single jpg file from your digital camera (no larger
+than 3MB).
+<br>
+<br>
+<form method=post action="/aditl2/dyn/phototest" enctype="multipart/form-data">
+<input type="file" name="dafile" size="40">
+<br>
+<input type="submit" value="Upload">
+</form>
+</div>
+
+</body></html>

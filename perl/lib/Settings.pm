@@ -1,0 +1,61 @@
+package Settings;
+
+use vars qw(%settings);
+
+$settings{"email"} = "aditl\@mit.edu";
+
+$settings{"dbName"} = "aditl2009";
+$settings{"pathBase"} = "/usr/local/aditl2009";
+$settings{"urlBase"} = "http://aditl.mit.edu/aditl2009";
+
+$settings{"templateLib"} = $settings{"pathBase"} . "/templates";
+$settings{"logDirectory"} = $settings{"pathBase"} . "/logs";
+$settings{"scratchDirectory"} = "/mnt/data/aditl2009/scratch";
+$settings{"zipFileRoot"} = "/mnt/data/aditl2009/rawUpload";
+$settings{"scratch2"} = "/mnt/data/aditl2009/scratch2";
+$settings{"rootPhotoDir"} = "/mnt/data/aditl2009/photoroot";
+$settings{"tinyBarcodePath"} = "/mnt/data/aditl2009/photoroot/tiny-barcodes";
+
+$settings{"SMTPHost"} = "outgoing.mit.edu";
+
+$settings{"validateURL"} = $settings{"urlBase"} . "/dyn/validate";
+$settings{"registerURL"} = $settings{"urlBase"} . "/dyn/register";
+$settings{"phototestURL"} = $settings{"urlBase"} . "/dyn/phototest";
+$settings{"uploadURL"} = $settings{"urlBase"} . "/dyn/upload";
+$settings{"loginURL"} = $settings{"urlBase"} . "/dyn/login";
+$settings{"photoURLBase"} = $settings{"urlBase"} . "/images";
+$settings{"frontURL"} = $settings{"urlBase"} . "/dyn/front";
+$settings{"timelineURL"} = $settings{"urlBase"} . "/dyn/timeline";
+$settings{"htmlFragmentURL"} = $settings{"urlBase"} . "/dyn/timeline-fragment";
+$settings{"jsFragmentURL"} = $settings{"urlBase"} . "/dyn/js-fragment";
+$settings{"tinyBarcodeURL"} = $settings{"urlBase"} . "/images/tiny-barcodes";
+$settings{"selectUserURL"} = $settings{"urlBase"} . "/dyn/select-user";
+$settings{"photoURL"} = $settings{"urlBase"} . "/dyn/photo";
+
+
+$settings{"friendLimit"} = 4;
+
+$settings{"exiftagsCommand"} = "/usr/local/bin/exiftags -a";
+$settings{"unzip"} = "/usr/bin/unzip";
+$settings{"convert"} = "/usr/bin/convert";
+$settings{"identify"} = "/usr/bin/identify";
+
+$settings{"colorManipLightness"} = 200;
+#$settings{"colorManipLightness"} = 240;
+$settings{"colorManipSat"} = 225;
+#$settings{"colorManipSat"} = 230;
+
+$settings{"eventDate"} = "2007-12-25";
+
+sub settings {
+    my $setting = shift;
+    if(exists($settings{$setting})) {
+	return $settings{$setting};
+    } else {
+	die "$setting is not a valid setting\n";
+    }
+}
+
+
+
+

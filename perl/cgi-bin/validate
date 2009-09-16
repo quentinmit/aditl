@@ -1,0 +1,75 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "../lib";
+use Database;
+use Template;
+use Settings;
+use Cookie;
+use Utils;
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+
+CGI::DISABLE_UPLOADS = 1;
+my $cgi = CGI->new();
+
+my @params = $cgi->param();
+unless(@params) {
+    noParams();
+}
+
+my $uid = 0;
+my $token = 0;
+
+if(defined($cgi->param("uid")) && defined($cgi->param("token"))) {
+    $uid = $cgi->param("uid");
+    $token = $cgi->param("token");
+} else {
+    noParams();
+}
+
+my $db = Database->new();
+my $status = $db->connect(Settings::settings("dbName"));
+unless($status) {
+    errorPage("there was an error in connecting to the database. it's not you, it's me. really.");
+}
+
+unless($db->completeRegistration($uid, $token)) {
+    errorPage("something went wrong in completing registration. please forward your registration email to aditl\@mit.edu.");
+}
+
+
+my $cookieToken = Cookie::createAuthToken();
+my $cookieIndex = $db->addAuthToken($uid, $cookieToken);
+my $ck1 = $cgi->cookie(
+	     -name => 'aditlauthid',
+	     -value => $cookieIndex,
+	     -expires => '+12M'
+	     );
+
+my $ck2 = $cgi->cookie(
+	     -name => 'aditlauthtoken',
+	     -value => $cookieToken,
+	     -expires => '+12M'
+	     );
+
+print $cgi->header(-cookies => [$ck1, $ck2]);
+
+print Utils::message("You have successfully completed registration.");
+
+exit;
+
+sub noParams {
+    print $cgi->header();
+    my $register = Settings::settings("registerURL");
+    my $html = Utils::redirect($register);
+    print $html;
+    exit;
+}
+
+sub errorPage {
+    print $cgi->header();
+    print Utils::message($_[0]);
+    exit;
+}

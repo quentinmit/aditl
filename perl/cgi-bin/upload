@@ -1,0 +1,334 @@
+#!/usr/bin/perl -w
+use strict;
+
+use lib "../lib";
+use Database;
+use Template;
+use Cookie;
+use Settings;
+use Utils;
+
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+$CGI::DISABLE_UPLOADS = 0;
+$CGI::POST_MAX=1024 * 1024 * 300; #300M limit
+
+my $cgi = CGI->new();
+my $db = Database->new();
+my $status = $db->connect(Settings::settings("dbName"));
+
+use vars qw($LOGFILE $SWITCH);
+$LOGFILE = Settings::settings("logDirectory") . "/upload.log";
+$SWITCH = "aditluploadswitch";
+
+my $uid;
+
+unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
+    print $cgi->header();
+    print Utils::redirect(Settings::settings("loginURL") . "?message=You%20must%20log%20in%20first.&redirect=" . Settings::settings("uploadURL"));
+    exit;
+}
+
+my $email = $db->getEmail($uid);
+
+
+# now see where in the upload process the user is.
+# the cookie represents the step in the process the user
+# just completed. 
+if(defined($cgi->cookie($SWITCH))) {
+    my $switch = $cgi->cookie($SWITCH);
+    if($switch eq "terms") {
+	terms($cgi, $db, $uid, $email);
+    } elsif($switch eq "survey") {
+	survey($cgi, $db, $uid, $email);
+    # don't use this feature } elsif($switch eq "selectppl") {
+    #selectppl($cgi, $db, $uid, $email);
+    } elsif($switch eq "doupload") {
+	doupload($cgi, $db, $uid, $email);
+    } else {
+	firstime($cgi, $db, $uid, $email);
+    }
+    exit;
+} else {
+    firstime($cgi, $db, $uid, $email);
+    exit;
+}
+
+sub firstime {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    my $cookie = $cgi->cookie(
+			      -name => $SWITCH,
+			      -value => "terms",
+			      );
+
+    print $cgi->header(-cookies => [$cookie]);
+    #print $cgi->header();
+
+    my $html = Utils::redirect(Settings::settings("uploadURL"));
+    print $html;
+}
+
+sub terms {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    if(defined($cgi->param("nextsurvey"))) {
+	if($cgi->param("nextsurvey") eq "1") {
+	    my $cookie = $cgi->cookie(
+				      -name => $SWITCH,
+				      -value => "survey",
+				      );
+	    print $cgi->header(-cookies => [$cookie]);
+	    print Utils::redirect(Settings::settings("uploadURL"));
+	    exit;
+	}
+    }
+
+    print $cgi->header();
+    print Template::fillTemplate(Settings::settings("templateLib") . "/terms.html", [Settings::settings("urlBase")]);
+    exit;
+}
+				  
+			      
+sub doupload {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+
+    if(defined($cgi->param("dafile")) &&
+       $cgi->param("dafile") ne "") {
+	getFile($cgi, $db, $uid, $email);
+	exit;
+    } elsif(defined($cgi->param("tried"))) {
+	print $cgi->header();
+	my $message = "Your upload failed. This is either because you didn't specify a file, or the file you uploaded " .
+	    "was more than 50MB. Please try <a class=\"link1\" href=\"" . Settings::settings("uploadURL"). "\">again</a>. If the problem persists, email us at aditl\@mit.edu";
+	print Utils::message($message);
+	exit;
+    } else {
+
+
+	my $cookie = $cgi->cookie(
+				  -name => $SWITCH,
+				  -value => "doupload",
+				  );
+	print $cgi->header(-cookies => [$cookie]);
+	my $temp = Settings::settings("templateLib") . "/upload.html";
+	print Template::fillTemplate($temp, [Settings::settings("urlBase")]);
+	exit;
+    }
+}
+
+sub getFile {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+    my $file = $cgi->param("dafile");
+
+    my $data;
+
+    my $path = Settings::settings("zipFileRoot") .
+	"/" . "$uid-$email-" . time() . ".zip";
+    open(FILE, ">$path") or die $!;
+    while(read($file, $data, 8192)) {
+	print FILE $data;
+    }
+
+    my @fileStats = stat(FILE);
+    my $size = $fileStats[7];
+    $size = $size / (1024 * 1024);
+    $size *= 10;
+    $size = int($size);
+    $size = $size / 10;
+
+    close(FILE);
+
+    my $message = "";
+    if(-f $path) {
+	Utils::log(Settings::settings("logDirectory") . "/uploads.log",
+		   "[" . Utils::nicetime() . "]" .
+		   " $email ($uid) successfully uploaded to $path");
+	  $message = "You have successfully uploaded your photos. The size of the file we received is $size MB. Please wait a few days while the squirrels get up to speed. Thanks";
+	  $db->zipFilePath($uid, $path);
+	  $db->setImportStatus($uid, "new");
+      } else {
+	  Utils::log(Settings::settings("logDirectory") . "/uploads.log",
+		     "[" . Utils::nicetime() . "]" .
+		     " $email ($uid) UNsuccessfully uploaded to $path");
+	    $message = "Your upload failed for some reason. Please try <a class=\"link1\" href=\"/aditl2/dyn/upload\">again</a>. If the problem persists, email us at aditl\@mit.edu";
+	}
+    print $cgi->header();
+    print Utils::message($message);
+}
+
+
+
+sub selectppl {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    if(defined($cgi->param("ppldone"))) {
+	if($cgi->param("ppldone") eq "1") {
+	    my $cookie = $cgi->cookie(
+				      -name => $SWITCH,
+				      -value => "doupload"
+				      );
+	    print $cgi->header(-cookies => [$cookie]);
+	    print Utils::redirect(Settings::settings("uploadURL"));
+	    exit;
+	}
+    }
+	    
+    my $cookie = $cgi->cookie(
+			      -name => $SWITCH,
+			      -value => "selectppl",
+			      );
+
+    print $cgi->header(-cookies => [$cookie]);
+
+    my $templateLib = Settings::settings("templateLib");
+    my $friendlimit = Settings::settings("friendLimit");
+
+    if(defined($cgi->param("addfriend"))) {
+	my $fruid = int($cgi->param("addfriend"));
+	$db->addfriend($uid, $fruid, $friendlimit);
+    }
+
+    if(defined($cgi->param("delfriend"))) {
+	my $fruid = int($cgi->param("delfriend"));
+	$db->delfriend($uid, $fruid);
+    }
+
+    my @searchppl;
+    my $search = "";
+    if(defined($cgi->param("search"))) {
+	$search = $cgi->param("search");
+    }
+
+    my @sortedsearch;
+    if($search) {
+	$db->search($search, "first_name", \@searchppl);
+	$db->search($search, "last_name", \@searchppl);
+	$db->search($search, "email", \@searchppl);
+	@sortedsearch = sort {$a->{ln} cmp $b->{ln}} @searchppl;
+    }
+
+    my @sortedsearch2;
+    my %seen;
+    foreach(@sortedsearch) {
+	my $key = $_->{uid};
+	unless($seen{$key} == 1) {
+	    push(@sortedsearch2, $_);
+	    $seen{$key} = 1;
+	}
+    }
+	
+    my @currentppl;
+    $db->friends($uid, \@currentppl);
+    my @sortedfriends = sort {$a->{ln} cmp $b->{ln}} @currentppl;
+
+    my $table1 = "";
+    my $table2 = "";
+
+    my $template1 = $templateLib . "/addppl-1.html";
+    my $template2 = $templateLib . "/addppl-2.html";
+    my $template;
+
+    my $i = 0;
+    my $addURL = Settings::settings("uploadURL") . "?addfriend=";
+    foreach(@sortedsearch2) {
+	if($i++ % 2 == 0) {
+	    $template = $template1;
+	} else {
+	    $template = $template2;
+	}
+
+	my $friendcount = $db->friendcount($uid);
+	my $action = "[add]";
+	if($friendcount >= Settings::settings("friendLimit")) {
+	    $action = "";
+	}
+	    
+	$table2 .= Template::fillTemplate($template,
+					  [$_->{email},
+					   $_->{fn} . " " . $_->{ln},
+					   $addURL . $_->{uid},
+					   $action]);
+    }
+
+    # for no results.
+    if($search && $table2 eq "") {
+	$table2 = Template::fillTemplate($template1, ["No matches", "", "", ""]);
+    }
+
+    $i=0;
+    my $removeURL = Settings::settings("uploadURL") . "?delfriend=";
+    foreach(@sortedfriends) {
+	if($i++ % 2 == 0) {
+	    $template = $template1;
+	} else {
+	    $template = $template2;
+	}
+
+	$table1 .= Template::fillTemplate($template,
+					  [$_->{email},
+					   $_->{fn} . " " . $_->{ln},
+					   $removeURL . $_->{uid},
+					   "[remove]"]);
+    }
+    
+    $template = Settings::settings("templateLib") . "/addppl.html";
+    print Template::fillTemplate($template, [$table1, $table2]);
+}
+    
+sub survey {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    my $howheard = "";
+    if(defined($cgi->param("howheard"))) {
+	$howheard = $cgi->param("howheard");
+    } else {
+	print $cgi->header();
+	print Template::fillTemplate(Settings::settings("templateLib") . "/uploadsurvey.html", [Settings::settings("urlBase")]);
+	exit;
+    }
+
+    if($howheard eq "poster") {
+	$db->setHowHeard($uid, "poster");
+	
+    } elsif($howheard eq "spotlight") {
+	$db->setHowHeard($uid, "spotlight");
+	
+    } elsif($howheard eq "emaillist") {
+	$db->setHowHeard($uid, "emaillist");
+	
+    } elsif($howheard eq "wordofmouth") {
+	$db->setHowHeard($uid, "wordofmouth");
+	
+    } elsif($howheard eq "other") {
+	$db->setHowHeard($uid, "other");
+    } else {
+	print $cgi->header();
+	print Template::fillTemplate(Settings::settings("templateLib") . "/uploadsurvey.html", [Settings::settings("urlBase")]);
+	exit;
+    }
+
+    doupload($cgi, $db, $uid, $email);
+}
+    
+    

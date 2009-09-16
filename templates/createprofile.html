@@ -1,0 +1,55 @@
+urlBase
+templateMessage
+fnvalue
+lnvalue
+emailvalue
+<template>
+
+<html>
+<head><title>ADITL Registration</title>
+<link rel="StyleSheet" href="urlBase/static/aditl.css" type="text/css" />
+</head>
+<body bgcolor=#ffffff>
+
+<left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
+<img border=0 name="bannerimg" src="urlBase/static/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/static/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
+</a></div></left>
+
+<br><br><br>
+
+<div class="stdgray" style="font-size:20px">ADITL Registration</div>
+<div class="stdgray" style="font-size:15px; width:450px">templateMessage</div>
+<br>
+<div class="orangebox" style="font-size:10px; width:43em">
+<form method=post action="urlBase/dyn/register">
+<table cellspacing=0 cellpadding=4>
+<tr><td align="right" class="stdgray" style="font-size:12px">first name</td><td><input name="firstname" size="10" value="fnvalue"></td></tr>
+<tr><td align="right" class="stdgray" style="font-size:12px">last name</td><td><input name="lastname" size="10" value="lnvalue"></td></tr>
+<tr><td align="right" class="stdgray" style="font-size:12px">email address</td><td><input name="email" size="17" value="emailvalue"></td></tr>
+<tr><td align="right" class="stdgray" style="font-size:12px">mit affiliation</td><td>
+<select name="affiliation">
+<option value="---" selected>---
+<option value="undergrad">undergrad
+<option value="gradstudent">grad student
+<option value="faculty">faculty
+<option value="staff">staff
+<option value="admin">administration
+<option value="alum">alum
+<option value="other">other
+</select>
+</td></tr>
+
+
+<tr><td align="right" class="stdgray" style="font-size:12px">password</td><td><input name="password" size="17" value="" type="password"></td></tr>
+<tr><td align="right" class="stdgray" style="font-size:12px">verify password</td><td><input name="password2" size="17" value="" type="password"></td></tr>
+<tr><td align="right" class="stdgray" style="font-size:12px"><br><input type="submit" name="null" value="register"></td><td></td></tr>
+</table>
+</form>
+</div>
+
+<div class="stdgray" style="font-size:10px; width:43em">[privacy policy] we will not give away, sell, pander, or otherwise release your personal information. your email address will be visible to other registered users.</div>
+
+
+
+</body></html>

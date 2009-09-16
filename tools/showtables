@@ -1,0 +1,19 @@
+#!/usr/bin/perl -w
+
+system "psql -d aditl -c \"SELECT
+a.attnum,
+a.attname AS field,
+t.typname AS type,
+a.attlen AS length,
+a.atttypmod AS lengthvar,
+a.attnotnull AS notnull
+FROM
+pg_class c,
+pg_attribute a,
+pg_type t
+WHERE
+c.relname = '$ARGV[0]'
+and a.attnum > 0
+and a.attrelid = c.oid
+and a.atttypid = t.oid
+ORDER BY a.attnum\"";

@@ -1,0 +1,174 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "/usr/local/aditl2/perl/lib";
+use Database;
+use Template;
+use Cookie;
+use Settings;
+use Utils;
+
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+$CGI::DISABLE_UPLOADS = 0;
+$CGI::POST_MAX=1024 * 1024 * 60; #60M limit
+
+my $cgi = CGI->new();
+my $db = Database->new();
+my $status = $db->connect("aditl2");
+
+use vars qw($LOGFILE $SWITCH);
+$LOGFILE = Settings::settings("logDirectory") . "/upload.log";
+$SWITCH = "aditluploadswitch";
+
+my $uid;
+
+unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
+    print $cgi->header();
+    print Utils::redirect(Settings::settings("loginURL") . "?message=You%20must%20log%20in%20first.&redirect=" . Settings::settings("uploadURL"));
+    exit;
+}
+
+my $email = $db->getEmail($uid);
+
+
+# now see where in the upload process the user is.
+# the cookie represents the step in the process the user
+# just completed. 
+if(defined($cgi->cookie($SWITCH))) {
+    my $switch = $cgi->cookie($SWITCH);
+    if($switch eq "survey") {
+	survey($cgi, $db, $uid, $email);
+    } elsif($switch eq "selectppl") {
+	selectppl($cgi, $db, $uid, $email);
+    } elsif($switch eq "doupload") {
+	doupload($cgi, $db, $uid, $email);
+    } else {
+	firstime($cgi, $db, $uid, $email);
+    }
+    exit;
+} else {
+    firstime($cgi, $db, $uid, $email);
+    exit;
+}
+
+sub firstime {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    my $cookie = $cgi->cookie(
+			      -name => $SWITCH,
+			      -value => "survey",
+			      -expires => '+30d'
+			      );
+
+    print $cgi->header(-cookies => [$cookie]);
+    #print $cgi->header();
+
+    my $template = Settings::settings("templateLib") . "/uploadsurvey.html";
+    my $html = Template::fillTemplate($template, []);
+    print $html;
+}
+
+sub doupload {
+    print $cgi->header();
+    print "got it";
+}
+
+
+sub selectppl {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    my $cookie = $cgi->cookie(
+			      -name => $SWITCH,
+			      -value => "selectppl",
+			      -expires => '+30d'
+			      );
+
+    print $cgi->header(-cookies => [$cookie]);
+
+    my @list;
+    $db->getAllEmails(\@list);
+    my @sortedemails;
+    Utils::alphaSplitList(5, \@list, \@sortedemails);
+
+    my $templateLib = Settings::settings("templateLib");
+
+
+    my @emailtables;
+    my @tablelabels; #this is the "aa - cd", "ce - fg" type of labels.
+
+    foreach(@sortedemails) {
+	my $emailtable = "";
+	my $i = 0;
+	my @emails = @{$_};
+
+	push(@tablelabels, substr($emails[0]->{email}, 0, 2));
+	push(@tablelabels, substr($emails[-1]->{email}, 0, 2));
+	     
+	foreach(@emails) {
+	    my $href = Settings::settings("uploadURL") . "?adduser=" . $_->{uid};
+	    my $template;
+	    if($i++ % 2 == 0) {
+		$template = $templateLib . "/addppl-1.html";
+	    } else {
+		$template = $templateLib . "/addppl-2.html";
+	    }
+	    $emailtable .= Template::fillTemplate($template,
+						  [$_->{email}, $_->{name}, $href]);
+	    $emailtable .= "\n";
+	}
+	push(@emailtables, $emailtable);
+    }
+
+    for(my $i = 0; $i < scalar(@tablelabels); $i+=2) {
+	push(@emailtables, "$tablelabels[$i] - $tablelabels[$i+1]");
+    }
+
+    my $template = Settings::settings("templateLib") . "/addppl.html";
+    print Template::fillTemplate($template, \@emailtables);
+}
+    
+sub survey {
+    my $cgi = shift;
+    my $db = shift;
+    my $uid = shift;
+    my $email = shift;
+
+    my $howheard = "";
+    if(defined($cgi->param("howheard"))) {
+	$howheard = $cgi->param("howheard");
+    } else {
+	firstime($cgi, $db, $uid, $email);
+	exit;
+    }
+
+    if($howheard eq "poster") {
+	$db->setHowHeard($uid, "poster");
+	
+    } elsif($howheard eq "spotlight") {
+	$db->setHowHeard($uid, "spotlight");
+	
+    } elsif($howheard eq "emaillist") {
+	$db->setHowHeard($uid, "emaillist");
+	
+    } elsif($howheard eq "wordofmouth") {
+	$db->setHowHeard($uid, "wordofmouth");
+	
+    } elsif($howheard eq "other") {
+	$db->setHowHeard($uid, "other");
+    } else {
+	firstime($cgi, $db, $uid, $email);
+	exit;
+    }
+    
+    selectppl($cgi, $db, $uid, $email);
+}
+    
+    

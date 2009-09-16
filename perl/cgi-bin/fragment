@@ -1,0 +1,107 @@
+#!/usr/bin/perl
+
+use strict;
+
+use lib "../lib";
+use Database;
+use Settings;
+use Template;
+use Utils;
+use Colors;
+
+use CGI qw(-debug :standard);
+$CGI::DISABLE_UPLOADS = 1;
+
+use vars qw($cgi $db);
+
+$cgi = new CGI;
+
+$db = Database->new();
+$db->connect("Settings::settings("dbName"));
+
+my $uid;
+
+
+my %image;
+
+$db->randomImage("small_photos", \%image);
+my @photographer = $db->getinfo($image{uid});
+my $fn = $photographer[0];
+my $ln = $photographer[1];
+
+my $photogName = lc(substr($fn, 0, 1)) . substr($fn, 1) . " " . lc(substr($ln, 0, 1)) . substr($ln, 1);
+#my $photogName = uc(substr($fn, 0, 1)) . substr($fn, 1) . " " . uc(substr($ln, 0, 1)) . substr($ln, 1);
+
+
+my @time = Utils::sqlTime($image{time}, $image{offset});
+my $tstring = "$time[0]:$time[1]:$time[2]";
+
+
+
+my %tinyImage;
+$db->photoInfo($image{phid}, "small_photos", \%tinyImage);
+
+my @color = Colors::grabColor($tinyImage{file});
+my $lightness = Settings::settings("colorManipLightness");
+my $sat = Settings::settings("colorManipSat");
+my @bgColor = Colors::slightGray(@color, $lightness, $sat);
+
+my $wbgcolor = Utils::toWebColor(@bgColor);
+my $wcolor = Utils::toWebColor(@color);
+
+my $aditlLeft = 550 - $image{width};
+
+my $voteURL = Settings::settings("frontURL") . "?vote=" . $image{phid};
+
+my $html = "<img src=\"$image{url}\" onClick=\"alert(\"you mama\");\">";
+
+print "Content-Type: text/xml; charset=ISO-8859-1\n\n";
+print $html;
+exit;
+
+
+
+
+
+# Opens an html template and fills in the appropriate photos and text
+# The format of the template is a newline separated list of keywords to
+# be replaced (order of keywords matching order of replacing text) ending
+# with <template> followed by the template body.
+# empty lines in keyword list are ignored.
+sub fillTemplate {
+    my $templateFile = shift; #file name
+    my $objectRef = shift;
+    my @objects = @$objectRef;
+    # list of text bits to be swapped in for the keywords found in the
+    # template.
+
+# The proc just takes objects in order and replaces the variables found
+# in the html template in order.
+
+    open(FILE, "$templateFile") or die "Couldn't open template file: $!\n";
+    my @temp = <FILE>;
+    my $template = join("", @temp);
+    close(FILE);
+    
+    @temp = split(/\<template\>/, $template);
+
+    my $templateBody = $temp[1];
+    my @variables1 = split(/\n/, $temp[0]);
+    my @variables; #keywords we'll be substituting for in template body
+
+    foreach(@variables1) {
+	unless($_ =~ /^\n$$/) {
+	    push(@variables, $_);
+	}
+    }
+
+    if(scalar(@objects) != scalar(@variables)) {
+	die "in 'fillTemplate' number of template keywords and replacement text does not match\n";
+    }
+
+    for(my $i = 0; $i < scalar(@variables); $i++) {
+	$templateBody =~ s/$variables[$i]/$objects[$i]/g;
+    }
+
+    return $templateBody;
+}

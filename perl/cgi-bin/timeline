@@ -1,0 +1,190 @@
+#!/usr/bin/perl
+
+use strict;
+
+use lib "../lib";
+use Database;
+use Settings;
+use Template;
+use Utils;
+use Colors;
+use Cookie;
+
+use CGI qw(-debug :standard);
+$CGI::DISABLE_UPLOADS = 1;
+
+use vars qw($cgi $db $MEDTABLE);
+
+$MEDTABLE = "med_photos";
+
+$cgi = new CGI;
+
+$db = Database->new();
+$db->connect(Settings::settings("dbName"));
+
+my @uids;
+for(my $i = 0; $i < 4; $i++) {
+    my $j = $i+1;
+    $uids[$i] = $cgi->param("uid$j");
+    unless($uids[$i]) {
+	$uids[$i] = -1;
+    }
+    $uids[$i] = int($uids[$i]);
+}
+
+my $start = $cgi->param("start");
+if(defined($start)) {
+    $start = int($start);
+    if($start < 0 || $start > 1439 || !($start % 15 == 0)) {
+	$start = 720;
+    }
+} else {
+    $start = 720;
+}
+    
+
+
+
+#720
+my $uidstring = "uid1=$uids[0]\&uid2=$uids[1]\&uid3=$uids[2]\&uid4=$uids[3]";
+
+my @initFrags;
+
+push(@initFrags, Settings::settings("urlBase"));
+push(@initFrags, $start);
+push(@initFrags, Settings::settings("htmlFragmentURL") . "?" . $uidstring);
+push(@initFrags, Settings::settings("jsFragmentURL") . "?" . $uidstring);
+
+my $index = 1;
+my @photognames;
+
+
+
+foreach(@uids) {
+    my $selectURL = Settings::settings("selectUserURL");
+    my @photographer = $db->getinfo($_);
+
+    my $uidvalue;
+    my $name;
+    if(@photographer) {
+	$name = $photographer[0] . " " . $photographer[1];
+	$name = lc($name);
+    } else {
+	$name = "nobody";
+    }
+
+    $selectURL .= "?uid1=" . $uids[0] . "&uid2=" . $uids[1] . "&uid3=" . $uids[2] . "&uid4=" . $uids[3] .
+	"&position=" . $index;
+
+    my $html = "<span style=\"font-size:15px; color:#646b76;\">[$index] $name</span>
+<a style=\"text-decoration:none; color:#646b76; font-size:15px;\" href=\"$selectURL\">[change]</a>";
+
+    push(@photognames, $html);
+    $index++;
+}
+
+push(@initFrags, join("&nbsp; &nbsp; &nbsp;", @photognames));
+
+
+my @mainPhotogInfo = $db->getinfo($uids[0]);
+
+
+my @navlineUIDs = ($uids[0]);
+push(@initFrags, getNavlineContent(\@navlineUIDs));
+push(@initFrags, navlineClickable());
+push(@initFrags, lc($mainPhotogInfo[0]));
+
+
+
+my $html = Template::fillTemplate(Settings::settings("templateLib") . "/timeline.html", \@initFrags);
+
+print $cgi->header();
+print $html;
+exit;
+
+sub getNavlineContent {
+    my $uidref = shift;
+
+    my @allimages;
+    foreach(@$uidref) {
+	#comes back sorted.
+	my @p = $db->getPhotosBetween($_, toSqlTime(0), toSqlTime(1439));
+	foreach(@p) {
+	    my %photo;
+	    $db->photoInfo($_, $MEDTABLE, \%photo);
+	    push(@allimages, \%photo);
+	}
+    }
+
+    my @bucketized;
+    #takes only first image per bucket
+    bucketize(\@allimages, \@bucketized);
+
+    my $html = "";
+
+    foreach(@bucketized) {
+	my $xoff = getPixelOffset(0, $_->{time});
+	$html .= "<img alt=\"\" style=\"position:absolute; top:0px; left:" . $xoff . "px;\" src=\"" .
+	    $_->{url} . "\" width=\"3\" height=\"10\"></img>\n";
+
+    }
+
+    return $html;
+}
+
+sub bucketize {
+    my $listref = shift;
+    my $outref = shift;
+
+    my %buckets;
+
+    foreach(@$listref) {
+	my @time = Utils::sqlTime($_->{time});
+	my $mins = $time[0]*60 + $time[1];
+	my $bucket = int($mins / 2);
+
+	unless(exists($buckets{$bucket})) {
+	    $buckets{$bucket} = 1;
+	    push(@$outref, $_);
+	}
+    }
+}
+
+sub getPixelOffset {
+    my $start = shift;
+    my $time = shift;
+
+    
+    my @timel = Utils::sqlTime($time, 0);
+
+    my $seconds = $timel[0]*3600 + $timel[1]*60 + $timel[2];
+
+    # num of seconds into this fifteen minute window that we are.
+    my $secondsOff = $seconds - ($start * 60);
+
+    my $pixOff = int( ($secondsOff / 86400) * 792);
+    
+    return $pixOff;
+}
+
+sub toSqlTime {
+    my $dayminute = shift;
+
+    my $day = Settings::settings("eventDate");
+    my $hour = int($dayminute / 60);
+    my $minute = $dayminute % 60;
+    
+    return "$day $hour:$minute:00";
+}
+
+sub navlineClickable {
+
+    my $html = "";
+    for(my $i = 0; $i < 24; $i++) {
+	my $min = $i * 60;
+	my $off = 33 * $i;
+	$html .= "<div style=\"z-index:3; position:absolute; top:-40px; left:" . $off . "px;\">";
+	$html .= "<a class=\"navclick\" href=\"#\" onclick=\"gotoTime($min)\"></a></div>\n";
+    }
+    return $html;
+}

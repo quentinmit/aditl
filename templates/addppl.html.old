@@ -1,0 +1,206 @@
+templateEmail1
+templateEmail2
+templateEmail3
+templateEmail4
+templateEmail5
+tabTitle1
+tabTitle2
+tabTitle3
+tabTitle4
+tabTitle5
+<template>
+
+<html>
+<head><title>ADITL Add ppl</title>
+<link rel="StyleSheet" href="/aditl2/aditl.css" type="text/css" />
+<style type="text/css">
+.associatesCell1 {
+        font-size:15px;
+	color:#77746B;
+	padding-left:10px;
+}
+
+.associatesCell2 {
+        font-size:15px;
+	color:#ffa963;
+	padding-left:10px;
+}
+
+.mainarea {
+        padding:5px;
+	border-style:solid; 
+	border-width:1px; 
+	border-color:#FFA963;
+	float:left;
+	width:30%;
+	
+}
+
+.lookuparea {
+	border-style:solid; 
+	border-width:1px; 
+	border-color:#FFA963;
+	float:left;
+	margin-left:10px;
+	width:50%;
+}
+
+.tab {
+        color:#37342b;
+        padding:0px;
+        text-align:center;
+        float:left;
+	width:20%;
+}
+
+.selectedtab {
+        color:#37342b;
+        padding:0px;
+        text-align:center;
+        float:left;
+        background-color:#ffa963;
+	width:20%;
+}
+
+a.link1 {font-size:17px; color:#ffa963}
+a.link1:hover {text-decoration:underline}
+
+</style>
+
+<script>
+<!--
+
+function email1() {
+document.getElementById("set").innerHTML = 
+document.getElementById("set1").innerHTML;
+document.getElementById("tab1").style.backgroundColor="#ffa963";
+document.getElementById("tab2").style.backgroundColor="#ffffff";
+document.getElementById("tab3").style.backgroundColor="#ffffff";
+document.getElementById("tab4").style.backgroundColor="#ffffff";
+document.getElementById("tab5").style.backgroundColor="#ffffff";
+}
+
+function email2() {
+document.getElementById("set").innerHTML = 
+document.getElementById("set2").innerHTML;
+document.getElementById("tab1").style.backgroundColor="#ffffff";
+document.getElementById("tab2").style.backgroundColor="#ffa963";
+document.getElementById("tab3").style.backgroundColor="#ffffff";
+document.getElementById("tab4").style.backgroundColor="#ffffff";
+document.getElementById("tab5").style.backgroundColor="#ffffff";
+}
+
+function email3() {
+document.getElementById("set").innerHTML = 
+document.getElementById("set3").innerHTML;
+document.getElementById("tab1").style.backgroundColor="#ffffff";
+document.getElementById("tab2").style.backgroundColor="#ffffff";
+document.getElementById("tab3").style.backgroundColor="#ffa963";
+document.getElementById("tab4").style.backgroundColor="#ffffff";
+document.getElementById("tab5").style.backgroundColor="#ffffff";
+}
+
+function email4() {
+document.getElementById("set").innerHTML = 
+document.getElementById("set4").innerHTML;
+document.getElementById("tab1").style.backgroundColor="#ffffff";
+document.getElementById("tab2").style.backgroundColor="#ffffff";
+document.getElementById("tab3").style.backgroundColor="#ffffff";
+document.getElementById("tab4").style.backgroundColor="#ffa963";
+document.getElementById("tab5").style.backgroundColor="#ffffff";
+}
+
+function email5() {
+document.getElementById("set").innerHTML = 
+document.getElementById("set5").innerHTML;
+document.getElementById("tab1").style.backgroundColor="#ffffff";
+document.getElementById("tab2").style.backgroundColor="#ffffff";
+document.getElementById("tab3").style.backgroundColor="#ffffff";
+document.getElementById("tab4").style.backgroundColor="#ffffff";
+document.getElementById("tab5").style.backgroundColor="#ffa963";
+}
+-->
+</script>
+</head>
+<body onLoad="email1()" bgcolor=#ffffff>
+
+<left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
+<img border=0 name="bannerimg" src="/aditl2/logo1.jpg" onMouseOver = "document.bannerimg.src = '/aditl2/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '/aditl2/logo1.jpg'">
+</a></div></left>
+
+<br><br><br>
+
+<div class="stdgray" style="font-size:20px">Who are the others?</div>
+<div class="stdgray" style="font-size:15px; width:600px">orem ipsum dolor sit amet, consectetuer 
+adipiscing elit. Proin bibendum fringilla sapien. In pulvinar dolor vel mauris. Vestibulum at lectus. 
+Morbi non nunc. Phasellus nonummy quam quis augue. Integer ullamcorper. In nonummy mi ac metus. 
+Maecenas arcu. Etiam placerat ipsum sit amet tortor rutrum rutrum. Sed pede. Nulla nisl enim, 
+hendrerit id, tempor ut, vulputate et, eros. Praesent a urna. Vestibulum molestie magna sit amet nunc. 
+Integer tincidunt.</div>
+
+<div style="margin-top:10px">
+
+<div class="mainarea">
+<div class="stdgray" style="font-weight:bold">Current Associates</div>
+<br>
+<div style="text-align:center">
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td class="associatesCell1">Christine Liu (cml@mit.edu)</td>
+<td class="associatesCell2">[remove]</td>
+</tr>
+</table>
+</div>
+</div>
+
+<div class="lookuparea">
+<a id="tab1" class="selectedtab" href="#" onClick="email1()">tabTitle1</a>
+<a id="tab2" href="#" class="tab" onClick="email2()">tabTitle2</a>
+<a id="tab3" href="#" class="tab" onClick="email3()">tabTitle3</a>
+<a id="tab4" href="#" class="tab" onClick="email4()">tabTitle4</a>
+<a id="tab5" href="#" class="tab" onClick="email5()">tabTitle5</a>
+<br><br>
+
+<div id="set">
+</div>
+
+<div id="set1" style="height:0px; visibility:hidden; position:absolute: top:0px;">
+<table width="100%" cellspacing="0" cellpadding="0">
+templateEmail1
+</table>
+</div>
+
+<div id="set2" style="height:0px; visibility:hidden; position:absolute; top:0px;">
+<table width="100%" cellspacing="0" cellpadding="0">
+templateEmail2
+</table>
+</div>
+
+<div id="set3" style="height:0px; visibility:hidden; position:absolute; top:0px;">
+<table width="100%" cellspacing="0" cellpadding="0">
+templateEmail3
+</table>
+</div>
+
+<div id="set4" style="height:0px; visibility:hidden; position:absolute; top:0px;">
+<table width="100%" cellspacing="0" cellpadding="0">
+templateEmail4
+</table>
+</div>
+
+<div id="set5" style="height:0px; visibility:hidden; position:absolute; top:0px;">
+<table width="100%" cellspacing="0" cellpadding="0">
+templateEmail5
+</table>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+</body></html>

@@ -1,0 +1,1 @@
+psql aditl2 -c "select * from users where email like '%$1%';"

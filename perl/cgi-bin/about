@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use strict;
+
+use lib "../lib";
+use Settings;
+use Template;
+use Utils;
+
+use CGI qw(-debug :standard);
+$CGI::DISABLE_UPLOADS = 1;
+
+use vars qw($cgi);
+
+$cgi = new CGI;
+
+my $bgcolor = $cgi->param("bgc") or "ffffff";
+my $fgcolor = $cgi->param("fgc") or "333333";
+
+
+print $cgi->header();
+
+
+my @vals = ($bgcolor, $fgcolor);
+
+my $html = Template::fillTemplate(Settings::settings("templateLib") . "/about.html", \@vals);
+
+print $html;
+exit;

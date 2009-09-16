@@ -1,0 +1,118 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "../lib";
+use Database;
+use Template;
+use Settings;
+use Cookie;
+use Utils;
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+
+CGI::DISABLE_UPLOADS = 1;
+use vars qw($cgi $redirect $db);
+$cgi = CGI->new();
+
+$db = Database->new();
+$db->connect(Settings::settings("dbName"));
+
+
+$redirect = "";
+
+my $email = "";
+my $password = "";
+if(defined($cgi->param("redirect"))) {
+    $redirect = $cgi->param("redirect");
+}
+
+my $uid = Cookie::isUserLoggedIn($cgi, $db);
+if($uid) {
+    print $cgi->header();
+    if($redirect) {
+	print Utils::redirect($redirect);
+	exit;
+    } else {
+	my $email = $db->getEmail($uid);
+	print Utils::message("you are already logged in as $email.");
+	exit;
+    }
+}
+
+if(defined($cgi->param("email"))) {
+    $email = $cgi->param("email");
+    $password = ($cgi->param("password")) or "";
+    processLogin($email, $password, $redirect);
+    exit;
+}
+
+#here we just present login form;
+
+my $message = "";
+if(defined($cgi->param("message"))) {
+    $message = $cgi->param("message");
+}
+
+print $cgi->header();
+my $templateroot = Settings::settings("templateLib");
+my $html = Template::fillTemplate("$templateroot/login.html", [Settings::settings("urlBase"), "Login", $message, "", $redirect]);
+
+print $html;
+exit;
+
+
+sub processLogin {
+    my $email = shift;
+    my $password = shift;
+    my $redirect = shift;
+
+    #input checking (like for single quotes) is done by the DB function.
+    if($db->validUser($email, $password)) {
+	doLogin($email, $db);
+	exit;
+    } else {
+	my $templateroot = Settings::settings("templateLib");
+	my $html = Template::fillTemplate("$templateroot/login.html", [Settings::settings("urlBase"), "Login", "email and password do not match. make sure you didn't forget \'<b>\@mit.edu</b>\'.", "$email", $redirect]);
+	print $cgi->header();
+	print $html;
+	exit;
+    }
+}
+
+sub doLogin {
+    my $email = shift;
+    my $db = shift;
+
+    my $uid = $db->userExists($email);
+    #at this point $uid should never be nonzero since we already
+    #checked the user's login information.
+    if($uid == 0) {
+	print Utils::message("Login failed for a really unexpected reason (error 100 in login)");
+	exit;
+    }
+
+    my $cookieToken = Cookie::createAuthToken();
+    my $cookieIndex = $db->addAuthToken($uid, $cookieToken);
+    my $ck1 = $cgi->cookie(
+			   -name => 'aditlauthid',
+			   -value => $cookieIndex
+			   );
+    
+    my $ck2 = $cgi->cookie(
+			   -name => 'aditlauthtoken',
+			   -value => $cookieToken
+			   );
+
+    print $cgi->header(-cookies => [$ck1, $ck2]);
+    my $html;
+    if($redirect) {
+	$html = Utils::redirect($redirect);
+    } else {
+	$html = Utils::message("you have successfully logged in with the email $email.");
+    }
+
+    print $html;
+    exit;
+}
+    

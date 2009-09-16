@@ -1,0 +1,173 @@
+tImage
+tTime
+tPhotog
+tColor
+tbgColor
+tWidth
+<template>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">	
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>
+A Day in the Life of MIT 2005
+</title>
+
+<style type="text/css">
+body {
+background-color:#ffffff;
+color:#292929;
+font-family:helvetica, sans-serif;
+margin:5px;
+}
+
+.header-spacer {
+width:100%; 
+height:50px;}
+
+.header-area {
+width:50%;
+height:3em;
+}
+
+.aditl-head1 {
+font-size:50px;
+color:#tColor;
+#background-color:#ff7777;
+float:left;
+margin-left:tWidthpx;
+}
+
+.aditl-head2 {
+font-size:23px;
+#font-style:italic;
+float:left;
+margin-top:21px;
+}
+
+
+.main-area {
+spacing-top:10px;
+background-color:#tbgColor;
+width:100%;
+height:352px;
+}
+
+.main-picture-area {
+width:600px;
+height:30px;
+float:left;
+#background-color:#ccffcc;
+}
+
+.main-image {
+float:right;
+border-right: 1px solid #333333;
+border-left: 1px solid #333333;
+border-top: 1px solid #333333;
+border-bottom: 1px solid #333333;
+}
+
+.main-text-area {
+margin-left:10px;
+margin-top:20px;
+float:left;
+}
+
+.main-text-area-spacer {
+height:290px;
+}
+
+.time-text {
+font-size:65px;
+letter-spacing:.03em;
+color:#tColor;
+}
+
+.name-text {
+margin-top:20px;
+#margin-left:8px;
+font-size:2em;
+}
+
+.info-text {
+margin-top:30px;
+#margin-left:8px;
+font-size:1.1em;
+line-height:1.1em;
+}
+
+.plus-button {
+vertical-align:bottom;
+#margin-left:8px;
+font-size:2em;
+}
+
+.footer-spacer {
+width:100%;
+height:40px;
+}
+
+.footer-bar {
+width:100%;
+height:200px;
+background-color:#tbgColor;
+}
+
+</style>
+
+</head>
+<body>
+
+<div>
+<div class="header-spacer"></div>
+
+<div class="header-area">
+<div class="aditl-head1">ADITL</div>
+<div class="aditl-head2">A Day in the Life of MIT</div>
+</div>
+
+
+<div style="height:2px; width:100%"></div>
+
+
+<div class="main-area">
+<div class="main-picture-area">
+<img id="mainImage" class="main-image" alt="front page image" src="tImage"></img>
+</div>
+
+<div class="main-text-area">
+<div class="main-text-area-spacer">
+
+<div class="time-text">tTime</div>
+<div class="name-text">tPhotog</div>
+
+<div class="info-text">
+<!--
+65 photos<br></br>+caption<br></br>8 comments
+-->
+</div>
+
+</div>
+
+<div class="plus-button">[+]</div>
+
+</div>
+
+</div>
+
+<div class="footer-area">
+<div class="footer-spacer"></div>
+<div class="footer-bar">blah blah blah</div>
+</div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
