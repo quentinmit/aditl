@@ -28,12 +28,12 @@ sub isUserLoggedIn {
     my $cgi = shift;
     my $db = shift;
 
-    unless(defined($cgi->cookie("aditlauthid")) && defined($cgi->cookie("aditlauthtoken"))) {
+    my $authid = $cgi->param("aditlauthid") || $cgi->url_param("aditlauthid") || $cgi->cookie("aditlauthid");
+    my $authtoken = $cgi->param("aditlauthtoken") || $cgi->url_param("aditlauthtoken") || $cgi->cookie("aditlauthtoken");
+
+    unless(defined($aditlauthid) && defined($aditlauthtoken)) {
 	return 0;
     }
-
-    my $authid = $cgi->cookie("aditlauthid");
-    my $authtoken = $cgi->cookie("aditlauthtoken");
 
     my @info;
     my $found = $db->getAuthToken($authid, \@info);
