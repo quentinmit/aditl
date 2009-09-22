@@ -107,7 +107,7 @@ exit;
 sub noParams {
     my $template = Settings::settings("templateLib") . "\/createprofile.html";
     my $msg = "registering with ADITL lets you upload your photos after the event and post comments. 
-you will also receive reminder emails before the day of the event in april. you must have a valid email ending in .mit.edu to register. please note
+you will also receive reminder emails before the day of the event in september. you must have a valid email ending in mit.edu to register. please note
 that this site does not use encryption, so you probably don't want to use your athena password.";
     my $html = Template::fillTemplate($template, [Settings::settings("urlBase"), $msg, "", "", ""]);
     print $html;
