@@ -1,1 +1,1 @@
-psql aditl2 -c "select * from users where email like '%$1%';"
+sudo -u www-data psql aditl2009 -c "select * from users where email like '%$1%';"
