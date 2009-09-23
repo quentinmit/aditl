@@ -11,8 +11,7 @@ $settings{"urlBase"} = "http://aditl.mit.edu";
 $settings{"templateLib"} = $settings{"pathBase"} . "/templates";
 $settings{"logDirectory"} = $settings{"pathBase"} . "/logs";
 $settings{"scratchDirectory"} = "/srv/aditl2009/scratch";
-$settings{"zipFileRoot"} = "/srv/aditl2009/rawUpload";
-$settings{"scratch2"} = "/srv/aditl2009/scratch2";
+$settings{"incomingDir"} = "/srv/aditl2009/incoming";
 $settings{"rootPhotoDir"} = "/srv/aditl2009/photoroot";
 $settings{"tinyBarcodePath"} = "/srv/aditl2009/photoroot/tiny-barcodes";
 

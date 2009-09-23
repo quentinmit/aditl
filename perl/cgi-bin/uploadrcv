@@ -1,0 +1,117 @@
+#!/usr/bin/perl -w
+use strict;
+
+use lib "../lib";
+use Database;
+use Template;
+use Cookie;
+use Settings;
+use Utils;
+
+use File::Spec::Functions;
+use POSIX qw(strftime);
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+$CGI::DISABLE_UPLOADS = 0;
+$CGI::POST_MAX=1024 * 1024 * 300; #300M limit
+
+my $cgi = CGI->new();
+my $db = Database->new();
+my $status = $db->connect(Settings::settings("dbName"));
+
+use vars qw($LOGFILE);
+$LOGFILE = Settings::settings("logDirectory") . "/upload.log";
+
+my $uid;
+
+unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
+    print $cgi->header('text/plain');
+    print "You do not appear to be logged in!";
+    exit;
+}
+
+my $email = $db->getEmail($uid);
+
+if ($cgi->param("Filedata")) {
+  getFile($cgi, $db, $uid, $email);
+} else {
+  print $cgi->header('text/plain');
+  print "No file received";
+  exit
+}
+
+sub getFile {
+  my $cgi = shift;
+  my $db = shift;
+  my $uid = shift;
+  my $email = shift;
+  my $fh = $cgi->upload("Filedata");
+
+  my $data;
+
+  my $fail;
+
+  my $path;
+  my $size;
+
+ UPLOAD: {
+    umask(002);
+
+    my $uploaddir = catdir(Settings::settings("incomingDir"), "$uid-$email");
+    -d $uploaddir || mkdir($uploaddir) or ($fail = "Couldn't make your upload directory: $!" && last UPLOAD);
+    $uploaddir = catdir($uploaddir, strftime("%Y-%m-%d-%H%M", localtime));
+    -d $uploaddir || mkdir($uploaddir) or ($fail = "Couldn't make a directory for this upload: $!" && last UPLOAD);
+
+    my $tmppath;
+    my $i = 1;
+    do {
+      $tmppath = catfile($uploaddir, "upload$i.in");
+    } while (-e $tmppath);
+
+    open(FILE, ">", $tmppath) or ($fail = "Couldn't open output file: $!" && last UPLOAD);
+    while(read($fh, $data, 8192)) {
+      print FILE $data;
+    }
+
+    my @fileStats = stat(FILE);
+    $size = $fileStats[7];
+    $size = $size / (1024 * 1024);
+    $size = sprintf("%.1f", $size);
+
+    close(FILE);
+
+    chomp(my $type = `file -b --mime-type $tmppath`);
+    my $i = 1;
+    do {
+      if ($type eq "image/jpeg") {
+	$path = catfile($uploaddir, "upload$i.jpg");
+      } elsif ($type eq "application/x-zip") {
+	$path = catfile($uploaddir, "upload$i.zip");
+      } else {
+	$fail = "Unknown mime type $type"; last UPLOAD;
+      }
+      $i++;
+    } while (-e $path);
+
+    rename($tmppath, $path) or ($fail = "Couldn't rename file into place: $!" && last UPLOAD);
+  }
+
+  my $message = $fail;
+  if($path && -f $path) {
+    Utils::log(Settings::settings("logDirectory") . "/uploads.log",
+	       "[" . Utils::nicetime() . "]" .
+	       " $email ($uid) successfully uploaded to $path");
+    $message = "You have successfully uploaded your photo(s). The size of the file we received is $size MB";
+    #$db->zipFilePath($uid, $path);
+    #$db->setImportStatus($uid, "new");
+  } else {
+    Utils::log(Settings::settings("logDirectory") . "/uploads.log",
+	       "[" . Utils::nicetime() . "]" .
+	       " $email ($uid) UNsuccessfully uploaded - $message");
+    unless ($message) {
+      $message = "Your upload failed for some reason. Please try again. If the problem persists, email us at aditl\@mit.edu";
+    }
+  }
+  print $cgi->header('text/plain');
+  print $message;
+}
