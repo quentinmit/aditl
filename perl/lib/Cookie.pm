@@ -31,7 +31,7 @@ sub isUserLoggedIn {
     my $authid = $cgi->param("aditlauthid") || $cgi->url_param("aditlauthid") || $cgi->cookie("aditlauthid");
     my $authtoken = $cgi->param("aditlauthtoken") || $cgi->url_param("aditlauthtoken") || $cgi->cookie("aditlauthtoken");
 
-    unless(defined($aditlauthid) && defined($aditlauthtoken)) {
+    unless(defined($authid) && defined($authtoken)) {
 	return 0;
     }
 
