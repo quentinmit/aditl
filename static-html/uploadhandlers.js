@@ -66,8 +66,8 @@ function uploadSuccess(file, serverData) {
 	try {
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
 
-		if (serverData.substring(0, 7) === "FILEID:") {
-			addImage("thumbnail.php?id=" + serverData.substring(7));
+		if (serverData.substring(0, 8) === "SUCCESS:") {
+			addImage("/photos/" + serverData.substring(8));
 
 			progress.setStatus("Thumbnail Created.");
 			progress.toggleCancel(false);

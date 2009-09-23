@@ -7,6 +7,7 @@ use Template;
 use Cookie;
 use Settings;
 use Utils;
+use Upload;
 
 use File::Spec::Functions;
 use POSIX qw(strftime);
@@ -98,10 +99,12 @@ sub getFile {
 
   my $message = $fail;
   if($path && -f $path) {
+    my @parts = Upload::process_upload($db, $uid, $path);
     Utils::log(Settings::settings("logDirectory") . "/uploads.log",
 	       "[" . Utils::nicetime() . "]" .
-	       " $email ($uid) successfully uploaded to $path");
-    $message = "You have successfully uploaded your photo(s). The size of the file we received is $size MB";
+	       " $email ($uid) successfully uploaded to $path (result: @parts)");
+    $message = join("\n", @parts);
+    #$message = "You have successfully uploaded your photo(s). The size of the file we received is $size MB";
     #$db->zipFilePath($uid, $path);
     #$db->setImportStatus($uid, "new");
   } else {

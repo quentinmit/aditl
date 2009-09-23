@@ -11,6 +11,7 @@ use lib "./";
 use Settings;
 use Email::Send;
 use Template;
+use File::Spec::Functions;
 
 #good random seed. from programming perl.
 srand ( time() ^ ($$ + ($$ << 15)) ); 
@@ -102,6 +103,29 @@ sub exiftime {
     }
 
     return $success;
+}
+
+sub imagePath {
+  my ($image, $size) = @_;
+  $size ||= "medium";
+
+  return catfile(Settings::settings("rootPhotoDir"), $image->{uid}, $size, $image->{phid}.".jpg");
+}
+
+sub imageURL {
+  my ($image, $size) = @_;
+  $size ||= "medium";
+
+  return Settings::settings("photoURLBase")."/".$image->{uid}."/".$size."/".$image->{phid}.".jpg";
+}
+
+sub imagesize {
+  my $file = shift;
+
+  my $output = join('',`identify -format "%w %h" $file`);
+  chomp $output;
+
+  return split(" ", $output);
 }
 
 # WARNING, seems not all cameras have these tags.
@@ -252,7 +276,7 @@ sub alphaSplitList {
 #offset.
 sub sqlTime {
     my $tstring = shift;
-    my $offset = shift;
+    #my $offset = shift;
 
     my @b1 = split(/\s/, $tstring);
     my @b2 = split(/\-/, $b1[1]);
@@ -262,13 +286,13 @@ sub sqlTime {
     my $minute = $b3[1];
     my $second = $b3[2];
 
-    $hour += $offset;
+    #$hour += $offset;
 
     my @digits = qw(00 01 02 03 04 05 06 07 08 09);
 
-    my $hour2 = ($hour < 10)? $digits[$hour] : $hour;
-    my $minute2 = ($minute < 10)? $digits[$minute] : $minute;
-    my $second2 = ($second < 10)? $digits[$second] : $second;
+    my $hour2 = sprintf("%02d", $hour);
+    my $minute2 = sprintf("%02d", $minute);
+    my $second2 = sprintf("%02d", $second);
 
     return ($hour2, $minute2, $second2);
 }

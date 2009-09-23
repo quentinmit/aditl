@@ -53,7 +53,7 @@ print $cgi->header();
 
 my %image;
 
-$db->randomImage("large_photos", \%image);
+$db->randomImage(\%image);
 my @photographer = $db->getinfo($image{uid});
 my $fn = $photographer[0];
 my $ln = $photographer[1];
@@ -61,17 +61,14 @@ my $ln = $photographer[1];
 my $photogName = lc($fn) . " " . lc($ln);
 #my $photogName = uc(substr($fn, 0, 1)) . substr($fn, 1) . " " . uc(substr($ln, 0, 1)) . substr($ln, 1);
 
-
+my ($width, $height) = Utils::imagesize(Utils::imagePath(\%image, "large"));
 
 my @time = Utils::sqlTime($image{time}, $image{offset});
 my $tstring = "$time[0]:$time[1]:$time[2]";
 
 
 
-my %tinyImage;
-$db->photoInfo($image{phid}, "small_photos", \%tinyImage);
-
-my @color = Colors::grabColor($tinyImage{file});
+my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 my $lightness = Settings::settings("colorManipLightness");
 my $sat = Settings::settings("colorManipSat");
 my @bgColor = Colors::slightGray(@color, $lightness, $sat);
@@ -79,61 +76,14 @@ my @bgColor = Colors::slightGray(@color, $lightness, $sat);
 my $wbgcolor = Utils::toWebColor(@bgColor);
 my $wcolor = Utils::toWebColor(@color);
 
-my $aditlLeft = 550 - $image{width};
+my $aditlLeft = 550 - $width;
 
 my $voteURL = Settings::settings("urlBase") . "/dyn/front2" . "?vote=" . $image{phid};
 
-my @vals = (Settings::settings("urlBase"), $image{url}, $tstring, $photogName, $wcolor, $wbgcolor,
-	    $aditlLeft, $image{width}, $voteURL);
+my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
+	    $aditlLeft, $width, $voteURL);
 
 my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front3.html", \@vals);
 
 print $html;
 exit;
-
-
-
-
-
-# Opens an html template and fills in the appropriate photos and text
-# The format of the template is a newline separated list of keywords to
-# be replaced (order of keywords matching order of replacing text) ending
-# with <template> followed by the template body.
-# empty lines in keyword list are ignored.
-sub fillTemplate {
-    my $templateFile = shift; #file name
-    my $objectRef = shift;
-    my @objects = @$objectRef;
-    # list of text bits to be swapped in for the keywords found in the
-    # template.
-
-# The proc just takes objects in order and replaces the variables found
-# in the html template in order.
-
-    open(FILE, "$templateFile") or die "Couldn't open template file: $!\n";
-    my @temp = <FILE>;
-    my $template = join("", @temp);
-    close(FILE);
-    
-    @temp = split(/\<template\>/, $template);
-
-    my $templateBody = $temp[1];
-    my @variables1 = split(/\n/, $temp[0]);
-    my @variables; #keywords we'll be substituting for in template body
-
-    foreach(@variables1) {
-	unless($_ =~ /^\n$$/) {
-	    push(@variables, $_);
-	}
-    }
-
-    if(scalar(@objects) != scalar(@variables)) {
-	die "in 'fillTemplate' number of template keywords and replacement text does not match\n";
-    }
-
-    for(my $i = 0; $i < scalar(@variables); $i++) {
-	$templateBody =~ s/$variables[$i]/$objects[$i]/g;
-    }
-
-    return $templateBody;
-}

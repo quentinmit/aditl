@@ -293,9 +293,28 @@ sub getinfo2 {
     
     my $conn = $self->{connection};
 
-    my @row = $conn->selectrow_array("select count(*) from med_photos where uid = ?", undef, $uid);
+    my @row = $conn->selectrow_array("select count(*) from photos where uid = ?", undef, $uid);
 
-    return @row or 0;
+    return $row[0] or 0;
+}
+
+sub nextPhid {
+  my ($self) = @_;
+
+  my $conn = $self->{connection};
+
+  my @row = $conn->selectrow_array("select nextval('photos_seq')");
+
+  return $row[0] || 0;
+}
+
+sub insertPhoto {
+  my ($self, $phid, $uid, $time, $file) = @_;
+
+  my $conn = $self->{connection};
+
+  $conn->do("INSERT INTO photos (phid, uid, time, original_path) VALUES (?, ?, ?, ?)",
+	    undef, $phid, $uid, $time, $file);
 }
 
 
@@ -388,7 +407,6 @@ sub setImportStatus {
 
 sub getRandomFrontPhoto {
     my $self = shift;
-    my $table = shift;
     my $hashref = shift;
 
     my $conn = $self->{connection};
@@ -402,7 +420,7 @@ sub getRandomFrontPhoto {
 
     $conn->do("update circles set last_date = now() where phid = ?", undef, $phid);
 
-    $self->photoInfo($phid, $table, $hashref);
+    $self->photoInfo($phid, $hashref);
 }
 
 # takes a table name which is the actual table to return
@@ -412,24 +430,22 @@ sub getRandomFrontPhoto {
 # urls, etc). See photoInfo for what info is returned.
 sub randomImage {
     my $self = shift;
-    my $table = shift;
-    
+
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my ($phid) = $conn->selectrow_array("select phid from large_photos order by random() limit 1");
+    my ($phid) = $conn->selectrow_array("select phid from photos order by random() limit 1");
 
-    $self->photoInfo($phid, $table, $hashref);
+    $self->photoInfo($phid, $hashref);
 }
 
 sub photoInfo {
     my $self = shift;
     my $phid = shift;
-    my $table = shift;
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my $sth = $conn->prepare("select phid, uid, width, height, time, time_offset as offset, url, path as file from $table where phid = ?");
+    my $sth = $conn->prepare("select phid, uid, time, original_path from photos where phid = ?");
     $sth->execute($phid);
     
     my $row = $sth->fetchrow_hashref;
@@ -448,7 +464,7 @@ sub getPhotosBetween {
     my $conn = $self->{connection};
 
     my $query;
-    my $phids = $conn->selectcol_arrayref("select phid from large_photos where uid = ? and time > ? and time <= ? order by time", undef, $uid, $start, $end);
+    my $phids = $conn->selectcol_arrayref("select phid from photos where uid = ? and time > ? and time <= ? order by time", undef, $uid, $start, $end);
     
     return @$phids;
 }
@@ -477,7 +493,7 @@ sub usersWithPhotos {
     my $ref = shift;
 
     my $conn = $self->{connection};
-    return @{$conn->selectcol_arrayref("select distinct uid from med_photos")};
+    return @{$conn->selectcol_arrayref("select distinct uid from photos")};
 }
 
 #returns list of friends' uids.
@@ -494,7 +510,7 @@ sub getCaption {
     my $phid = shift;
 
     my $conn = $self->{connection};
-    return $conn->selectrow_array("select caption from captions where phid = ?", undef, $phid);
+    return $conn->selectrow_array("select caption from photos where phid = ?", undef, $phid);
 }
 
 #assumes caption has already been made safe...i.e no unescaped ' characters.
@@ -504,6 +520,5 @@ sub setCaption {
     my $caption = shift;
 
     my $conn = $self->{connection};
-    $conn->do("delete from captions where phid = ?", undef, $phid);
-    $conn->do("insert into captions values (?, ?)", undef, $phid, $caption);
+    $conn->do("UPDATE photos SET caption = ? WHERE phid = ?", undef, $caption, $phid);
 }
