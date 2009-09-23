@@ -2,7 +2,7 @@
 
 use strict;
 
-use lib "/usr/local/aditl/perl/lib";
+use lib "../lib";
 use Database;
 use Options;
 use ColorGrab;
