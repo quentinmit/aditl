@@ -62,7 +62,7 @@ my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
 	    $aditlLeft, $voteURL, $width - 8, $image{phid}, $numphotos[0], $personURL, $caption);
 
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front2.html", \@vals);
+my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front.html", \@vals);
 
 print $html;
 exit;
