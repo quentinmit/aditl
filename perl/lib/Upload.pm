@@ -10,6 +10,7 @@ use strict;
 use lib "./";
 use Settings;
 use File::Spec::Functions;
+use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 
 our %SIZES = (
 	      small => "50x50",
@@ -25,6 +26,36 @@ sub process_upload {
   } else {
     return process_image($db, $uid, $file);
   }
+}
+
+sub process_zip {
+  my ($db, $uid, $file) = @_;
+
+  my $zip = Archive::Zip->new();
+
+  unless ( $zip->read($file) == AZ_OK ) {
+    return "FAIL:Unable to read Zip archive";
+  }
+
+  my $outdir = $file."-files";
+  -d $outdir || mkdir($outdir) or return "FAIL:Unable to make output directory $outdir: $!";
+  my @results;
+  my $i;
+  for my $member ($zip->members()) {
+    next if $member->isDirectory();
+    my $filename = $member->fileName();
+    my $extension = ".jpg";
+    if ($filename =~ m|(\.([^.]+))$|) {
+      $extension = $1;
+    }
+    my $out = catfile($outdir, $i++.$extension);
+    if ($zip->extractMember($member, $out) == AZ_OK) {
+      push @results, process_image($db, $uid, $out);
+    } else {
+      push @results, "FAIL:Couldn't extract $filename from zip archive";
+    }
+  }
+  return @results;
 }
 
 sub process_image ($$) {

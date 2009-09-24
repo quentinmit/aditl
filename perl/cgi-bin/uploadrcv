@@ -86,7 +86,7 @@ sub getFile {
     do {
       if ($type eq "image/jpeg") {
 	$path = catfile($uploaddir, "upload$i.jpg");
-      } elsif ($type eq "application/x-zip") {
+      } elsif ($type =~ m|application/(x-)?zip|) {
 	$path = catfile($uploaddir, "upload$i.zip");
       } else {
 	$fail = "Unknown mime type $type"; last UPLOAD;

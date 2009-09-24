@@ -63,26 +63,26 @@ function uploadProgress(file, bytesLoaded) {
 }
 
 function uploadSuccess(file, serverData) {
-	try {
-		var progress = new FileProgress(file,  this.customSettings.upload_target);
+    try {
+	var progress = new FileProgress(file,  this.customSettings.upload_target);
 
-		if (serverData.substring(0, 8) === "SUCCESS:") {
-			addImage("/photos/" + serverData.substring(8));
+	var parts = serverData.split("\n");
+	for (i in parts) {
+	    if (parts[i].substring(0, 8) === "SUCCESS:") {
+		addImage("/photos/" + parts[i].substring(8));
 
-			progress.setStatus("Thumbnail Created.");
-			progress.toggleCancel(false);
-		} else {
-			addImage("/static/error.gif");
-			progress.setStatus("Error.");
-			progress.toggleCancel(false);
-			alert(serverData);
-
-		}
-
-
-	} catch (ex) {
-		this.debug(ex);
+		progress.setStatus("Thumbnail Created.");
+		progress.toggleCancel(false);
+	    } else {
+		addImage("/static/error.gif");
+		progress.setStatus("Error.");
+		progress.toggleCancel(false);
+		alert(serverData);
+	    }
 	}
+    } catch (ex) {
+	this.debug(ex);
+    }
 }
 
 function uploadComplete(file) {
