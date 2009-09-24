@@ -309,12 +309,12 @@ sub nextPhid {
 }
 
 sub insertPhoto {
-  my ($self, $phid, $uid, $time, $file) = @_;
+  my ($self, $phid, $uid, $time, $file, $md5) = @_;
 
   my $conn = $self->{connection};
 
-  $conn->do("INSERT INTO photos (phid, uid, time, original_path) VALUES (?, ?, ?, ?)",
-	    undef, $phid, $uid, $time, $file);
+  $conn->do("INSERT INTO photos (phid, uid, time, original_path, original_md5) VALUES (?, ?, ?, ?, ?)",
+	    undef, $phid, $uid, $time, $file, $md5);
 }
 
 
@@ -437,6 +437,13 @@ sub randomImage {
     my ($phid) = $conn->selectrow_array("select phid from photos order by random() limit 1");
 
     $self->photoInfo($phid, $hashref);
+}
+
+sub getPhotoByMD5 {
+  my ($self, $md5) = @_;
+
+  my ($phid) = $self->{connection}->selectrow_array("select phid from photos where original_md5 = ?", undef, $md5);
+  return $phid;
 }
 
 sub getNextPhoto {

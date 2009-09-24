@@ -11,6 +11,7 @@ use lib "./";
 use Settings;
 use File::Spec::Functions;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
+use Digest::MD5;
 
 our %SIZES = (
 	      small => "50x50",
@@ -68,7 +69,13 @@ sub process_image ($$) {
     Utils::exiftime($file, \@date) or die "Couldn't extract time";
     my $datestamp = join("-", ($date[0], $date[1], $date[2])) . " " .
       join(":", ($date[3], $date[4], $date[5]));
-    my $phid = $db->nextPhid;
+
+    my $md5 = Digest::MD5->new->addfile(new IO::File($file, "r"))->hexdigest;
+    my $phid;
+    if ($phid = $db->getPhotoByMD5($md5)) {
+      return "SUCCESS:$uid/small/$phid.jpg";
+    }
+    $phid = $db->nextPhid;
 
     umask(002);
 
@@ -83,7 +90,7 @@ sub process_image ($$) {
       system($conv, $file, "-geometry", $SIZES{$size}, catfile($sizedir, "$phid.jpg"));
     }
 
-    $db->insertPhoto($phid, $uid, $datestamp, $file);
+    $db->insertPhoto($phid, $uid, $datestamp, $file, $md5);
     return "SUCCESS:$uid/small/$phid.jpg";
   };
   if ($@) {
