@@ -15,7 +15,7 @@ use File::Spec::Functions;
 use Image::ExifTool qw(:Public);
 
 #good random seed. from programming perl.
-srand ( time() ^ ($$ + ($$ << 15)) ); 
+#srand ( time() ^ ($$ + ($$ << 15)) ); 
 
 sub email {
     my $to = shift;
