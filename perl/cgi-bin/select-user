@@ -10,7 +10,7 @@ use Utils;
 use Cookie;
 
 #good random seed. from programming perl.
-srand ( time() ^ ($$ + ($$ << 15)) ); 
+#srand ( time() ^ ($$ + ($$ << 15)) ); 
 
 
 use CGI qw(-debug :standard);
@@ -18,7 +18,7 @@ $CGI::DISABLE_UPLOADS = 1;
 
 use vars qw($cgi $db $ENTRIES_PER_PAGE);
 
-$ENTRIES_PER_PAGE = 5;
+$ENTRIES_PER_PAGE = 500;
 
 $cgi = new CGI;
 
@@ -65,15 +65,15 @@ my $offset = $ENTRIES_PER_PAGE * $minorid;
 
 my $more = 0;
 my @spliced = splice(@subsorted, $offset);
-if(scalar(@spliced) > 5) {
+if(scalar(@spliced) > $ENTRIES_PER_PAGE) {
     $more = 1;
-    @spliced = splice(@spliced, 0, 5);
+    @spliced = splice(@spliced, 0, $ENTRIES_PER_PAGE);
 }
 
 
 my $barcodeBase = Settings::settings("tinyBarcodeURL");
 
-my $max = (scalar(@spliced) > 5)? 5 : scalar(@spliced);
+my $max = scalar(@spliced);
 
 my $userlist = "";
 for(my $i = 0; $i < $max; $i++) {
@@ -97,14 +97,16 @@ for(my $i = 0; $i < $max; $i++) {
 
     my $yoff = $i * 45;
 
-    $userlist .= "<div style=\"position:absolute; left:576px; top:" . $yoff . "px;
-font-size:15px; width:18em; border-top: 1px solid #A19E95; height:20px;
-border-right: 1px solid #A19E95; border-bottom:1px solid #A19E95; padding-top:2px; padding-left:8px;\">";
+    $userlist .= '<div style="margin-bottom: 23px; border: 1px solid #A19E95; height:22px; font-size:15px;"><a style="font-size: 15px"href="'.$url.'"><img style="margin-top:-1px; margin-bottom: -1px;" border="0" src="'.$barcode.'"><span style="position:relative;font-size:15px;width:18em;top:2px; padding: 0 8px; vertical-align: top;">'."$name ($num[0] photos)".'</span></a></div>'
 
-    $userlist .= "<a href=\"$url\" style=\"font-size:15px;\">$name ($num[0] photos)</a></div>\n";
+#    $userlist .= "<div style=\"position:absolute; left:576px; top:" . $yoff . "px;
+#font-size:15px; width:18em; border-top: 1px solid #A19E95; height:20px;
+#border-right: 1px solid #A19E95; border-bottom:1px solid #A19E95; padding-top:2px; padding-left:8px;\">";
 
-    $userlist .= "<div style=\"position:absolute; left:0px; top:" . $yoff . "px;\"
-<a href=\"$url\"><img border=\"0\" src=\"" . $barcode . "\" alt = \"\"></img></a></div>\n";
+#    $userlist .= "<a href=\"$url\" style=\"font-size:15px;\">$name ($num[0] photos)</a></div>\n";
+
+#    $userlist .= "<div style=\"position:absolute; left:0px; top:" . $yoff . "px;\"
+#<a href=\"$url\"><img border=\"0\" src=\"" . $barcode . "\" alt = \"\"></img></a></div>\n";
 
 
 }
