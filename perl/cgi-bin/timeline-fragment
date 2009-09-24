@@ -65,18 +65,7 @@ my @images;
 foreach(@uids) {
 
     #comes back sorted.
-    my @p = $db->getPhotosBetween($_, toSqlTime($start), toSqlTime($end));
-
-    #print toSqlTime($start);
-
-    #print @p;
-    
-    my @thisimages;
-    foreach(@p) {
-	my %photo;
-	$db->photoInfo($_, \%photo);
-	push(@thisimages, \%photo);
-    }
+    my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
 
     my @bucketized;
     #becomes a list of list refs. Each sublist is a list of %photos in time order 

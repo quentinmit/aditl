@@ -64,18 +64,11 @@ print $cgi->header();
 my @images;
 
 foreach(@uids) {
-    my @p = $db->getPhotosBetween($_, toSqlTime($start), toSqlTime($end));
+    my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
 
     #print toSqlTime($start);
 
     #print @p;
-    
-    my @thisimages;
-    foreach(@p) {
-	my %photo;
-	$db->photoInfo($_, \%photo);
-	push(@thisimages, \%photo);
-    }
 
     bucketize(\@thisimages);
 
@@ -99,10 +92,8 @@ foreach(@images) {
 	my $photogName = lc($fn) . " " . lc($ln);
 
 	my $caption = "";
-	$caption = $db->getCaption($_->{phid});
+	$caption = $_->{caption};
 	$caption = Utils::summary($caption, 20);
-
-	#my ($width, $height) = Utils::imagesize(Utils::imagePath($_,"medium"));
 
 	$js .= "addPhoto(" . $_->{phid} . ", " . $_->{lookupid} . ", \"" .
 	    Utils::imageURL($_,"medium") . "\", " . $_->{medium_width} .
