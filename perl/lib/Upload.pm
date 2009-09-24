@@ -89,8 +89,9 @@ sub process_image ($$) {
 
       system($conv, $file, "-geometry", $SIZES{$size}, catfile($sizedir, "$phid.jpg"));
     }
+    my $medium_size = [Utils::imagesize(catfile($userroot, "medium", "$phid.jpg"))];
 
-    $db->insertPhoto($phid, $uid, $datestamp, $file, $md5);
+    $db->insertPhoto($phid, $uid, $datestamp, $file, $md5, $medium_size);
     return "SUCCESS:$uid/small/$phid.jpg";
   };
   if ($@) {

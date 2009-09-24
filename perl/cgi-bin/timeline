@@ -87,7 +87,7 @@ push(@initFrags, join("&nbsp; &nbsp; &nbsp;", @photognames));
 my @mainPhotogInfo = $db->getinfo($uids[0]);
 
 
-my @navlineUIDs = ($uids[0]);
+my @navlineUIDs = @uids;#($uids[0]);
 push(@initFrags, getNavlineContent(\@navlineUIDs));
 push(@initFrags, navlineClickable());
 push(@initFrags, lc($mainPhotogInfo[0]));

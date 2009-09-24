@@ -309,12 +309,12 @@ sub nextPhid {
 }
 
 sub insertPhoto {
-  my ($self, $phid, $uid, $time, $file, $md5) = @_;
+  my ($self, $phid, $uid, $time, $file, $md5, $medium_size) = @_;
 
   my $conn = $self->{connection};
 
-  $conn->do("INSERT INTO photos (phid, uid, time, original_path, original_md5) VALUES (?, ?, ?, ?, ?)",
-	    undef, $phid, $uid, $time, $file, $md5);
+  $conn->do("INSERT INTO photos (phid, uid, time, original_path, original_md5, medium_size) VALUES (?, ?, ?, ?, ?, ?)",
+	    undef, $phid, $uid, $time, $file, $md5, join(',', @$medium_size));
 }
 
 
@@ -434,7 +434,7 @@ sub randomImage {
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my ($phid) = $conn->selectrow_array("select phid from photos order by random() limit 1");
+    my ($phid) = $conn->selectrow_array("select phid from photos WHERE phid NOT IN (select phid from circles) order by random() limit 1");
 
     $self->photoInfo($phid, $hashref);
 }
@@ -472,7 +472,7 @@ sub photoInfo {
     my $hashref = shift;
 
     my $conn = $self->{connection};
-    my $sth = $conn->prepare("select phid, uid, time, original_path from photos where phid = ?");
+    my $sth = $conn->prepare("select phid, uid, time, original_path, medium_size[0] as medium_width, medium_size[1] as medium_height from photos where phid = ?");
     $sth->execute($phid);
     
     my $row = $sth->fetchrow_hashref;
