@@ -23,7 +23,7 @@ unless(defined($cgi->param("uid1")) && defined($cgi->param("uid2")) &&
    defined($cgi->param("uid3")) && defined($cgi->param("uid4")) &&
        defined($cgi->param("start")) && defined($cgi->param("end"))) {
     print $cgi->header();
-    print "Missing parameter\n";
+    print "//Missing parameter\n";
     exit;
 }
 
@@ -43,19 +43,19 @@ $end = int($end);
 
 if($start < 0 || $start > 1440 || $end < 0 || $end > 1440) {
     print $cgi->header();
-    print "Invalid times\n";
+    print "//Invalid times\n";
     exit;
 }
 
 if($end <= $start) {
     print $cgi->header();
-    print "Start time after end time\n";
+    print "//Start time after end time\n";
     exit;
 }
 
 unless(($start % 15 == 0) && ($end % 15 == 0)) {
     print $cgi->header();
-    print "Start or end time doesn't line up\n";
+    print "//Start or end time doesn't line up\n";
     exit;
 }
 
