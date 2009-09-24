@@ -439,6 +439,20 @@ sub randomImage {
     $self->photoInfo($phid, $hashref);
 }
 
+sub getNextPhoto {
+  my ($self, $uid, $phid) = @_;
+
+  my ($next) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and time > (select time from photos where phid = ?) order by time limit 1", undef, $uid, $phid);
+  return $next;
+}
+
+sub getPreviousPhoto {
+  my ($self, $uid, $phid) = @_;
+
+  my ($previous) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and time < (select time from photos where phid = ?) order by time desc limit 1", undef, $uid, $phid);
+  return $previous;
+}
+
 sub photoInfo {
     my $self = shift;
     my $phid = shift;

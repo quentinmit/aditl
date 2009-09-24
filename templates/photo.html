@@ -1,14 +1,18 @@
 urlBase
 tImage
+tColor
 tbgColor
 tTime
 tPhotog
+tpersonDay
 tWidth
 tRealWidth
 tPhid
 tNumPhotos
 tCaptionEdit
 tCaptionText
+tPrevLink
+tNextLink
 <template>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	
@@ -30,7 +34,7 @@ color:#292929;
 font-family:helvetica, sans-serif;
 }
 
-a {text-decoration:none;}
+/*a {text-decoration:none;}*/
 
 .header-area {
 width:50%;
@@ -176,16 +180,16 @@ color:#tColor;
 </head>
 <body>
 
-<div class="aditl-head1"><a style="color:#333333;" href="urlBase/dyn/front">ADITL</a></div>
+<div class="aditl-head1"><a style="color:#333333;text-decoration:none;" href="urlBase/dyn/front">ADITL</a></div>
 
 
 <div class="main-area">
 <img id="mainImage" class="main-image" alt="front page image" src="tImage"></img>
 <div class="time-text">tTime</div>
-<div class="name-text">tPhotog</div>
+<div class="name-text"><a style="color:#333333;" href="tpersonDay">tPhotog</a></div>
 <div class="name-text" style="top:100px; font-size:23px;">tNumPhotos photos</div>
 <div class="caption-text">tCaptionText</div>
-<div class="caption-edit">tCaptionEdit</div>
+<div class="caption-edit">tPrevLinktCaptionEdittNextLink</div>
 
 </div>
 

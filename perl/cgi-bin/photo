@@ -60,14 +60,15 @@ my $sat = Settings::settings("colorManipSat");
 my @bgColor = Colors::slightGray(@color, $lightness, $sat);
 
 my $wbgcolor = Utils::toWebColor(@bgColor);
+my $wcolor = Utils::toWebColor(@color);
 
 my ($width, $height) = Utils::imagesize(Utils::imagePath(\%image, "large"));
 
-
+my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
 my $aditlLeft = 550 - $width;
 
-my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $wbgcolor, $tstring, $photogName,
+my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $wcolor, $wbgcolor, $tstring, $photogName, $personURL,
 	    $aditlLeft, $width, $image{phid}, $numphotos[0]);
 
 
@@ -93,7 +94,18 @@ my $caption = "";
 
     push(@vals, $html);
 }
-	
+
+my $prev = $db->getPreviousPhoto($image{uid}, $image{phid});
+my $next = $db->getNextPhoto($image{uid}, $image{phid});
+
+if ($prev) {
+  push @vals, sprintf('<a href="%s?phid=%d">&lt; prev</a> ', Settings::settings("photoURL"), $prev);
+} else { push @vals, "" };
+
+if ($next) {
+  push @vals, sprintf(' <a href="%s?phid=%d">next &gt;</a>', Settings::settings("photoURL"), $next);
+} else { push @vals, "" };
+
 my $html = Template::fillTemplate(Settings::settings("templateLib") . "/photo.html", \@vals);
 
 print $html;
