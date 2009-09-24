@@ -10,6 +10,7 @@ use Colors;
 use Utils;
 use Cookie;
 
+use HTML::Entities;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
@@ -37,7 +38,7 @@ $db->photoInfo($phid, \%image);
 my $setcaption = $cgi->param("setcaption");
 if($setcaption && $visitoruid == $image{uid}) {
     my $caption = $cgi->param("caption");
-    $db->setCaption($phid, Utils::escapeCaption($caption));
+    $db->setCaption($phid, encode_entities($caption));
 }
 
 
