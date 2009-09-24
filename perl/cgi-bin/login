@@ -10,6 +10,7 @@ use Utils;
 
 use CGI qw(-debug :standard);
 use CGI::Carp('fatalsToBrowser');
+use HTML::Entities;
 
 $CGI::DISABLE_UPLOADS = 1;
 use vars qw($cgi $redirect $db);
@@ -51,7 +52,7 @@ if(defined($cgi->param("email"))) {
 
 my $message = "";
 if(defined($cgi->param("message"))) {
-    $message = $cgi->param("message");
+    $message = encode_entities($cgi->param("message"));
 }
 
 print $cgi->header();
