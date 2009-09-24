@@ -20,6 +20,8 @@ $cgi = new CGI;
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
+my $uid = Cookie::isUserLoggedIn($cgi, $db);
+
 print $cgi->header();
 
 my %image;
@@ -59,8 +61,15 @@ my $voteURL = Settings::settings("frontURL") . "?vote=" . $image{phid};
 
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
+my $loginURL = Settings::settings("urlBase")."/dyn/login?redirect=".Settings::settings("frontURL");
+my $loginText = "login";
+if ($uid) {
+  $loginURL = Settings::settings("urlBase")."/dyn/upload";
+  $loginText = "upload";
+}
+
 my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
-	    $aditlLeft, $voteURL, $width - 8, $image{phid}, $numphotos[0], $personURL, $caption);
+	    $aditlLeft, $voteURL, $width - 8, $image{phid}, $numphotos[0], $personURL, $caption, $loginURL, $loginText);
 
 my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front.html", \@vals);
 
