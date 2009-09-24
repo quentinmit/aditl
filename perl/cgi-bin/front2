@@ -24,7 +24,7 @@ my $uid;
 
 unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
     print $cgi->header();
-    print Utils::redirect(Settings::settings("loginURL") . "?redirect=" . Settigns::settings("urlBase") . "/dyn/front2");
+    print Utils::redirect(Settings::settings("loginURL") . "?redirect=" . Settings::settings("urlBase") . "/dyn/front2");
     exit;
 }
 

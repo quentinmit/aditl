@@ -26,6 +26,7 @@ sub process_upload {
     return process_image($db, $uid, $file);
   }
 }
+
 sub process_image ($$) {
   my ($db, $uid, $file) = @_;
 

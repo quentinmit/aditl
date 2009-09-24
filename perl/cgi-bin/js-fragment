@@ -102,7 +102,7 @@ foreach(@images) {
 	$caption = $db->getCaption($_->{phid});
 	$caption = Utils::summary($caption, 20);
 
-	my ($width, $height) = Utils::imagesize(Utils::imagePath($_,"large"));
+	my ($width, $height) = Utils::imagesize(Utils::imagePath($_,"medium"));
 
 	$js .= "addPhoto(" . $_->{phid} . ", " . $_->{lookupid} . ", \"" .
 	    Utils::imageURL($_,"medium") . "\", " . $width .

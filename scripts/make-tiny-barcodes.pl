@@ -12,8 +12,7 @@ $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
 
-my @uids;
-$db->usersWithPhotos(\@uids);
+my @uids = $db->usersWithPhotos();
 my $eventDate = Settings::settings("eventDate");
 
 foreach(@uids) {
@@ -22,9 +21,9 @@ foreach(@uids) {
     my @photos;
     foreach(@phids) {
 	my %info;
-	$db->photoInfo($_, 'small_photos', \%info);
+	$db->photoInfo($_, \%info);
 
-	$info{filename} = $info{file};
+	$info{filename} = Utils::imagePath(\%info,"medium");
 	my @time = Utils::sqlTime($info{time});
 	$info{time} = $time[0] * 60 + $time[1];
 	
