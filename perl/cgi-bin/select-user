@@ -87,7 +87,7 @@ for(my $i = 0; $i < $max; $i++) {
     my $uid3;
     my $uid4;
 
-    ($uid1, $uid2, $uid3, $uid4) = getUids($uid, $cgi);
+    ($uid1, $uid2, $uid3, $uid4) = getUids([$uid], $cgi);
 
     my $url = Settings::settings("timelineURL") . "?uid1=" . $uid1 . "&uid2=" . $uid2 .
 	"&uid3=" . $uid3 . "&uid4=" . $uid4;
@@ -190,10 +190,9 @@ sub selectRandom() {
     my $uids = shift;
     my $cgi = shift;
 
-    my $ind = int(rand(scalar(@$uids)));
-    my $uid = $uids->[$ind]{'uid'};
+    my @uids = $db->randomUsersWithPhotos(4);
 
-    my @selected = getUids($uid, $cgi);
+    my @selected = getUids(\@uids, $cgi);
 
     my $url = Settings::settings("timelineURL");
 
@@ -206,7 +205,7 @@ sub selectRandom() {
     
 
 sub getUids {
-    my $primaryUid = shift;
+    my $uids = shift;
     my $cgi = shift;
 
     my @uids;
@@ -214,13 +213,13 @@ sub getUids {
     my $position = $cgi->param("position");
     $position = int($position);
     unless($position) {
-	push(@uids, $primaryUid);
+	push(@uids, @$uids);
 
 	#my @friends = $db->getFriends($primaryUid);
 	#@friends = splice(@friends, 0, 3);
         #push(@uids, @friends);
 
-	push(@uids, (-1, -1, -1));
+	push(@uids, (-1, -1, -1, -1));
 	return @uids;
     }
 
@@ -233,7 +232,7 @@ sub getUids {
 
     my $position = $cgi->param("position") - 1;
 
-    $replace[$position] = $primaryUid;
+    $replace[$position] = $uids->[0];
 
     return @replace;
 }

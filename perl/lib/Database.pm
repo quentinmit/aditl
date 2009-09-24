@@ -439,6 +439,12 @@ sub randomImage {
     $self->photoInfo($phid, $hashref);
 }
 
+sub randomUsersWithPhotos {
+  my ($self, $limit) = @_;
+  my $uids = $self->{connection}->selectcol_arrayref("select uid from (select distinct uid from photos) t1 order by random() limit ?", undef, $limit);
+  return @$uids;
+}
+
 sub getPhotoByMD5 {
   my ($self, $md5) = @_;
 
