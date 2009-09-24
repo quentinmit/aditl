@@ -27,7 +27,7 @@ $settings{"frontURL"} = $settings{"urlBase"} . "/dyn/front";
 $settings{"timelineURL"} = $settings{"urlBase"} . "/dyn/timeline";
 $settings{"htmlFragmentURL"} = $settings{"urlBase"} . "/dyn/timeline-fragment";
 $settings{"jsFragmentURL"} = $settings{"urlBase"} . "/dyn/js-fragment";
-$settings{"tinyBarcodeURL"} = $settings{"urlBase"} . "/images/tiny-barcodes";
+$settings{"tinyBarcodeURL"} = $settings{"urlBase"} . "/photos/tiny-barcodes";
 $settings{"selectUserURL"} = $settings{"urlBase"} . "/dyn/select-user";
 $settings{"photoURL"} = $settings{"urlBase"} . "/dyn/photo";
 
@@ -44,7 +44,7 @@ $settings{"colorManipLightness"} = 200;
 $settings{"colorManipSat"} = 225;
 #$settings{"colorManipSat"} = 230;
 
-$settings{"eventDate"} = "2007-12-25";
+$settings{"eventDate"} = "2009-09-24";
 
 sub settings {
     my $setting = shift;

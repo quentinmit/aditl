@@ -11,9 +11,7 @@ use Utils;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
-use vars qw($cgi $db $MEDTABLE);
-
-$MEDTABLE = "med_photos";
+use vars qw($cgi $db);
 
 $cgi = new CGI;
 
@@ -29,7 +27,7 @@ $db->connect(Settings::settings("dbName"));
 #}
 
 my @uids;
-for(my $i = 0; $i < 4; $i++) {
+foreach my $i (0..4) {
     my $j = $i+1;
     my $uid = $cgi->param("uid$j");
     if($uid) {
@@ -76,7 +74,7 @@ foreach(@uids) {
     my @thisimages;
     foreach(@p) {
 	my %photo;
-	$db->photoInfo($_, $MEDTABLE, \%photo);
+	$db->photoInfo($_, \%photo);
 	push(@thisimages, \%photo);
     }
 
@@ -121,7 +119,7 @@ foreach(@images) {
 	my $slot = ($line == 0)? 1 : 2;
 
 	$html .= "<img class=\"tiny-thumbnail\" id=\"tiny" . $_->{phid} . "\" style=\"top:0 " .
-	    "px; left:" . $xoff . "px;\" src=\"" . $_->{url} .
+	    "px; left:" . $xoff . "px;\" src=\"" . Utils::imageURL($_, "small") .
 	    "\" width=\"20\" height=\"15\" onClick=\"photo1Click(" . 
 	    $_->{phid} . ", $slot, $xoff, $yoff);\">\n";
     }
@@ -175,12 +173,7 @@ sub niceTime {
     my $hour = int($dayminute / 60);
     my $minute = $dayminute % 60;
 
-    my @digits = qw(00 01 02 03 04 05 06 07 08 09);
-
-    $hour = ($hour < 10)? $digits[$hour] : $hour;
-    $minute = ($minute < 10)? $digits[$minute] : $minute;
-
-    return "$hour:$minute";
+    return sprintf("%02d:%02d", $hour, $minute);
 }
 
 

@@ -41,31 +41,21 @@ unless(defined($majorid) && defined($minorid)) {
     $minorid = 0;
 }
 
-my @uids;
-$db->usersWithPhotos(\@uids);
+my @users = $db->userInfoWithPhotos();
 
 if($cgi->param("random")) {
-    selectRandom(\@uids, $cgi);
+    selectRandom(\@users, $cgi);
     exit;
-}
-
-my @users;
-foreach(@uids) {
-    my @info = $db->getinfo($_);
-    my $fn = lc($info[0]);
-    my $ln = lc($info[1]);
-
-    my %infoh = (
-	"uid" => $_,
-	"fn" => $fn,
-	"ln" => $ln,
-	"name" => $ln);
-
-    push(@users, \%infoh);
 }
 
 my @sorted;
 Utils::alphaSplitList(1, \@users, \@sorted);
+
+#{ use Data::Dumper;
+#print $cgi->header, Dumper(\@uids);
+#exit
+#}
+
 @sorted = @{$sorted[0]}; #see alphaSplitlist
 
 my @subsorted;
@@ -201,7 +191,7 @@ sub selectRandom() {
     my $cgi = shift;
 
     my $ind = int(rand(scalar(@$uids)));
-    my $uid = $uids->[$ind];
+    my $uid = $uids->[$ind]{'uid'};
 
     my @selected = getUids($uid, $cgi);
 

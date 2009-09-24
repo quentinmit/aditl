@@ -31,7 +31,7 @@ my $phid = $cgi->param("phid");
 
 $phid = int($phid);
 
-$db->photoInfo($phid, "large_photos", \%image);
+$db->photoInfo($phid, \%image);
 
 
 my $setcaption = $cgi->param("setcaption");
@@ -47,16 +47,13 @@ my $ln = $photographer[1];
 
 my $photogName = lc($fn) . " " . lc($ln);
 
-my @time = Utils::sqlTime($image{time}, $image{offset});
+my @time = Utils::sqlTime($image{time});
 my $tstring = "$time[0]:$time[1]:$time[2]";
 
 my @numphotos = $db->getinfo2($image{uid});
 
 
-my %tinyImage;
-$db->photoInfo($image{phid}, "small_photos", \%tinyImage);
-
-my @color = Colors::grabColor($tinyImage{file});
+my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
 my $lightness = Settings::settings("colorManipLightness");
 my $sat = Settings::settings("colorManipSat");
@@ -64,14 +61,14 @@ my @bgColor = Colors::slightGray(@color, $lightness, $sat);
 
 my $wbgcolor = Utils::toWebColor(@bgColor);
 
+my ($width, $height) = Utils::imagesize(Utils::imagePath(\%image, "large"));
 
 
 
+my $aditlLeft = 550 - $width;
 
-my $aditlLeft = 550 - $image{width};
-
-my @vals = (Settings::settings("urlBase"), $image{url}, $wbgcolor, $tstring, $photogName,
-	    $aditlLeft, $image{width}, $image{phid}, $numphotos[0]);
+my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $wbgcolor, $tstring, $photogName,
+	    $aditlLeft, $width, $image{phid}, $numphotos[0]);
 
 
 if($visitoruid == $image{uid} && !$doedit) {

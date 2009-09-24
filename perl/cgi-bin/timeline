@@ -13,9 +13,7 @@ use Cookie;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
-use vars qw($cgi $db $MEDTABLE);
-
-$MEDTABLE = "med_photos";
+use vars qw($cgi $db);
 
 $cgi = new CGI;
 
@@ -111,7 +109,7 @@ sub getNavlineContent {
 	my @p = $db->getPhotosBetween($_, toSqlTime(0), toSqlTime(1439));
 	foreach(@p) {
 	    my %photo;
-	    $db->photoInfo($_, $MEDTABLE, \%photo);
+	    $db->photoInfo($_, \%photo);
 	    push(@allimages, \%photo);
 	}
     }
@@ -125,7 +123,7 @@ sub getNavlineContent {
     foreach(@bucketized) {
 	my $xoff = getPixelOffset(0, $_->{time});
 	$html .= "<img alt=\"\" style=\"position:absolute; top:0px; left:" . $xoff . "px;\" src=\"" .
-	    $_->{url} . "\" width=\"3\" height=\"10\"></img>\n";
+	    Utils::imageURL($_, "small") . "\" width=\"3\" height=\"10\"></img>\n";
 
     }
 

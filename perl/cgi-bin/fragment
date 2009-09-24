@@ -17,7 +17,7 @@ use vars qw($cgi $db);
 $cgi = new CGI;
 
 $db = Database->new();
-$db->connect("Settings::settings("dbName"));
+$db->connect(Settings::settings("dbName"));
 
 my $uid;
 

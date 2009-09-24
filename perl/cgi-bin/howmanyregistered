@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 use strict;
 
-use lib "/usr/local/aditl2/perl/lib";
+use lib "../lib";
 use Database;
+use Settings;
 
 use CGI qw(-debug :standard);
 use CGI::Carp('fatalsToBrowser');
@@ -12,6 +13,6 @@ my $cgi = CGI->new();
 
 print $cgi->header();
 my $db = Database->new();
-my $status = $db->connect("aditl2");
+my $status = $db->connect(Settings::settings("dbName"));
 
 print $db->howManyRegistered();

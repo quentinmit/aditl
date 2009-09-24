@@ -490,10 +490,23 @@ sub photoVote {
 #populates list with uids of users with photos in the db.
 sub usersWithPhotos {
     my $self = shift;
-    my $ref = shift;
 
     my $conn = $self->{connection};
     return @{$conn->selectcol_arrayref("select distinct uid from photos")};
+}
+
+sub userInfoWithPhotos {
+  my $self = shift;
+
+  my $conn = $self->{connection};
+  my $sth = $conn->prepare("select uid, lower(first_name) as fn, lower(last_name) as ln, lower(last_name) as name from users where uid in (select distinct uid from photos)");
+  $sth->execute;
+
+  my @users;
+  while (my $row = $sth->fetchrow_hashref) {
+    push @users, $row;
+  }
+  return @users;
 }
 
 #returns list of friends' uids.
