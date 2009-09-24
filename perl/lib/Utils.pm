@@ -12,6 +12,7 @@ use Settings;
 use Email::Send;
 use Template;
 use File::Spec::Functions;
+use Image::ExifTool qw(:Public);
 
 #good random seed. from programming perl.
 srand ( time() ^ ($$ + ($$ << 15)) ); 
@@ -73,36 +74,21 @@ sub exiftime {
 
     return 0 if($file eq "");
 
-    my $exifcom = Settings::settings("exiftagsCommand");
-    my @output = `$exifcom $file`;
-    chomp(@output);
+    my $info = ImageInfo($file, [qw(CreateDate)]);
 
-    my $success = 0;
-    foreach(@output) {
-	#Image Generated: 2003:04:14 01:15:32
-	next unless(/Image Generated:/);
+    my $date = $info->{CreateDate};
 
-	$_ =~ s/\s+/ /g;
-	my @broken1 = split(/ /, $_);
-	my $date = $broken1[2];
-	my $ttime = $broken1[3];
-
-	my @brokendate = split(/:/, $date);
-	my @brokentime = split(/:/, $ttime);
-
-	$$timeref[0] = $brokendate[0];
-	$$timeref[1] = $brokendate[1];
-	$$timeref[2] = $brokendate[2];
-
-	$$timeref[3] = $brokentime[0];
-	$$timeref[4] = $brokentime[1];
-	$$timeref[5] = $brokentime[2];
-
-	$success = 1;
-	last;
+    if ($date =~ m|^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$|) {
+      push @$timeref, $1, $2, $3, $4, $5, $6;
+      return 1;
     }
 
-    return $success;
+    if ($date =~ m|^(\d{2})\.(\d{2})\.(\d{4}) (\d{2}):(\d{2}):(\d{2})$|) {
+      push @$timeref, $3, $1, $2, $4, $5, $6;
+      return 1;
+    }
+
+    return 0;
 }
 
 sub imagePath {
