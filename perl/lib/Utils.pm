@@ -78,7 +78,7 @@ sub exiftime {
 
     my $date = $info->{CreateDate};
 
-    if ($date =~ m|^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$|) {
+    if ($date =~ m|^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})|) {
       push @$timeref, $1, $2, $3, $4, $5, $6;
       return 1;
     }
