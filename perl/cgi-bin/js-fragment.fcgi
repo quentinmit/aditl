@@ -8,62 +8,61 @@ use Settings;
 use Template;
 use Utils;
 
-use CGI qw(-debug :standard);
+use CGI::Fast qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
 use vars qw($cgi $db);
 
-$cgi = new CGI;
-
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
+ACCEPT: while($cgi = new CGI::Fast) {
 
-unless(defined($cgi->param("uid1")) && defined($cgi->param("uid2")) &&
-   defined($cgi->param("uid3")) && defined($cgi->param("uid4")) &&
-       defined($cgi->param("start")) && defined($cgi->param("end"))) {
+  unless(defined($cgi->param("uid1")) && defined($cgi->param("uid2")) &&
+	 defined($cgi->param("uid3")) && defined($cgi->param("uid4")) &&
+	 defined($cgi->param("start")) && defined($cgi->param("end"))) {
     print $cgi->header();
     print "//Missing parameter\n";
-    exit;
-}
+    next ACCEPT;
+  }
 
-my @uids;
-foreach my $i (0..3) {
+  my @uids;
+  foreach my $i (0..3) {
     my $j = $i+1;
     $uids[$i] = $cgi->param("uid$j");
     $uids[$i] = int($uids[$i]);
-}
+  }
 
-#these are in minutes.
-my $start = $cgi->param("start");
-my $end = $cgi->param("end");
+  #these are in minutes.
+  my $start = $cgi->param("start");
+  my $end = $cgi->param("end");
 
-$start = int($start);
-$end = int($end);
+  $start = int($start);
+  $end = int($end);
 
-if($start < 0 || $start > 1440 || $end < 0 || $end > 1440) {
+  if($start < 0 || $start > 1440 || $end < 0 || $end > 1440) {
     print $cgi->header();
     print "//Invalid times\n";
-    exit;
-}
+    next ACCEPT;
+  }
 
-if($end <= $start) {
+  if($end <= $start) {
     print $cgi->header();
     print "//Start time after end time\n";
-    exit;
-}
+    next ACCEPT;
+  }
 
-unless(($start % 15 == 0) && ($end % 15 == 0)) {
+  unless(($start % 15 == 0) && ($end % 15 == 0)) {
     print $cgi->header();
     print "//Start or end time doesn't line up\n";
-    exit;
-}
+    next ACCEPT;
+  }
 
 
-print $cgi->header();
-my @images;
+  print $cgi->header();
+  my @images;
 
-foreach(@uids) {
+  foreach(@uids) {
     my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
 
     #print toSqlTime($start);
@@ -73,36 +72,36 @@ foreach(@uids) {
     bucketize(\@thisimages);
 
     push(@images, \@thisimages);
-}
+  }
 
-my $js = "";
+  my $js = "";
 
-foreach(@images) {
+  foreach(@images) {
     my @is = @$_;
 
     foreach(@is) {
 
-	my @time = Utils::sqlTime($_->{time}, $_->{offset});
-	my $tstring = "$time[0]:$time[1]:$time[2]";
+      my @time = Utils::sqlTime($_->{time}, $_->{offset});
+      my $tstring = "$time[0]:$time[1]:$time[2]";
 
-	my @photographer = $db->getinfo($_->{uid});
-	my $fn = $photographer[0];
-	my $ln = $photographer[1];
+      my @photographer = $db->getinfo($_->{uid});
+      my $fn = $photographer[0];
+      my $ln = $photographer[1];
 
-	my $photogName = lc($fn) . " " . lc($ln);
+      my $photogName = lc($fn) . " " . lc($ln);
 
-	my $caption = "";
-	$caption = $_->{caption};
-	$caption = Utils::summary($caption, 20);
+      my $caption = "";
+      $caption = $_->{caption};
+      $caption = Utils::summary($caption, 20);
 
-	$js .= "addPhoto(" . $_->{phid} . ", " . $_->{lookupid} . ", \"" .
-	    Utils::imageURL($_,"medium") . "\", " . $_->{medium_width} .
+      $js .= "addPhoto(" . $_->{phid} . ", " . $_->{lookupid} . ", \"" .
+	Utils::imageURL($_,"medium") . "\", " . $_->{medium_width} .
 	    ", \"$tstring\", \"$photogName\", \"$caption\", \"\"); ";	
     }
-}
+  }
 
-print $js;
-	
+  print $js;
+}
 
 sub getPixelOffset {
     my $start = shift;

@@ -8,16 +8,15 @@ use Settings;
 use Template;
 use Utils;
 
-use CGI qw(-debug :standard);
+use CGI::Fast qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
 use vars qw($cgi $db);
 
-$cgi = new CGI;
-
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
+ACCEPT: while ($cgi = new CGI::Fast) {
 
 #unless(defined($cgi->param("uid1")) && defined($cgi->param("uid2")) &&
 #   defined($cgi->param("uid3")) && defined($cgi->param("uid4")) &&
@@ -26,43 +25,43 @@ $db->connect(Settings::settings("dbName"));
 #    exit;
 #}
 
-my @uids;
-foreach my $i (0..4) {
+  my @uids;
+  foreach my $i (0..4) {
     my $j = $i+1;
     my $uid = $cgi->param("uid$j");
     if($uid) {
-	$uid = int($uid);
-	push(@uids, $uid);
+      $uid = int($uid);
+      push(@uids, $uid);
     }
-}
+  }
 
-#these are in minutes.
-my $start = $cgi->param("start");
-my $end = $cgi->param("end");
+  #these are in minutes.
+  my $start = $cgi->param("start");
+  my $end = $cgi->param("end");
 
-$start = int($start);
-$end = int($end);
+  $start = int($start);
+  $end = int($end);
 
-if($start < 0 || $start > 1440 || $end < 0 || $end > 1440) {
+  if($start < 0 || $start > 1440 || $end < 0 || $end > 1440) {
     print $cgi->header();
-    exit;
-}
+    next ACCEPT;
+  }
 
-if($end <= $start) {
+  if($end <= $start) {
     print $cgi->header();
-    exit;
-}
+    next ACCEPT;
+  }
 
-unless(($start % 15 == 0) && ($end % 15 == 0)) {
+  unless(($start % 15 == 0) && ($end % 15 == 0)) {
     print $cgi->header();
-    exit;
-}
+    next ACCEPT;
+  }
 
 
-print $cgi->header();
-my @images;
+  print $cgi->header();
+  my @images;
 
-foreach(@uids) {
+  foreach(@uids) {
 
     #comes back sorted.
     my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
@@ -71,22 +70,20 @@ foreach(@uids) {
     #becomes a list of list refs. Each sublist is a list of %photos in time order 
     bucketize(\@thisimages, \@bucketized);
 
-    
-
     push(@images, \@bucketized);
-}
+  }
 
 
-my $html = "<div class=\"fifteen-block\">\n";
+  my $html = "<div class=\"fifteen-block\">\n";
 
-if($start % 60 == 0 || $start % 60 == 30) {
+  if($start % 60 == 0 || $start % 60 == 30) {
     $html .= "<div style=\"position:absolute; left:0px; height:0px; font-size:10px;" .
 	"color:#333333;\">" . niceTime($start) . "</div>\n";
-}
+  }
 
-my $yoff = 8;
-my $line = 0;
-foreach(@images) {
+  my $yoff = 8;
+  my $line = 0;
+  foreach(@images) {
     my @is = @$_;
 
     if($line == 1) {
@@ -94,33 +91,34 @@ foreach(@images) {
     } else {
 	$yoff += 25;
     }
-    
+
     my $class = "single-timeline";
     if($uids[$line] < 0) {
-	$class = "single-timeline-empty";
+      $class = "single-timeline-empty";
     }
 
     $html .= "<div class=\"$class\" style=\"left:0px; top:" . $yoff . "px; height:15px;\">\n";
     foreach(@is) {
 
-	my $xoff = getPixelOffset($start, $_->{time});
+      my $xoff = getPixelOffset($start, $_->{time});
 
-	my $slot = ($line == 0)? 1 : 2;
+      my $slot = ($line == 0)? 1 : 2;
 
-	$html .= "<img class=\"tiny-thumbnail\" id=\"tiny" . $_->{phid} . "\" style=\"top:0 " .
-	    "px; left:" . $xoff . "px;\" src=\"" . Utils::imageURL($_, "small") .
-	    "\" width=\"20\" height=\"15\" onClick=\"photo1Click(" . 
+      $html .= "<img class=\"tiny-thumbnail\" id=\"tiny" . $_->{phid} . "\" style=\"top:0 " .
+	"px; left:" . $xoff . "px;\" src=\"" . Utils::imageURL($_, "small") .
+	  "\" width=\"20\" height=\"15\" onClick=\"photo1Click(" . 
 	    $_->{phid} . ", $slot, $xoff, $yoff);\">\n";
     }
 
     $html .= "</div>";
     $line++;
+  }
+
+  $html .= "</div>";
+
+  print $html;
+
 }
-
-$html .= "</div>";
-
-print $html;
-	
 
 sub getPixelOffset {
     my $start = shift;
