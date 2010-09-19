@@ -455,14 +455,14 @@ sub getPhotoByMD5 {
 sub getNextPhoto {
   my ($self, $uid, $phid) = @_;
 
-  my ($next) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and time > (select time from photos where phid = ?) order by time limit 1", undef, $uid, $phid);
+  my ($next) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and (time > (select time from photos where phid = ?) or (time = (select time from photos where phid = ?) and phid > ?)) order by time, phid limit 1", undef, $uid, $phid, $phid, $phid);
   return $next;
 }
 
 sub getPreviousPhoto {
   my ($self, $uid, $phid) = @_;
 
-  my ($previous) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and time < (select time from photos where phid = ?) order by time desc limit 1", undef, $uid, $phid);
+  my ($previous) = $self->{connection}->selectrow_array("select phid from photos where uid = ? and (time < (select time from photos where phid = ?) or (time = (select time from photos where phid = ?) and phid < ?)) order by time desc, phid desc limit 1", undef, $uid, $phid, $phid, $phid);
   return $previous;
 }
 
