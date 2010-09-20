@@ -68,7 +68,7 @@ if ($uid) {
   $loginText = "upload";
 }
 
-my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
+my @vals = (Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
 	    $aditlLeft, $voteURL, $width - 8, $image{phid}, $numphotos[0], $personURL, $caption, $loginURL, $loginText);
 
 my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front.html", \@vals);

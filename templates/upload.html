@@ -1,19 +1,18 @@
-urlBase
 aditlAuthID
 aditlAuthToken
 <template>
 
 <html>
 <head><title>ADITL upload your day</title>
-<link rel="StyleSheet" href="urlBase/static/aditl.css" type="text/css" />
-<script type="text/javascript" src="urlBase/static/swfupload.js"></script>
-<script type="text/javascript" src="urlBase/static/uploadhandlers.js"></script>
+<link rel="StyleSheet" href="${Settings:staticURLBase}/aditl.css" type="text/css" />
+<script type="text/javascript" src="${Settings:staticURLBase}/swfupload.js"></script>
+<script type="text/javascript" src="${Settings:staticURLBase}/uploadhandlers.js"></script>
 <script type="text/javascript">
 var swfu;
 window.onload = function () {
     swfu = new SWFUpload({
         // Backend Settings
-        upload_url: "urlBase/dyn/uploadrcv",
+        upload_url: "${Settings:uploadrcvURL}",
         post_params: {"aditlauthid": "aditlAuthID", "aditlauthtoken": "aditlAuthToken"},
 
         // File Upload Settings
@@ -33,7 +32,7 @@ window.onload = function () {
         upload_complete_handler : uploadComplete,
 
         // Button Settings
-        button_image_url : "urlBase/static/SmallSpyGlassWithTransperancy_17x18.png",
+        button_image_url : "${Settings:staticURLBase}/SmallSpyGlassWithTransperancy_17x18.png",
         button_placeholder_id : "spanButtonPlaceholder",
         button_width: 280,
         button_height: 18,
@@ -45,7 +44,7 @@ window.onload = function () {
         button_cursor: SWFUpload.CURSOR.HAND,
 
         // Flash Settings
-        flash_url : "urlBase/static/swfupload.swf",
+        flash_url : "${Settings:staticURLBase}/swfupload.swf",
 
         custom_settings : {
             upload_target : "divFileProgressContainer"
@@ -60,8 +59,8 @@ window.onload = function () {
 <body bgcolor=#ffffff>
 
 <left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
-<img border=0 name="bannerimg" src="urlBase/static/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/static/logo2.jpg'"
-onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
+<img border=0 name="bannerimg" src="${Settings:staticURLBase}/logo1.jpg" onMouseOver = "document.bannerimg.src = '${Settings:staticURLBase}/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '${Settings:staticURLBase}/logo1.jpg'">
 </a></div></left>
 
 <br><br><br>

@@ -88,7 +88,7 @@ sub terms {
     }
 
     print $cgi->header();
-    print Template::fillTemplate(Settings::settings("templateLib") . "/terms.html", [Settings::settings("urlBase")]);
+    print Template::fillTemplate(Settings::settings("templateLib") . "/terms.html", []);
     exit;
 }
 				  
@@ -106,7 +106,7 @@ sub doupload {
 			   );
   print $cgi->header(-cookies => [$cookie]);
   my $temp = Settings::settings("templateLib") . "/upload.html";
-  print Template::fillTemplate($temp, [Settings::settings("urlBase"), $cgi->cookie("aditlauthid"), $cgi->cookie("aditlauthtoken")]);
+  print Template::fillTemplate($temp, [$cgi->cookie("aditlauthid"), $cgi->cookie("aditlauthtoken")]);
   exit;
 }
 

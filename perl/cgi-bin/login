@@ -57,7 +57,7 @@ if(defined($cgi->param("message"))) {
 
 print $cgi->header();
 my $templateroot = Settings::settings("templateLib");
-my $html = Template::fillTemplate("$templateroot/login.html", [Settings::settings("urlBase"), "Login", $message, "", $redirect]);
+my $html = Template::fillTemplate("$templateroot/login.html", ["Login", $message, "", $redirect]);
 
 print $html;
 exit;
@@ -74,7 +74,7 @@ sub processLogin {
 	exit;
     } else {
 	my $templateroot = Settings::settings("templateLib");
-	my $html = Template::fillTemplate("$templateroot/login.html", [Settings::settings("urlBase"), "Login", "email and password do not match. make sure you didn't forget \'<b>\@mit.edu</b>\'.", "$email", $redirect]);
+	my $html = Template::fillTemplate("$templateroot/login.html", ["Login", "email and password do not match. make sure you didn't forget \'<b>\@mit.edu</b>\'.", "$email", $redirect]);
 	print $cgi->header();
 	print $html;
 	exit;

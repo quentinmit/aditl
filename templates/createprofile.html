@@ -1,4 +1,3 @@
-urlBase
 templateMessage
 fnvalue
 lnvalue
@@ -7,13 +6,13 @@ emailvalue
 
 <html>
 <head><title>ADITL Registration</title>
-<link rel="StyleSheet" href="urlBase/static/aditl.css" type="text/css" />
+<link rel="StyleSheet" href="${Settings:staticURLBase}/aditl.css" type="text/css" />
 </head>
 <body bgcolor=#ffffff>
 
 <left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
-<img border=0 name="bannerimg" src="urlBase/static/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/static/logo2.jpg'"
-onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
+<img border=0 name="bannerimg" src="${Settings:staticURLBase}/logo1.jpg" onMouseOver = "document.bannerimg.src = '${Settings:staticURLBase}/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '${Settings:staticURLBase}/logo1.jpg'">
 </a></div></left>
 
 <br><br><br>
@@ -22,7 +21,7 @@ onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
 <div class="stdgray" style="font-size:15px; width:450px">templateMessage</div>
 <br>
 <div class="orangebox" style="font-size:10px; width:43em">
-<form method=post action="urlBase/dyn/register">
+<form method=post action="${Settings:registerURL}">
 <table cellspacing=0 cellpadding=4>
 <tr><td align="right" class="stdgray" style="font-size:12px">first name</td><td><input name="firstname" size="10" value="fnvalue"></td></tr>
 <tr><td align="right" class="stdgray" style="font-size:12px">last name</td><td><input name="lastname" size="10" value="lnvalue"></td></tr>

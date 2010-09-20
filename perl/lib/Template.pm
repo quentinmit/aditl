@@ -6,6 +6,8 @@ require Exporter;
 
 use strict;
 
+use Settings;
+
 # Opens an html template and fills in the appropriate photos and text
 # The format of the template is a newline separated list of keywords to
 # be replaced (order of keywords matching order of replacing text) ending
@@ -45,6 +47,8 @@ sub fillTemplate {
     for(my $i = 0; $i < scalar(@variables); $i++) {
 	$templateBody =~ s/$variables[$i]/$objects[$i]/g;
     }
+
+    $templateBody =~ s/\$\{Settings:(\w+)\}/Settings::settings($1)/eg;
 
     return $templateBody;
 }

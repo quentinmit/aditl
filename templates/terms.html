@@ -1,8 +1,7 @@
-urlBase
 <template>
 <html>
 <head><title>ADITL Terms and Conditions</title>
-<link rel="StyleSheet" href="urlBase/static/aditl.css" type="text/css" />
+<link rel="StyleSheet" href="${Settings:staticURLBase}/aditl.css" type="text/css" />
 <style type="text/css">
 .cell1 {padding-left:4px}
 .smalltext {color:#77746b; font-family: helvetica, sans-serif; font-size:15px; text-align:justify}
@@ -15,8 +14,8 @@ a.link1:hover {text-decoration:underline}
 <body bgcolor=#ffffff>
 
 <left><div class="banner"><a class="banner" href="http://aditl.mit.edu">
-<img border=0 name="bannerimg" src="urlBase/static/logo1.jpg" onMouseOver = "document.bannerimg.src = 'urlBase/static/logo2.jpg'"
-onMouseOut = "document.bannerimg.src = 'urlBase/static/logo1.jpg'">
+<img border=0 name="bannerimg" src="${Settings:staticURLBase}/logo1.jpg" onMouseOver = "document.bannerimg.src = '${Settings:staticURLBase}/logo2.jpg'"
+onMouseOut = "document.bannerimg.src = '${Settings:staticURLBase}/logo1.jpg'">
 </a></div></left>
 
 <br><br>
@@ -55,7 +54,7 @@ photograph.
 ADITL photo event if unexpected technical, legal, and/or financial
 difficulties arise.
 <br><br>
-<form method=post action="urlBase/dyn/upload">
+<form method=post action="${Settings:uploadURL}">
 <input type="submit" name="null" value="I agree">
 <input type="hidden" name="nextpage" value="1">
 </form>

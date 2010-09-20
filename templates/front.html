@@ -1,4 +1,3 @@
-urlBase
 tImage
 tTime
 tPhotog
@@ -213,7 +212,7 @@ if(x == 1) {
 </head>
 <body>
 
-<div class="aditl-head1"><a style="text-decoration:none;" href="urlBase/dyn/front">ADITL</a></div>
+<div class="aditl-head1"><a style="text-decoration:none;" href="${Settings:frontURL}">ADITL</a></div>
 <!--
 <div class="aditl-head2">A Day in the Life of MIT</div>
 -->
@@ -241,8 +240,8 @@ height:50px; z-index:3;"></div>
 <div class="moreitem" id="moretnq">the yearbook of mit</div>
 <div class="moreitem" id="morelogin">to upload or write captions</div>
 
-<div class="navitem" style="left:0px;"><a href="urlBase/dyn/about?bgc=tbgColor&fgc=tColor" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
-<div class="navitem" style="left:4em;"><a href="urlBase/dyn/select-user" onmouseover="day(1)" onmouseout="day(0)">day</a></div>
+<div class="navitem" style="left:0px;"><a href="${Settings:aboutURL}?bgc=tbgColor&fgc=tColor" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
+<div class="navitem" style="left:4em;"><a href="${Settings:selectUserURL}" onmouseover="day(1)" onmouseout="day(0)">day</a></div>
 <div class="navitem" style="left:7em;"><a href="urlLoginUpload" onmouseover="login(1)" onmouseout="login(0)" >tLoginUpload</div>
 <div class="navitem" style="left:11em;"><a href="http://web.mit.edu/yearbook/www" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
 

@@ -79,7 +79,7 @@ sub showForm {
 
     my $template = Settings::settings("templateLib") . "/phototest.html";
     my @emptylist;
-    my $html = Template::fillTemplate($template, [Settings::settings("urlBase")]);
+    my $html = Template::fillTemplate($template, []);
     print $cgi->header();
     print $html;
 }

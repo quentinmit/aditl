@@ -80,7 +80,7 @@ my $aditlLeft = 550 - $width;
 
 my $voteURL = Settings::settings("frontURL") . "2" . "?vote=" . $image{phid};
 
-my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
+my @vals = (Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
 	    $aditlLeft, $width, $voteURL);
 
 my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front2.html", \@vals);

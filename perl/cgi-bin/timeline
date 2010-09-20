@@ -48,7 +48,6 @@ my $uidstring = "uid1=$uids[0]\&uid2=$uids[1]\&uid3=$uids[2]\&uid4=$uids[3]";
 
 my @initFrags;
 
-push(@initFrags, Settings::settings("urlBase"));
 push(@initFrags, $start);
 push(@initFrags, Settings::settings("htmlFragmentURL") . "?" . $uidstring);
 push(@initFrags, Settings::settings("jsFragmentURL") . "?" . $uidstring);
