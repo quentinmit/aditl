@@ -6,7 +6,7 @@ echo
 echo -n "Please type 'yes' to continue: "
 read response
 if [ "$response" = "yes" ]; then
-   sudo -u www-data psql aditl2009 -c "DELETE FROM photos WHERE phid = '$1';"
+   sudo -u www-data psql aditl2010 -c "DELETE FROM photos WHERE phid = '$1';"
 else
    echo "Not deleting"
 fi
