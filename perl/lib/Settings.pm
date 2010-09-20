@@ -4,32 +4,35 @@ use vars qw(%settings);
 
 $settings{"email"} = "aditl\@mit.edu";
 
-$settings{"dbName"} = "aditl2009";
-$settings{"pathBase"} = "/usr/local/aditl2009";
-$settings{"urlBase"} = "http://aditl.mit.edu";
+$settings{"dbName"} = "aditl2010";
+$settings{"pathBase"} = "/usr/local/aditl2010";
+$settings{"urlBase"} = "http://aditl.mit.edu/2010/";
 
 $settings{"templateLib"} = $settings{"pathBase"} . "/templates";
 $settings{"logDirectory"} = $settings{"pathBase"} . "/logs";
-$settings{"scratchDirectory"} = "/srv/aditl2009/scratch";
-$settings{"incomingDir"} = "/srv/aditl2009/incoming";
-$settings{"rootPhotoDir"} = "/srv/aditl2009/photoroot";
-$settings{"tinyBarcodePath"} = "/srv/aditl2009/photoroot/tiny-barcodes";
+$settings{"scratchDirectory"} = "/srv/aditl2010/scratch";
+$settings{"incomingDir"} = "/srv/aditl2010/incoming";
+$settings{"rootPhotoDir"} = "/srv/aditl2010/photoroot";
+$settings{"tinyBarcodePath"} = "/srv/aditl2010/photoroot/tiny-barcodes";
 
 $settings{"SMTPHost"} = "outgoing.mit.edu";
 
-$settings{"validateURL"} = $settings{"urlBase"} . "/dyn/validate";
-$settings{"registerURL"} = $settings{"urlBase"} . "/dyn/register";
-$settings{"phototestURL"} = $settings{"urlBase"} . "/dyn/phototest";
-$settings{"uploadURL"} = $settings{"urlBase"} . "/dyn/upload";
-$settings{"loginURL"} = $settings{"urlBase"} . "/dyn/login";
-$settings{"photoURLBase"} = $settings{"urlBase"} . "/photos";
-$settings{"frontURL"} = $settings{"urlBase"} . "/dyn/front";
-$settings{"timelineURL"} = $settings{"urlBase"} . "/dyn/timeline";
-$settings{"htmlFragmentURL"} = $settings{"urlBase"} . "/dyn/timeline-fragment.fcgi";
-$settings{"jsFragmentURL"} = $settings{"urlBase"} . "/dyn/js-fragment.fcgi";
-$settings{"tinyBarcodeURL"} = $settings{"urlBase"} . "/photos/tiny-barcodes";
-$settings{"selectUserURL"} = $settings{"urlBase"} . "/dyn/select-user";
-$settings{"photoURL"} = $settings{"urlBase"} . "/dyn/photo";
+$settings{"aboutURL"} = $settings{"urlBase"} . "about";
+$settings{"validateURL"} = $settings{"urlBase"} . "validate";
+$settings{"registerURL"} = $settings{"urlBase"} . "register";
+$settings{"phototestURL"} = $settings{"urlBase"} . "phototest";
+$settings{"uploadURL"} = $settings{"urlBase"} . "upload";
+$settings{"uploadrcvURL"} = $settings{"urlBase"} . "uploadrcv";
+$settings{"loginURL"} = $settings{"urlBase"} . "login";
+$settings{"photoURLBase"} = $settings{"urlBase"} . "photos";
+$settings{"staticURLBase"} = $settings{"urlBase"} . "static";
+$settings{"frontURL"} = $settings{"urlBase"} . "front";
+$settings{"timelineURL"} = $settings{"urlBase"} . "timeline";
+$settings{"htmlFragmentURL"} = $settings{"urlBase"} . "timeline-fragment.fcgi";
+$settings{"jsFragmentURL"} = $settings{"urlBase"} . "js-fragment.fcgi";
+$settings{"tinyBarcodeURL"} = $settings{"urlBase"} . "photos/tiny-barcodes";
+$settings{"selectUserURL"} = $settings{"urlBase"} . "select-user";
+$settings{"photoURL"} = $settings{"urlBase"} . "photo";
 
 
 $settings{"friendLimit"} = 4;
@@ -44,7 +47,7 @@ $settings{"colorManipLightness"} = 200;
 $settings{"colorManipSat"} = 225;
 #$settings{"colorManipSat"} = 230;
 
-$settings{"eventDate"} = "2009-09-24";
+$settings{"eventDate"} = "2010-09-23";
 
 sub settings {
     my $setting = shift;
