@@ -24,7 +24,7 @@ my $uid;
 
 unless($uid = Cookie::isUserLoggedIn($cgi, $db)) {
     print $cgi->header();
-    print Utils::redirect(Settings::settings("loginURL") . "?redirect=" . Settings::settings("urlBase") . "/dyn/front2");
+    print Utils::redirect(Settings::settings("loginURL") . "?redirect=" . Settings::settings("frontURL") . "2");
     exit;
 }
 
@@ -44,7 +44,7 @@ if(defined($cgi->param("vote"))) {
     # Never really used above, there's only 1 vote type.
     $db->photoVote($vote, $uid, 1);
     print $cgi->header();
-    print Utils::redirect(Settings::settings("urlBase") . "/dyn/front2");
+    print Utils::redirect(Settings::settings("frontURL") . "2");
     exit;
 			  
 }
@@ -78,7 +78,7 @@ my $wcolor = Utils::toWebColor(@color);
 
 my $aditlLeft = 550 - $width;
 
-my $voteURL = Settings::settings("urlBase") . "/dyn/front2" . "?vote=" . $image{phid};
+my $voteURL = Settings::settings("frontURL") . "2" . "?vote=" . $image{phid};
 
 my @vals = (Settings::settings("urlBase"), Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
 	    $aditlLeft, $width, $voteURL);

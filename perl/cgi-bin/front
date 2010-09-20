@@ -61,10 +61,10 @@ my $voteURL = Settings::settings("frontURL") . "?vote=" . $image{phid};
 
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
-my $loginURL = Settings::settings("urlBase")."/dyn/login?redirect=".Settings::settings("frontURL");
+my $loginURL = Settings::settings("loginURL")."?redirect=".Settings::settings("frontURL");
 my $loginText = "login";
 if ($uid) {
-  $loginURL = Settings::settings("urlBase")."/dyn/upload";
+  $loginURL = Settings::settings("uploadURL");
   $loginText = "upload";
 }
 
