@@ -191,12 +191,28 @@ sub fixTime {
     return @times;
 }
 
+
+#counts how many registered
 sub howManyRegistered {
     my $self = shift;
 
     my $conn = $self->{connection};
 
     my @row = $conn->selectrow_array("select count(*) from users;");
+    if(scalar(@row) == 0) {
+	return 0;
+    }
+
+    return $row[0];
+}
+
+#counts how many photos total
+sub howManyPhotos {
+    my $self = shift;
+
+    my $conn = $self->{connection};
+
+    my @row = $conn->selectrow_array("select count(*) from photos;");
     if(scalar(@row) == 0) {
 	return 0;
     }

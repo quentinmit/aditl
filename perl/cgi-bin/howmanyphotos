@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "../lib";
+use Database;
+use Settings;
+
+use CGI qw(-debug :standard);
+use CGI::Carp('fatalsToBrowser');
+$CGI::DISABLE_UPLOADS = 1;
+
+my $cgi = CGI->new();
+
+print $cgi->header();
+my $db = Database->new();
+my $status = $db->connect(Settings::settings("dbName"));
+
+print $db->howManyPhotos();
+
