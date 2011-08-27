@@ -35,6 +35,12 @@ ACCEPT: while ($cgi = new CGI::Fast) {
     }
   }
 
+  my $alluids = 0;
+
+  if ($cgi->param("uids") eq "all") {
+      $alluids = 1;
+  }
+
   #these are in minutes.
   my $start = $cgi->param("start");
   my $end = $cgi->param("end");
@@ -61,16 +67,23 @@ ACCEPT: while ($cgi = new CGI::Fast) {
   print $cgi->header();
   my @images;
 
-  foreach(@uids) {
+  if ($alluids) {
+      my @thisimages = $db->getAllPhotoInfoBetween(toSqlTime($start), toSqlTime($end));
+      my @bucketized;
+      bucketize(\@thisimages, \@bucketized);
+      push(@images, \@bucketized);
+  } else {
+      foreach(@uids) {
 
-    #comes back sorted.
-    my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
+	  #comes back sorted.
+	  my @thisimages = $db->getPhotoInfoBetween($_, toSqlTime($start), toSqlTime($end));
 
-    my @bucketized;
-    #becomes a list of list refs. Each sublist is a list of %photos in time order 
-    bucketize(\@thisimages, \@bucketized);
+	  my @bucketized;
+	  #becomes a list of list refs. Each sublist is a list of %photos in time order 
+	  bucketize(\@thisimages, \@bucketized);
 
-    push(@images, \@bucketized);
+	  push(@images, \@bucketized);
+      }
   }
 
 

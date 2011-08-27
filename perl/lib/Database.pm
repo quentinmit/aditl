@@ -514,6 +514,21 @@ sub getPhotosBetween {
 
 # takes a uid, a beginning time "yyyy-mm-dd hh:mm:ss", and ending time (same format)
 # and a returns a list of phids for photos in that time.
+sub getAllPhotosBetween {
+    my $self = shift;
+    my $start = shift;
+    my $end = shift;
+
+    my $conn = $self->{connection};
+
+    my $query;
+    my $phids = $conn->selectcol_arrayref("select phid from photos where time > ? and time <= ? order by time", undef, $start, $end);
+
+    return @$phids;
+}
+
+# takes a uid, a beginning time "yyyy-mm-dd hh:mm:ss", and ending time (same format)
+# and a returns a list of phids for photos in that time.
 sub getPhotoInfoBetween {
     my $self = shift;
     my $uid = shift;
@@ -525,6 +540,27 @@ sub getPhotoInfoBetween {
     my $query;
     my $sth = $conn->prepare("select phid, uid, time, caption, original_path, medium_size[0] as medium_width, medium_size[1] as medium_height from photos where uid = ? and time > ? and time <= ? order by time");
     $sth->execute($uid, $start, $end);
+
+    my @photos;
+    while (my $row = $sth->fetchrow_hashref) {
+      push @photos, $row;
+    }
+
+    return @photos;
+}
+
+# takes a a beginning time "yyyy-mm-dd hh:mm:ss", and ending time (same format)
+# and a returns a list of phids for photos in that time.
+sub getAllPhotoInfoBetween {
+    my $self = shift;
+    my $start = shift;
+    my $end = shift;
+
+    my $conn = $self->{connection};
+
+    my $query;
+    my $sth = $conn->prepare("select phid, uid, time, caption, original_path, medium_size[0] as medium_width, medium_size[1] as medium_height from photos where time > ? and time <= ? order by time");
+    $sth->execute($start, $end);
 
     my @photos;
     while (my $row = $sth->fetchrow_hashref) {
