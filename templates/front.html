@@ -96,7 +96,7 @@ position:absolute;
 top:66px;
 left:565px;
 font-size:2em;
-width:500px;
+width:459px;
 }
 
 .caption-text {
@@ -191,6 +191,15 @@ if(x == 1) {
 }
 }
 
+function photog(x) {
+var a = document.getElementById("morephotog");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
 function tnq(x) {
 var a = document.getElementById("moretnq");
 if(x == 1) {
@@ -213,7 +222,7 @@ if(x == 1) {
 </head>
 <body>
 
-<div class="aditl-head1"><a style="text-decoration:none;" href="urlBase/dyn/front">ADITL</a></div>
+<div class="aditl-head1"><a style="text-decoration:none;" href="urlBase/2009/front">ADITL</a></div>
 <!--
 <div class="aditl-head2">A Day in the Life of MIT</div>
 -->
@@ -237,30 +246,32 @@ height:50px; z-index:3;"></div>
 <div class="footer-bar">
 
 <div class="moreitem" id="moreabout">about the event</div>
-<div class="moreitem" id="moreday">follow someone's day</div>
+<div class="moreitem" id="moreday">follow everyone's day</div>
+<div class="moreitem" id="morephotog">follow someone's day</div>
 <div class="moreitem" id="moretnq">the yearbook of mit</div>
 <div class="moreitem" id="morelogin">to upload or write captions</div>
 
-<div class="navitem" style="left:0px;"><a href="urlBase/dyn/about?bgc=tbgColor&fgc=tColor" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
-<div class="navitem" style="left:4em;"><a href="urlBase/dyn/select-user" onmouseover="day(1)" onmouseout="day(0)">day</a></div>
-<div class="navitem" style="left:7em;"><a href="urlLoginUpload" onmouseover="login(1)" onmouseout="login(0)" >tLoginUpload</div>
-<div class="navitem" style="left:11em;"><a href="http://web.mit.edu/yearbook/www" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
+<div class="navitem" style="left:0px;"><a href="urlBase/2009/about?bgc=tbgColor&fgc=tColor" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
+<!--<div class="navitem" style="left:4em;"><a href="" onmouseover="day(1)" onmouseout="day(0)">day</a></div>-->
+<div class="navitem" style="left:4em;"><a href="urlBase/2009/select-user" onmouseover="photog(1)" onmouseout="photog(0)">by_photog</a></div>
+<div class="navitem" style="left:10em;"><a href="urlLoginUpload" onmouseover="login(1)" onmouseout="login(0)" >tLoginUpload</div>
+<div class="navitem" style="left:14em;"><a href="http://web.mit.edu/yearbook/www" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
 
 </a></div>
 
 
-<!-- Start of StatCounter Code -->
-<script type="text/javascript" language="javascript">
-var sc_project=1222138; 
-var sc_invisible=1; 
-var sc_partition=10; 
-var sc_security="0a612d0b"; 
+
+<!-- Google Analytics Begin -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
-
-<script type="text/javascript" language="javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript><a href="http://www.statcounter.com/" target="_blank"><img  src="http://c11.statcounter.com/counter.php?sc_project=1222138&amp;java=0&amp;security=0a612d0b&amp;invisible=1" alt="free page hit counter" border="0"></a> </noscript>
-<!-- End of StatCounter Code -->
-
-
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10743984-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<!-- Google Analytics End -->
 
 </body>
 

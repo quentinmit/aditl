@@ -87,7 +87,7 @@ sub process_image ($$) {
       my $sizedir = catdir($userroot, $size);
       -d $sizedir || mkdir($sizedir) or die "Couldn't mkdir: $!";
 
-      system($conv, $file, "-geometry", $SIZES{$size}, catfile($sizedir, "$phid.jpg"));
+      system($conv, $file, "-auto-orient", "-geometry", $SIZES{$size}, catfile($sizedir, "$phid.jpg"));
     }
     my $medium_size = [Utils::imagesize(catfile($userroot, "medium", "$phid.jpg"))];
 

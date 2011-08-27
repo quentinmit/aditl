@@ -25,7 +25,7 @@ function fileQueueError(file, errorCode, message) {
 			break;
 		}
 
-		addImage("/static/" + imageName);
+		addImage("/2009/static/" + imageName);
 
 	} catch (ex) {
 		this.debug(ex);
@@ -74,7 +74,7 @@ function uploadSuccess(file, serverData) {
 		progress.setStatus("Thumbnail Created.");
 		progress.toggleCancel(false);
 	    } else {
-		addImage("/static/error.gif");
+		addImage("/2009/static/error.gif");
 		progress.setStatus("Error.");
 		progress.toggleCancel(false);
 		alert(serverData);
@@ -135,7 +135,7 @@ function uploadError(file, errorCode, message) {
 			break;
 		}
 
-		addImage("/static/" + imageName);
+		addImage("/2009/static/" + imageName);
 
 	} catch (ex3) {
 		this.debug(ex3);
