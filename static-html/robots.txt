@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /2009/timeline
+Disallow: /2010/timeline
+Disallow: /2011/timeline
+Disallow: /2012/timeline
+Disallow: /2013/timeline
+Disallow: /2014/timeline
