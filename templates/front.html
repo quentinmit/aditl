@@ -21,7 +21,7 @@ tLoginUpload
 <meta name="description" content="24 hours of mit in photos">
 <meta name="keywords" content="aditl,photo,blog,tnq,technique,photo,photos,reid williams,mike pihulic,mit life">
 <title>
-A Day in the Life of MIT 2009
+A Day in the Life of MIT 2010
 </title>
 
 <!-- phid is tPhid -->
@@ -190,6 +190,15 @@ if(x == 1) {
 }
 }
 
+function photog(x) {
+var a = document.getElementById("morephotog");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
 function tnq(x) {
 var a = document.getElementById("moretnq");
 if(x == 1) {
@@ -236,14 +245,16 @@ height:50px; z-index:3;"></div>
 <div class="footer-bar">
 
 <div class="moreitem" id="moreabout">about the event</div>
-<div class="moreitem" id="moreday">follow someone's day</div>
+<div class="moreitem" id="moreday">follow everyone's day</div>
+<div class="moreitem" id="morephotog">follow someone's day</div>
 <div class="moreitem" id="moretnq">the yearbook of mit</div>
 <div class="moreitem" id="morelogin">to upload or write captions</div>
 
 <div class="navitem" style="left:0px;"><a href="${Settings:aboutURL}?bgc=tbgColor&fgc=tColor" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
-<div class="navitem" style="left:4em;"><a href="${Settings:selectUserURL}" onmouseover="day(1)" onmouseout="day(0)">day</a></div>
-<div class="navitem" style="left:7em;"><a href="urlLoginUpload" onmouseover="login(1)" onmouseout="login(0)" >tLoginUpload</div>
-<div class="navitem" style="left:11em;"><a href="http://web.mit.edu/yearbook/www" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
+<!--<div class="navitem" style="left:4em;"><a href="" onmouseover="day(1)" onmouseout="day(0)">day</a></div>-->
+<div class="navitem" style="left:4em;"><a href="${Settings:selectUserURL}" onmouseover="photog(1)" onmouseout="photog(0)">by_photog</a></div>
+<div class="navitem" style="left:10em;"><a href="urlLoginUpload" onmouseover="login(1)" onmouseout="login(0)" >tLoginUpload</div>
+<div class="navitem" style="left:14em;"><a href="http://yearbook.scripts.mit.edu/newsite/" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
 
 </a></div>
 
