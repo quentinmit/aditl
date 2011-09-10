@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo -u www-data psql -At aditl2010 -c "SELECT email FROM users ORDER BY email ASC" | cat
+sudo -u www-data psql -At aditl2011 -c "SELECT email FROM users ORDER BY email ASC" | cat

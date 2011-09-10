@@ -4,16 +4,16 @@ use vars qw(%settings);
 
 $settings{"email"} = "aditl\@mit.edu";
 
-$settings{"dbName"} = "aditl2010";
-$settings{"pathBase"} = "/usr/local/aditl2010";
-$settings{"urlBase"} = "http://aditl.mit.edu/2010/";
+$settings{"dbName"} = "aditl2011";
+$settings{"pathBase"} = "/usr/local/aditl2011";
+$settings{"urlBase"} = "http://aditl.mit.edu/2011/";
 
 $settings{"templateLib"} = $settings{"pathBase"} . "/templates";
 $settings{"logDirectory"} = $settings{"pathBase"} . "/logs";
-$settings{"scratchDirectory"} = "/srv/aditl2010/scratch";
-$settings{"incomingDir"} = "/srv/aditl2010/incoming";
-$settings{"rootPhotoDir"} = "/srv/aditl2010/photoroot";
-$settings{"tinyBarcodePath"} = "/srv/aditl2010/photoroot/tiny-barcodes";
+$settings{"scratchDirectory"} = "/srv/aditl2011/scratch";
+$settings{"incomingDir"} = "/srv/aditl2011/incoming";
+$settings{"rootPhotoDir"} = "/srv/aditl2011/photoroot";
+$settings{"tinyBarcodePath"} = "/srv/aditl2011/photoroot/tiny-barcodes";
 
 $settings{"SMTPHost"} = "outgoing.mit.edu";
 
@@ -47,7 +47,7 @@ $settings{"colorManipLightness"} = 200;
 $settings{"colorManipSat"} = 225;
 #$settings{"colorManipSat"} = 230;
 
-$settings{"eventDate"} = "2010-09-23";
+$settings{"eventDate"} = "2011-09-22";
 
 sub settings {
     my $setting = shift;

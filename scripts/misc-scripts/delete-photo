@@ -1,12 +1,12 @@
 #!/bin/bash
 echo "WARNING: About to delete photo with id '$1'"
 echo "Please confirm you really intend to delete this photo:"
-echo "http://aditl.mit.edu/dyn/photo?phid=$1"
+echo "http://aditl.mit.edu/2011/photo?phid=$1"
 echo
 echo -n "Please type 'yes' to continue: "
 read response
 if [ "$response" = "yes" ]; then
-   sudo -u www-data psql aditl2010 -c "DELETE FROM photos WHERE phid = '$1';"
+   sudo -u www-data psql aditl2011 -c "DELETE FROM photos WHERE phid = '$1';"
 else
    echo "Not deleting"
 fi
