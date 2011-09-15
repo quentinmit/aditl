@@ -27,7 +27,7 @@ height:3em;
 font-size:50px;
 color:#<TMPL_VAR NAME="Color" DEFAULT="333333">;
 position:absolute;
-left:5px;
+left:<TMPL_VAR NAME="Width" DEFAULT="5">px;
 top:52px;
 margin:0px;
 padding:0px;
@@ -36,7 +36,7 @@ padding:0px;
 .aditl-head2 {
 font-size:23px;
 position:absolute;
-left:5px;
+left:<TMPL_VAR NAME="Width" DEFAULT="5">px;
 top:75px;
 margin-left:145px;
 }
@@ -55,8 +55,96 @@ margin:0px;
 padding:0px;
 }
 
-A, A:link, .highlight {
+A, A:link, .highlight, .time-text, .navitem, .moreitem {
 color:#<TMPL_VAR NAME="Color" DEFAULT="333333">;
+}
+
+.main-image {
+position:absolute;
+left:<TMPL_VAR NAME="Width" DEFAULT="5">px;
+top:0px;
+border-right: 1px solid #333333;
+border-left: 1px solid #333333;
+border-top: 1px solid #333333;
+border-bottom: 1px solid #333333;
+}
+
+.time-text {
+position:absolute;
+top:5px;
+left:565px;
+font-size:65px;
+letter-spacing:.03em;
+}
+
+.name-text {
+position:absolute;
+top:66px;
+left:565px;
+font-size:2em;
+width:459px;
+}
+
+.caption-text {
+font-size:12px;
+position:absolute;
+top:130px;
+left:565px;
+width:250px;
+text-align:left;
+}
+
+.info-text {
+margin-top:30px;
+font-size:1.1em;
+line-height:1.1em;
+}
+
+a.plus-button:link {
+position:absolute;
+top:305px;
+left:565px;
+font-size:2em;
+color:#333333;
+text-decoration:none;
+}
+
+a.plus-button:hover {
+position:absolute;
+top:305px;
+left:565px;
+font-size:2em;
+color:#333333;
+text-decoration:none;
+font-weight:bold;
+}
+
+.footer-bar {
+position:absolute;
+left:tWidthpx;
+top:455px;
+}
+
+.navitem {
+position:absolute;
+top:0px;
+font-size:20px;
+}
+
+.moreitem {
+position:absolute;
+top:-40px;
+left:4px;
+padding-top:2px;
+font-size:25px;
+visibility:hidden;
+filter:alpha(opacity=.6); 
+-moz-opacity:.6; 
+opacity: .6;
+<TMPL_IF NAME="RealWidth">
+width:<TMPL_VAR NAME="RealWidth">px;
+</TMPL_IF>
+background-color:#ffffff;
 }
 
 </style>

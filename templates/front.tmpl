@@ -1,0 +1,113 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<!-- phid is <TMPL_VAR NAME="Phid"> -->
+
+<meta name="description" content="24 hours of mit in photos">
+<meta name="keywords" content="aditl,photo,blog,tnq,technique,photo,photos,reid williams,mike pihulic,mit life">
+
+
+<script type="text/javascript">
+
+function about(x) {
+var a = document.getElementById("moreabout");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
+function day(x) {
+var a = document.getElementById("moreday");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
+function photog(x) {
+var a = document.getElementById("morephotog");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
+function tnq(x) {
+var a = document.getElementById("moretnq");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
+function login(x) {
+var a = document.getElementById("morelogin");
+if(x == 1) {
+    a.style.visibility = "visible";
+} else {
+    a.style.visibility = "hidden";
+}
+}
+
+</script>
+</head>
+<body>
+
+<div class="aditl-head1"><a style="text-decoration:none;" href="<TMPL_VAR EXPR="settings('frontURL')">">ADITL</a></div>
+<!--
+<div class="aditl-head2">A Day in the Life of MIT</div>
+-->
+<div class="aditl-head2">A day in the life of mit</div>
+
+<div class="main-area">
+<img id="mainImage" class="main-image" alt="front page image" src="<TMPL_VAR NAME="Image">"></img>
+<div class="time-text"><TMPL_VAR NAME="Time"></div>
+<div class="name-text"><a style="color:#333333;" href="<TMPL_VAR NAME="personDay">"><TMPL_VAR NAME="Photog"></a></div>
+<div class="name-text" style="top:100px; font-size:23px;"><TMPL_VAR NAME="NumPhotos"> photos</div>
+<div class="caption-text"><TMPL_VAR NAME="Caption"></div>
+
+
+<!-- covers the moreitem stuff -->
+<div style="position:absolute; left:552px; top:302px; background-color:#tBgColor; width:400px;
+height:50px; z-index:3;"></div>
+
+
+</div>
+
+<div class="footer-bar">
+
+<div class="moreitem" id="moreabout">about the event</div>
+<div class="moreitem" id="moreday">follow everyone's day</div>
+<div class="moreitem" id="morephotog">follow someone's day</div>
+<div class="moreitem" id="moretnq">the yearbook of mit</div>
+<div class="moreitem" id="morelogin">to upload or write captions</div>
+
+<div class="navitem" style="left:0px;"><a href="<TMPL_VAR EXPR="settings('aboutURL')">?bgc=<TMPL_VAR NAME="bgColor">&fgc=<TMPL_VAR NAME="Color">" onmouseover="about(1)" onmouseout="about(0)">about</a></div>
+<!--<div class="navitem" style="left:4em;"><a href="" onmouseover="day(1)" onmouseout="day(0)">day</a></div>-->
+<div class="navitem" style="left:4em;"><a href="<TMPL_VAR EXPR="settings('selectUserURL')">" onmouseover="photog(1)" onmouseout="photog(0)">by_photog</a></div>
+<div class="navitem" style="left:10em;"><a href="<TMPL_VAR NAME="urlLoginUpload">" onmouseover="login(1)" onmouseout="login(0)" ><TMPL_VAR NAME="LoginUpload"></div>
+<div class="navitem" style="left:14em;"><a href="http://yearbook.scripts.mit.edu/" onmouseover="tnq(1)" onmouseout="tnq(0)">technique</div>
+
+</a></div>
+
+
+
+<!-- Google Analytics Begin -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10743984-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<!-- Google Analytics End -->
+
+</body>
+
+</html>

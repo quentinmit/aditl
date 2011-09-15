@@ -16,6 +16,7 @@ sub fillTemplateNew {
   my $t = HTML::Template::Expr->new_file
     (
      $filename,
+     die_on_bad_params => 0,
      functions =>
      {
       settings => \&Settings::settings,

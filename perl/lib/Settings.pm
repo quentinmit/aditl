@@ -48,6 +48,7 @@ $settings{"colorManipSat"} = 225;
 #$settings{"colorManipSat"} = 230;
 
 $settings{"eventDate"} = "2011-09-22";
+$settings{"year"} = "2011";
 
 sub settings {
     my $setting = shift;
