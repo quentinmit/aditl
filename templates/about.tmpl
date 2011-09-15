@@ -1,7 +1,3 @@
-tbgColor
-tColor
-<template>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">	
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
@@ -29,7 +25,7 @@ height:3em;
 
 .aditl-head1 {
 font-size:50px;
-color:#tColor;
+color:#<TMPL_VAR NAME="Color">;
 position:absolute;
 left:5px;
 top:52px;
@@ -50,19 +46,15 @@ margin-left:145px;
 position:absolute;
 top:100px;
 left:0px;
-background-color:#tbgColor;
+background-color:#<TMPL_VAR NAME="bgColor">;
 width:100%;
 height:352px;
 margin:0px;
 padding:0px;
 }
 
-A {
-color:#tColor;
-}
-
-A:link {
-color:#tColor;
+A, A:link, .highlight {
+color:#<TMPL_VAR NAME="Color">;
 }
 
 </style>
@@ -71,7 +63,7 @@ color:#tColor;
 </head>
 <body>
 
-<div class="aditl-head1"><a href="${Settings:frontURL}">ADITL</a></div>
+<div class="aditl-head1"><a href="<TMPL_VAR EXPR="settings('frontURL')">">ADITL</a></div>
 <div class="aditl-head2">A day in the life of mit</div>
 
 <div class="main-area">
@@ -93,27 +85,14 @@ ADITL is sponsored by <a href="http://yearbook.scripts.mit.edu/newsite/">Techniq
 width:400px;">
 Credits
 <div style="position:absolute; left:0px; top:40px; width:400px; font-size:15px; color:#333333;">
-software lead {<span style="color:#tColor;">quentin</span> smith}<br>
-original software, design {<span style="color:#tColor;">reid</span> williams}<br>
-publicity {<span style="color:#tColor;">yi-an</span> lai}<br><br>
+original software, design {<span class="highlight">reid</span> williams}<br>
 
-special thanks {technique's <span style="color:#tColor;">alum</span> community}<br>
-special thanks {<span style="color:#tColor;">everyone</span> who participated}<br><br>
+special thanks {technique's <span class="highlight">alum</span> community}<br>
+special thanks {<span class="highlight">everyone</span> who participated}<br><br>
 
-<b>project lead</b>  {<span style="color:#tColor;">david</span> templeton}<br><br>
+<b>project lead</b>  {<span class="highlight">quentin</span> smith}<br><br>
 
 </div></div>
-
-
-
-
-
-
 </div>
-
-
-
-
 </body>
-
 </html>

@@ -20,10 +20,14 @@ my $fgcolor = $cgi->param("fgc") or "333333";
 
 print $cgi->header();
 
-
-my @vals = ($bgcolor, $fgcolor);
-
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/about.html", \@vals);
+my $html = Template::fillTemplateNew
+  (
+   Settings::settings("templateLib") . "/about.tmpl",
+   {
+    bgColor => $bgcolor,
+    Color => $fgcolor,
+   }
+  );
 
 print $html;
 exit;

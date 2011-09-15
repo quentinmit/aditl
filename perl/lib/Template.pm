@@ -1,4 +1,7 @@
 package Template;
+
+use HTML::Template::Expr;
+
 require Exporter;
 @ISA = qw(Exporter);
 
@@ -7,6 +10,20 @@ require Exporter;
 use strict;
 
 use Settings;
+
+sub fillTemplateNew {
+  my ($filename, $params) = @_;
+  my $t = HTML::Template::Expr->new_file
+    (
+     $filename,
+     functions =>
+     {
+      settings => \&Settings::settings,
+     }
+    );
+  $t->param($params);
+  return $t->output;
+}
 
 # Opens an html template and fills in the appropriate photos and text
 # The format of the template is a newline separated list of keywords to
