@@ -1,0 +1,228 @@
+@import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
+* {
+  margin: 0;
+}
+html, body {
+  height: 100%;
+}
+#wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -4em;
+}
+body {
+  background: url('../../images/whitey.png') repeat;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Arial', sans-serif;
+  color: #565656;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+a, a:visited {
+  color: #1c7681;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+header {
+  width: 960px;
+  margin: 0 auto;
+}
+header hgroup {
+  padding: 0 10px;
+  padding-top: 6px;
+}
+header h1 {
+  line-height: 1em;
+  margin: 0;
+  font-size: 6.25em;
+  float: left;
+}
+header h1 a, header h1 a:visited, header h1 a:hover {
+  color: #565656;
+  text-decoration: none;
+  font-weight: 900;
+}
+header h2 {
+  font-size: 3.224em;
+  font-weight: 200;
+  float: right;
+  text-align: left;
+  width: 700px;
+  margin: 0;
+  padding-top: .1em;
+}
+header h3 {
+  font-size: 1.27em;
+  clear: right;
+  float: right;
+  text-align: left;
+  width: 700px;
+  margin: 0;
+}
+header:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+nav {
+  width: 960px;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+nav ul {
+  list-style: none;
+  margin: 0;
+  float: right;
+}
+nav ul li {
+  line-height: 1em;
+  display: inline;
+  padding: 0 13px;
+  font-size: 1.54em;
+  font-weight: 700;
+}
+nav:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+div#content {
+  width: 100%;
+  position: relative;
+  padding: 7px 0;
+}
+div#content .stripe {
+  height: 20px;
+  background-color: #1c7681;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+div#content .stripe.below {
+  bottom: 0px;
+}
+div#content .stripe.above {
+  top: 0;
+}
+div#content .image-background {
+  background-color: rgba(181, 197, 200, 0.41);
+  text-align: center;
+  line-height: 0.8em;
+}
+#image-info {
+  width: 960px;
+  margin: 0 auto;
+  padding-bottom: 4em;
+}
+#image-info #time {
+  width: 300px;
+  font-size: 6.25em;
+  margin-left: 10px;
+  float: left;
+}
+#image-info #person {
+  width: 380px;
+  margin-left: 330px;
+  text-align: right;
+  padding-top: .9em;
+}
+#image-info #person h1 {
+  margin: 0;
+  font-size: 3.224em;
+  font-weight: 200;
+}
+#image-info #person h2 {
+  margin: 0;
+  font-size: 1.27em;
+}
+#image-info #person p {
+  margin: .3em 0;
+  font-size: 1.27em;
+  font-weight: 700;
+}
+#image-info #caption {
+  width: 220px;
+  margin-right: 10px;
+  float: right;
+  font-size: .917em;
+  line-height: 1.4em;
+}
+#image-info #caption p {
+  margin-top: 2.1em;
+}
+#image-info:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+  clear: both;
+}
+#push {
+  clear: both;
+  height: 10em;
+}
+footer {
+  background-color: #323232;
+  color: #e2e3e5;
+  padding-top: 2em;
+  height: 8em;
+  clear: both !important;
+  margin-top: -10em;
+}
+footer #credits {
+  width: 960px;
+  margin: 0 auto;
+  font-weight: 500;
+  font-size: 1.27em;
+}
+footer #credits #technique-credit {
+  float: left;
+  margin-left: 10px;
+  width: 460px;
+}
+footer #credits #technique-credit img {
+  float: left;
+  padding-top: 3px;
+}
+footer #credits #technique-credit p {
+  margin: 0;
+  margin-left: 250px;
+}
+footer #credits #mit-credit {
+  float: right;
+  text-align: right;
+}
+footer #credits #mit-credit img {
+  float: right;
+  padding-top: 5px;
+}
+footer #credits #mit-credit p {
+  margin: 0;
+  margin-right: 78px;
+}
+footer #credits:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+footer #copyright-terms {
+  width: 960px;
+  margin: 0 auto;
+  text-align: left;
+  font-size: 0.917em;
+  padding-top: 3em;
+}
+footer #copyright-terms p {
+  margin: 0;
+  margin-left: 10px;
+}

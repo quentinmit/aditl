@@ -1,0 +1,278 @@
+@columnSpacing:     10px;
+
+@fontGray:          #565656;
+@accentColor:       #1c7681;
+@highlightColor:    rgba(181, 197, 200, .41);
+@footerColor:       #323232;
+@footerTextColor:   #e2e3e5;
+
+@documentWidth:     960px;
+
+@largeText:         6.25em;
+@mediumText:        3.224em;
+@smallerText:       1.27em;
+@smallestText:      .917em;
+@navText:           1.54em;
+
+@import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
+
+.center-content () {
+    width: @documentWidth;
+    margin: 0 auto;
+}
+
+.header-tagline () {
+    float: right;
+    text-align: left;
+    width: 700px;
+    margin: 0;
+}
+
+.clear-floats () {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.link-style () {
+
+}
+
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -4em;
+}
+
+body {
+    background: url('../../images/whitey.png') repeat;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Arial', sans-serif;
+    color: @fontGray;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
+
+a, a:visited {
+    color: @accentColor;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+header{
+    .center-content;
+    
+    hgroup {
+        padding: 0 @columnSpacing;
+        padding-top: 6px;
+    }
+    
+    h1 {
+        line-height: 1em;
+        margin: 0;
+        font-size: @largeText;
+        float:left;
+        
+        a, a:visited, a:hover {
+            color: @fontGray;
+            text-decoration: none;
+            font-weight: 900;
+        }
+    }
+    
+    h2 {
+        font-size: @mediumText;
+        font-weight: 200;
+        .header-tagline;
+        padding-top:.1em;
+    }
+    
+    h3 {
+        font-size: @smallerText;
+        clear:right;
+        .header-tagline;
+    }
+}
+
+header:after { .clear-floats; }
+
+nav {
+    .center-content;
+    padding-bottom: @columnSpacing;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        float:right;
+        
+        li {
+            line-height: 1em;
+            display: inline;
+            padding: 0 13px;
+            font-size: @navText;
+            font-weight: 700;
+        }
+    }
+}
+
+nav:after { .clear-floats; }
+
+div#content {
+    width: 100%;
+    position:relative;
+    padding: 7px 0;
+    
+    
+    .stripe {
+        height: @columnSpacing*2;
+        background-color: @accentColor;
+        position: absolute;
+        width: 100%;
+        z-index: -1;
+    }
+    
+    .stripe.below {
+        bottom: 0px;
+    }
+    .stripe.above {
+        top: 0;
+    }
+    
+    .image-background {
+        background-color: @highlightColor;
+        text-align:center;
+        line-height: 0.8em;
+    }
+}
+
+#image-info {
+    .center-content;
+    
+    padding-bottom: 4em;
+    
+    #time {
+        width: 300px;
+        font-size: @largeText;
+        margin-left: @columnSpacing;
+        float:left;
+    }
+    
+    #person {
+        width: 380px;
+        margin-left: 330px;
+        text-align: right;
+        padding-top: .9em;
+        
+        h1 {
+            margin: 0;
+            font-size: @mediumText;
+            font-weight: 200;
+        }
+        
+        h2 {
+            margin: 0;
+            font-size: @smallerText;
+        }
+        
+        p {
+            margin: .3em 0;
+            font-size: @smallerText;
+            font-weight: 700;
+        }
+    }
+    
+    #caption {
+        width: 220px;
+        margin-right: @columnSpacing;
+        float: right;
+        font-size: .917em;
+        line-height: 1.4em;
+        p {
+            margin-top: 2.1em;
+        }
+    }
+}
+
+#image-info:after { .clear-floats; clear:both;}
+
+#push {
+    clear: both;
+    height:10em;
+}
+
+footer {
+    background-color: @footerColor;
+    color: @footerTextColor;
+    
+    padding-top: 2em;
+    height: 8em;
+    
+    clear:both !important;
+    margin-top:-10em;
+    
+    #credits {
+        .center-content;
+        
+        font-weight: 500;
+        font-size: @smallerText;
+        
+        #technique-credit {
+            float:left;
+            margin-left: @columnSpacing;
+            width: 460px;
+            
+            img {
+                float:left;
+                padding-top: 3px;
+            }
+            
+            p {
+                margin: 0;
+                margin-left: 250px;
+            }
+        }
+        
+        #mit-credit {
+            float: right;
+            text-align: right;
+            
+            img { 
+                float:right; 
+                padding-top: 5px;    
+            }
+            
+            p {
+                margin: 0;
+                margin-right: 78px;
+            }
+        }
+    }
+    
+    #credits:after { .clear-floats; }
+    
+    #copyright-terms {
+        .center-content;
+        text-align:left;
+        font-size: @smallestText;
+        padding-top: 3em;
+        
+        
+        p {
+            margin: 0;
+            margin-left: @columnSpacing;
+        }
+    }
+}

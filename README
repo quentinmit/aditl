@@ -1,0 +1,10 @@
+Some Dependencies You Will Need
+
+apt-get install libdbi-perl
+apt-get install libhtml-template-expr-perl
+apt-get install libemail-send-perl
+apt-get install libimage-exiftool-perl
+apt-get install libemail-rfc822-address
+apt-get install libimager-perl
+apt-get install libdbd-pg-perl
+apt-get install imagemagick
