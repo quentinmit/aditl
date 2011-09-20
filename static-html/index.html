@@ -76,6 +76,11 @@ document.image8.src = "8.jpg";
 document.getElementById("thebanner").style.color = "#026fa6";
 }
 
+function roll9() {
+document.image9.src = "9.jpg";
+document.getElementById("thebanner").style.color = "#62471b";
+}
+
 function rollback() {
 document.image1.src = "gray.jpg";
 document.image2.src = "gray.jpg";
@@ -85,6 +90,7 @@ document.image5.src = "gray.jpg";
 document.image6.src = "gray.jpg";
 document.image7.src = "gray.jpg";
 document.image8.src = "gray.jpg";
+document.image9.src = "gray.jpg";
 document.getElementById("thebanner").style.color = "#dadada";
 }
 
@@ -135,7 +141,8 @@ ADITL</div>
 
 <td class="cell1"><img name="image8" src="gray.jpg" border=0 width=70 height=47 onMouseOver="roll8()" onMouseOut ="rollback()"></td>
 
-<td class="cell1"><img src="white-stripe.jpg" border=0 width=70 height=47></td>
+<td class="cell1"><img name="image9" src="gray.jpg" border=0 width=70 height=47 onMouseOver="roll9()" onMouseOut ="rollback()"></td>
+
 </tr>
 <tr><td colspan=11><img border=0 src="white.jpg" width=1 height=15></td></tr>
 <tr>
