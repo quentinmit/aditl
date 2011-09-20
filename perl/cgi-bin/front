@@ -57,8 +57,6 @@ my $wcolor = Utils::toWebColor(@color);
 
 my $aditlLeft = 550 - $width;
 
-my $voteURL = Settings::settings("frontURL") . "?vote=" . $image{phid};
-
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
 my $loginURL = Settings::settings("loginURL")."?redirect=".Settings::settings("frontURL");
@@ -78,7 +76,7 @@ my $html = Template::fillTemplateNew
    Color => $wcolor,
    bgColor => $wbgcolor,
    Width => $aditlLeft,
-   Front => $voteURL, # unused
+   voteURL => undef, # unused
    RealWidth => $width - 8,
    Phid => $image{phid},
    NumPhotos => $numphotos[0],

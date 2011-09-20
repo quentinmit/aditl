@@ -66,7 +66,9 @@ my ($width, $height) = Utils::imagesize(Utils::imagePath(\%image, "large"));
 my @time = Utils::sqlTime($image{time}, $image{offset});
 my $tstring = "$time[0]:$time[1]:$time[2]";
 
+my $caption = $db->getCaption($image{phid});
 
+my @numphotos = $db->getinfo2($image{uid});
 
 my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 my $lightness = Settings::settings("colorManipLightness");
@@ -80,10 +82,35 @@ my $aditlLeft = 550 - $width;
 
 my $voteURL = Settings::settings("frontURL") . "2" . "?vote=" . $image{phid};
 
-my @vals = (Utils::imageURL(\%image, "large"), $tstring, $photogName, $wcolor, $wbgcolor,
-	    $aditlLeft, $width, $voteURL);
+my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/front2.html", \@vals);
+my $loginURL = Settings::settings("loginURL")."?redirect=".Settings::settings("frontURL");
+my $loginText = "login";
+if ($uid) {
+  $loginURL = Settings::settings("uploadURL");
+  $loginText = "upload";
+}
+
+my $html = Template::fillTemplateNew
+  (
+   Settings::settings("templateLib") . "/front.tmpl",
+  {
+   Image => Utils::imageURL(\%image, "large"),
+   Time => $tstring,
+   Photog => $photogName,
+   Color => $wcolor,
+   bgColor => $wbgcolor,
+   Width => $aditlLeft,
+   voteURL => $voteURL,
+   RealWidth => $width - 8,
+   Phid => $image{phid},
+   NumPhotos => $numphotos[0],
+   personDay => $personURL,
+   Caption => $caption,
+   urlLoginUpload => $loginURL,
+   LoginUpload => $loginText,
+  }
+  );
 
 print $html;
 exit;

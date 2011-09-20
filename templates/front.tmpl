@@ -94,7 +94,9 @@ height:50px; z-index:3;"></div>
 
 </a></div>
 
-
+<TMPL_IF NAME="voteURL">
+<div style="position:absolute; left:0px; top:0px;"><a href="<TMPL_VAR NAME="voteURL">">[vote]</a></div>
+</TMPL_IF>
 
 <!-- Google Analytics Begin -->
 <script type="text/javascript">
