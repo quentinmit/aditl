@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADITL: A day in the life of MIT. September 22, 2011</title>
+        <link rel="stylesheet" href="stylesheets/css/main.css" />
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+                <header>
+                    <hgroup>
+                        <h1><a href="">ADITL</a></h1>
+                        <h2>A day in the life of MIT.</h2>
+                        <h3>22 September 2011</h3>
+                    </hgroup>
+                </header>
+                <nav>
+                    <ul>
+                        <li><a href="">Follow Someone</a></li>
+                        <li><a href="">About ADITL</a></li>
+                        <li><a href="">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div id="aditl-data" role="content">
+            
+                <div id="overview">
+                    <div class="times">
+                        <div class="t-0">00:00</div>
+                        <div class="t-4">04:00</div>
+                        <div class="t-8">08:00</div>
+                        <div class="t-12">12:00</div>
+                        <div class="t-16">16:00</div>
+                        <div class="t-20">20:00</div>
+                        <div class="t-24">23:59</div>
+                    </div>
+                    <div class="line">
+                        <img src="images/all-time-test-1.jpg" style="left:80px;" alt="09:00:34" />
+                        <img src="images/all-time-test-2.jpg" style="left:400px;" alt="09:00:34" />
+                    </div>
+                    <div id="timeline-slider-wrapper">
+                        <div id="timeline-slider"></div>
+                    </div>
+                </div>
+                
+                <a href="#" class="pagination-arrow prev"><img src="images/previous-arrow.png" width="120" height="80" src="back" /></a>
+                <a href="#" class="pagination-arrow next"><img src="images/next-arrow.png" width="120" height="80" src="forward" /></a>
+                <h2>Quentin Smith's Day</h2>
+                
+                <div class="timeline">
+                    <div class="scrollview-bg"></div>
+                    <div class="v-stripe left"></div>
+                    <div class="v-stripe right"></div>
+                    <div scrollviewenabledscrolly="no" scrollviewmode="table" scrollviewbars="none" class="scrollview-container">
+                        <div class="scrollview-content">
+                            <div class="scrollview-item even">
+                                <div class="image">
+                                    <img src="images/timeline-test-1.jpg" alt="some image" />
+                                </div>
+                                <div class="info">
+                                    <div class="pagination">
+                                        <a href="#" class="next">next</a>
+                                        <a href="#" class="prev inactive">previous</a>
+                                        <p>1 of 10</p>
+                                    </div>
+                                    <article>
+                                        <h2>07:45:43</h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at justo metus, et molestie arcu. Maecenas malesuada, nunc ut congue laoreet, orci metus facilisis elit, vel vulputate ipsum arcu eget leo.
+                                        </p>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="scrollview-item" style="left: 380px;">
+                                <div class="image">
+                                    <img src="images/timeline-test-2.jpg" alt="some image" />
+                                </div>
+                                <div class="info">
+                                    <div class="pagination">
+                                        <a href="#" class="next">next</a>
+                                        <a href="#" class="prev inactive">previous</a>
+                                        <p>1 of 10</p>
+                                    </div>
+                                    <article>
+                                        <h2>07:52:43</h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at justo metus, et molestie arcu. Maecenas malesuada, nunc ut congue laoreet, orci metus facilisis elit, vel vulputate ipsum arcu eget leo.
+                                        </p>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="scrollview-item even" style="left: 760px;">
+                                <div class="image">
+                                </div>
+                                <div class="info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="push"></div>
+        </div>
+        <footer>
+            <div id="credits">
+                <div id="technique-credit">
+                    <a href="http://technique.mit.edu/"><img src="images/technique-logo.png" alt="Technique"  /></a>
+                    <p>The yearbook, photography<br />&amp; design club of MIT.</p>
+                </div>
+                <div id="mit-credit">
+                    <a href="http://web.mit.edu/"><img src="images/mit-logo.png" alt="MIT" /></a>
+                    <p>The Massachusetts<br />Institute of Technology</p>
+                </div>
+            </div>
+            
+            <div id="copyright-terms">
+                <p>All images are copyright &copy; 2011 by their respective owners.</p>
+            </div>
+        </footer>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" type="text/javascript"></script>
+        <script src="javascript/scrollview.js" type="text/javascript"></script>
+        <script src="javascript/vanillaos.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+                $("#timeline-slider").slider();
+        </script>
+    </body>
+</html>

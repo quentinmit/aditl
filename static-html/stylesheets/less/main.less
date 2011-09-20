@@ -1,18 +1,29 @@
-@columnSpacing:     10px;
+@documentWidth:         960px;
+@columnSpacing:         10px;
+@indivTimeHeight:       414px;
+@indivTimeItemHeight:   266px;
+@indivTimeItemWidth:    380px;
 
 @fontGray:          #565656;
 @accentColor:       #111;
 @highlightColor:    rgba(181, 197, 200, .41);
+@inverseHeaderText: #cccccc;
 @footerColor:       #323232;
 @footerTextColor:   #e2e3e5;
 
-@documentWidth:     960px;
+@timelineBgcolor:   rgba(50, 50, 50, .39);
+@timelineEvenColor: rgba(226, 227, 229, .43);
 
 @largeText:         6.25em;
 @mediumText:        3.224em;
 @smallerText:       1.27em;
 @smallestText:      .917em;
 @navText:           1.54em;
+
+@timelineLargeText: 2.64em;
+@timelineImagePaginationWidth: 200px;
+@timelineImagePaginationHeight: 40px;
+@timelineImagePaginationArrowWidth: 40px;
 
 @import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
 
@@ -55,12 +66,16 @@ html, body {
 }
 
 body {
-    background: url('../../images/whitey.png') repeat;
+    background: url('../../images/bg.png') repeat;
     font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Arial', sans-serif;
     color: @fontGray;
     padding: 0;
     margin: 0;
     font-size: 12px;
+}
+
+img {
+    border: 0;
 }
 
 a, a:visited {
@@ -111,31 +126,71 @@ header:after { .clear-floats; }
 
 nav {
     .center-content;
-    padding-bottom: @columnSpacing;
+    padding-bottom: 0;
+    margin-top: -10px;
+    height: 45px;
 
     ul {
         list-style: none;
         margin: 0;
         float:right;
+        padding-right: 5px;
+        
         
         li {
             line-height: 1em;
             display: inline;
-            padding: 0 13px;
+            padding-left: 18px;
             font-size: @navText;
             font-weight: 700;
+            
+            a, a:visited {
+                display: -moz-inline-stack;
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0 5px;
+                padding-top: 10px;
+                padding-bottom:23px;
+            }
         }
     }
 }
 
 nav:after { .clear-floats; }
 
+#header-wrapper {
+    width: 100%;
+    background-color: @footerColor;
+    
+    header {
+        color: @inverseHeaderText;
+        
+        h1{
+            a, a:visited, a:hover {
+                color: @inverseHeaderText;
+            }
+        }
+    }
+
+    nav {
+        ul {
+            a, a:visited {
+                color: @footerTextColor;
+            }
+            a:hover {
+                text-decoration: none;
+                color: @fontGray;
+                background-color: @footerTextColor;
+            }
+        }
+    }
+}
+
 div#content {
     width: 100%;
     position:relative;
     padding: 7px 0;
-    
-    
+
     .stripe {
         height: @columnSpacing*2;
         background-color: @accentColor;
@@ -160,7 +215,6 @@ div#content {
 
 #image-info {
     .center-content;
-    
     padding-bottom: 4em;
     
     #time {
@@ -207,6 +261,228 @@ div#content {
 }
 
 #image-info:after { .clear-floats; clear:both;}
+
+@timesWidth: @documentWidth - @columnSpacing*2;
+@timesChunk: @timesWidth/6;
+@timeNumWidth: 50px;
+
+.time-placement (@itemNum) {
+    left: @timesChunk*@itemNum - (@timeNumWidth/2);
+}
+
+div#aditl-data {
+    .center-content;
+    
+    #overview {
+        margin: @columnSpacing*2 @columnSpacing;
+        position: relative;
+        margin-bottom: @columnSpacing/2;
+        
+        .times {
+            width: @timesWidth;
+            position:relative;
+            height: 20px;
+            div {
+                position: absolute;
+                top: 0;
+                width: @timeNumWidth;
+                text-align:center;
+                font-weight: 600;
+                letter-spacing: 1px;
+                font-size: @smallerText;
+            }
+            .t-0 {
+                left: 0;
+                text-align:left;
+            }
+            .t-4 { .time-placement(1); }
+            .t-8 { .time-placement(2); }
+            .t-12 { .time-placement(3); }
+            .t-16 { .time-placement(4); }
+            .t-20 { .time-placement(5); }
+            .t-24 { 
+                left: @timesWidth - @timeNumWidth;
+                text-align: right;
+            }
+        }
+        .line {
+            width: @documentWidth - @columnSpacing*2;
+            height: 15px;
+            background-color: @timelineBgcolor;
+            position: relative;
+            img {
+                position:absolute;
+                top:0;
+            }
+        }
+        
+        #timeline-slider-wrapper {
+            width: @documentWidth - @columnSpacing*2;
+            position: absolute;
+            top:0;
+            
+            #timeline-slider {
+                position: relative;
+                text-align: left;
+                background-color: transparent;
+                height:45px;
+            }
+            .ui-slider .ui-slider-handle {
+                position: absolute;
+                z-index: 2;
+                width: @columnSpacing*2;
+                height: @columnSpacing;
+                cursor: default;
+                background-color: @fontGray;
+                outline: none;
+            }
+            
+            .ui-slider-horizontal .ui-slider-handle {
+                top: 37px;
+                margin-left: -.6em;
+            }
+        }
+         
+    }
+    
+    a.pagination-arrow {
+        width:120px;
+        height: 80px;
+        display: block;
+    }
+    a.pagination-arrow.prev {
+        float: left;
+    }
+    a.pagination-arrow.next {
+        float: right;
+    }
+    
+    h2 {
+        font-size: @mediumText;
+        font-weight: 200;
+        text-align: center;
+        line-height: 80px;
+    }
+    
+    .timeline {
+        clear: both;
+        position: relative;
+        height: @indivTimeHeight + 80;
+        margin-top: 1em;
+        padding: 0 @columnSpacing;
+        
+        .scrollview-bg {
+            position: absolute;
+            top: -1px;
+            left: @columnSpacing -1 ;
+            background: @timelineBgcolor;
+            width: @documentWidth - (2*@columnSpacing);
+            height: @indivTimeItemHeight;
+            border: 1px solid @fontGray;
+            
+        }
+        
+        .v-stripe {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: @columnSpacing - 1;
+            height: @indivTimeItemHeight + 2;
+            background-color: @fontGray;
+        }
+        
+        .v-stripe.right {
+            left: @documentWidth - @columnSpacing + 3;
+        }
+    
+        .scrollview-container {
+            width: @documentWidth - (2*@columnSpacing);
+            height: @indivTimeHeight;
+            overflow-x: hidden;
+            
+            .scrollview-content {
+                position: relative;
+            }
+            .scrollview-item {
+                width: @indivTimeItemWidth;
+                height: @indivTimeHeight;
+                position: absolute;
+                top: 0;
+                left: 0;
+                .image {
+                    width: @indivTimeItemWidth;
+                    height: @indivTimeItemHeight;
+                }
+                .info {
+                    .pagination {
+                        width: @timelineImagePaginationWidth;
+                        height: @timelineImagePaginationHeight;
+                        float: right;
+                        background-color: @fontGray;
+                        color: @footerTextColor;
+                        margin-right: @columnSpacing*3;
+                        margin-top: @columnSpacing*3;
+                        
+                        p {
+                            font-size: @navText;
+                            line-height: @timelineImagePaginationHeight;
+                            margin-left: 1em;
+                            font-weight:400;
+                        }
+                        
+                        a {
+                            width: @timelineImagePaginationArrowWidth;
+                            height: 40px;
+                            background-image: url('../../images/small-pagination-arrows.png');
+                            background-repeat: no-repeat;
+                            background-position: @timelineImagePaginationArrowWidth*0 center;
+                            overflow: hidden;
+                            display: block;
+                            text-indent: -10em;
+                            float:right;
+                        }
+                        a.prev.inactive {
+                            background-position-x: -@timelineImagePaginationArrowWidth*1;
+                        }
+                        a.next {
+                            background-position-x: -@timelineImagePaginationArrowWidth*3;
+                        }
+                        a.next.inactive {
+                            background-position-x: -@timelineImagePaginationArrowWidth*2;
+                        }
+                        a:hover {
+                            background-color: #000000;
+                        }
+                        
+                    }
+                    article {
+                        width: 140px;
+                        h2 {
+                            line-height: normal;
+                            font-weight: 200;
+                            font-size: @timelineLargeText;
+                        }
+                        
+                        p {
+                            margin: .3em 0;
+                            font-size: @smallestText;
+                            line-height: 1.4em;
+                        }
+                    }
+                    
+                }
+            }
+            
+            .scrollview-item.even {
+                .image {
+                    background-color: @timelineEvenColor;
+                }
+            }  
+        }
+    }
+}
+
+
 
 #push {
     clear: both;
