@@ -57,14 +57,9 @@ if(defined($cgi->param("message"))) {
 
 print $cgi->header();
 
-my $bgcolor = $cgi->param("bgc") or "ffffff";
-my $fgcolor = $cgi->param("fgc") or "333333";
-
 my $html = Template::fillTemplateNew(
     Settings::settings("templateLib") . "/login.tmpl",
        {
-        bgColor => $bgcolor,
-        Color => $fgcolor,
         page_login => 1,
         LoginRedirectValue => $redirect
        }
@@ -91,14 +86,10 @@ sub processLogin {
 	doLogin($email, $db);
 	exit;
     } else {
-        my $bgcolor = $cgi->param("bgc") or "ffffff";
-        my $fgcolor = $cgi->param("fgc") or "333333";
     
         my $html = Template::fillTemplateNew(
         Settings::settings("templateLib") . "/login.tmpl",
            {
-            bgColor => $bgcolor,
-            Color => $fgcolor,
             page_login => 1,
             LoginRedirectValue => $redirect,
             LoginNoticeMessge => "Your email and password do not match. Please make sure you didn't forget <strong>\@mit.edu</strong>.",

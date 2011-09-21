@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADITL: A day in the life of MIT. September 22, 2011</title>
+        <link rel="stylesheet" href="<TMPL_VAR EXPR="settings('staticURLBase')">/stylesheets/css/main.css" />
+        <script type="text/javascript" src="<TMPL_VAR EXPR="settings('staticURLBase')">/swfupload.js"></script>
+        <script type="text/javascript" src="<TMPL_VAR EXPR="settings('staticURLBase')">/uploadhandlers.js"></script>
+        <script type="text/javascript">
+        var swfu;
+        window.onload = function () {
+            swfu = new SWFUpload({
+                // Backend Settings
+                upload_url: "<TMPL_VAR EXPR="settings('uploadrcvURL')">",
+                post_params: {"aditlauthid": "<TMPL_VAR NAME="ADITLAuthId">", "aditlauthtoken": "<TMPL_VAR NAME="ADITLAuthToken">"},
+        
+                // File Upload Settings
+                file_size_limit : "4000 MB",       // 4GB
+                file_types : "*.jpg;*.zip;*.JPG;*.ZIP;*.jpeg;*.JPEG",
+                file_types_description : "ZIP Archives or JPEG Images",
+                file_upload_limit : "0",
+        
+                // Event Handler Settings - these functions as defined in Handlers.js
+                //  The handlers are not part of SWFUpload but are part of my website and control how
+                //  my website reacts to the SWFUpload events.
+                file_queue_error_handler : fileQueueError,
+                file_dialog_complete_handler : fileDialogComplete,
+                upload_progress_handler : uploadProgress,
+                upload_error_handler : uploadError,
+                upload_success_handler : uploadSuccess,
+                upload_complete_handler : uploadComplete,
+        
+                // Button Settings
+                button_image_url : "",
+                button_placeholder_id : "spanButtonPlaceholder",
+                button_width: 720,
+                button_height: 55,
+                button_text : '<span class="button">Select Images or ZIP Archives<span class="buttonSmall">&nbsp;&nbsp;(4GB per file)</span></span>',
+                button_text_style : '.button { font-weight: 800; line-height: 2em; font-family: Helvetica, Arial, sans-serif; font-size: 24pt; color: #E2E3E5; } .buttonSmall { font-weight: 400; padding-left: 1em; font-size: 16pt; }',
+                button_text_top_padding: 16,
+                button_text_left_padding: 18,
+                button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+                button_cursor: SWFUpload.CURSOR.HAND,
+        
+                // Flash Settings
+                flash_url : "<TMPL_VAR EXPR="settings('staticURLBase')">/swfupload.swf",
+        
+                custom_settings : {
+                    upload_target : "divFileProgressContainer"
+                },
+        
+                // Debug Settings
+                debug: false
+            });
+        };
+        </script>
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+	        <TMPL_INCLUDE NAME="parts/header.tmpl">
+            </div>
+            <div id="about-aditl" class="upload" role="content">
+                <article>
+                    <h2>Upload your day</h2>
+                    <h3>Step 2 of 2</h3>
+                    <p>This is where you upload photos. You can revisit this page and upload multiple times.</p>
+                    <p>Please click the "Select Images or ZIP Archives" button below, and select JPG or ZIP files from your computer. Tip: Use <strong>Shift</strong> to select a long list of JPGs, or <strong>Control</strong> (<strong>Command</strong> on Mac) to select multiple individual JPGs. If you choose to submit a ZIP archive, make sure it is a vanilla ZIP archive, not tar+gzip. It does not matter what you name the files.</p>
+                    <p>
+                        <strong>Depending on your connection speed, the upload may take several minutes. The upload widget requires Adobe Flash (sorry iPhone users, we're working on it).</strong> Please don't get impatient and hit your browser's stop button. 
+                    </p>
+                    <form>
+                            <div class="upload-wrapper">
+                                    <span id="spanButtonPlaceholder"></span>
+                            </div>
+                    </form>
+                    <div id="divFileProgressContainer"></div>
+                    <div id="thumbnails"></div>
+                </article>
+            </div>  
+            <div id="push"></div>
+        </div>
+
+	<TMPL_INCLUDE NAME="parts/footer.tmpl">
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADITL: A day in the life of MIT. September 22, 2011</title>
+        <link rel="stylesheet" href="<TMPL_VAR EXPR="settings('staticURLBase')">/stylesheets/css/main.css" />
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+	        <TMPL_INCLUDE NAME="parts/header.tmpl">
+            </div>
+            <div id="about-aditl" class="upload" role="content">
+                <article>
+                    <h2>Terms and Conditions</h2>
+                    <h3>Step 1 of 2</h3>
+                    <p>By submitting photographs, you, the participant, agree to the following terms and conditions:</p>
+                    <p>
+                        <ul>
+                            <li>All submitted photographs are taken on September 22, 2011.</li>
+                            <li>The submitted photographs are the original work of the participant and do not violate the rights of any third party.</li>
+                            <li>The participant retains the copyright on all submitted photographs.</li>
+                            <li>The participant grants Technique the right to publish submitted photographs on the ADITL website, in the Technique yearbook, as part of future materials promoting ADITL or Technique, and/or as part of an exhibition of ADITL or Technique photos. While Technique will always credit the participant wherever the photographs appear, no compensation will be given.</li>
+                            <li>Technique may make modifications to the submitted photographs for the purpose of publication (including, but not limited to, cropping and selective exposure adjustment).</li>
+                            <li>The participant agrees not to hold Technique liable for issues arising from the publication of any submitted photograph.</li>
+                            <li>Technique reserves the right to cancel or modify the terms of the ADITL photo event if unexpected technical, legal, and/or financial difficulties arise.</li>
+                        </ul>
+                    </p>
+                    <form method="POST" action="<TMPL_VAR EXPR="settings('uploadURL')">">
+                        <input type="hidden" name="nextpage" value="1" />
+                        <input type="submit" value="I agree" />
+                    </form>
+                </article>
+            </div>  
+            <div id="push"></div>
+        </div>
+
+	<TMPL_INCLUDE NAME="parts/footer.tmpl">
+    </body>
+</html>

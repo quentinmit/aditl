@@ -133,14 +133,9 @@ sub formatError {
     #my $template = Settings::settings("templateLib") . "\/createprofile.html";
     #my $html = Template::fillTemplate($template, [$msg, $fn, $ln, $email]);
 
-    my $bgcolor = $cgi->param("bgc") or "ffffff";
-    my $fgcolor = $cgi->param("fgc") or "333333";
-
     my $html = Template::fillTemplateNew(
         Settings::settings("templateLib") . "/login.tmpl",
            {
-            bgColor => $bgcolor,
-            Color => $fgcolor,
             page_login => 1,
             RegisterNoticeMessge => $msg,
             RegisterFilledEmail => $email,

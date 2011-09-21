@@ -6,17 +6,22 @@ use lib "../lib";
 use Settings;
 use Template;
 use Utils;
+use Database;
+use Cookie;
 
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
-use vars qw($cgi);
+use vars qw($cgi $db);
 
 $cgi = new CGI;
 
 my $bgcolor = $cgi->param("bgc") or "ffffff";
 my $fgcolor = $cgi->param("fgc") or "333333";
 
+$db = Database->new();
+$db->connect(Settings::settings("dbName"));
+my $visitoruid = Cookie::isUserLoggedIn($cgi, $db);
 
 print $cgi->header();
 
@@ -26,7 +31,8 @@ my $html = Template::fillTemplateNew
    {
     bgColor => $bgcolor,
     Color => $fgcolor,
-    page_about => 1
+    page_about => 1,
+    uid => $visitoruid
    }
   );
 

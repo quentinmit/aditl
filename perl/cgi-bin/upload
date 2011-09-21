@@ -88,7 +88,16 @@ sub terms {
     }
 
     print $cgi->header();
-    print Template::fillTemplate(Settings::settings("templateLib") . "/terms.html", []);
+    
+    my $html = Template::fillTemplateNew(
+        Settings::settings("templateLib") . "/terms.tmpl",
+           {
+            page_upload => 1,
+            uid => $uid
+           }
+        );
+    print $html;
+    #print Template::fillTemplate(Settings::settings("templateLib") . "/terms.html", []);
     exit;
 }
 				  
@@ -105,8 +114,18 @@ sub doupload {
 			    -value => "doupload",
 			   );
   print $cgi->header(-cookies => [$cookie]);
-  my $temp = Settings::settings("templateLib") . "/upload.html";
-  print Template::fillTemplate($temp, [$cgi->cookie("aditlauthid"), $cgi->cookie("aditlauthtoken")]);
+  #my $temp = Settings::settings("templateLib") . "/upload.html";
+  #print Template::fillTemplate($temp, [$cgi->cookie("aditlauthid"), $cgi->cookie("aditlauthtoken")]);
+  my $html = Template::fillTemplateNew(
+        Settings::settings("templateLib") . "/upload.tmpl",
+           {
+            page_upload => 1,
+            uid => $uid,
+            ADITLAuthId => $cgi->cookie("aditlauthid"),
+            ADITLAuthToken => $cgi->cookie("aditlauthtoken")
+           }
+        );
+  print $html;
   exit;
 }
 

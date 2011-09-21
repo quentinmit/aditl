@@ -680,6 +680,7 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
 }
 #about-aditl.upload h3 {
   font-size: 1.27em;
+  margin: .5em 0;
 }
 #about-aditl.upload ul li {
   font-size: 1.27em;
