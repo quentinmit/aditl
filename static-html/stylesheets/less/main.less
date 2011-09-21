@@ -13,6 +13,7 @@
 
 @timelineBgcolor:   rgba(50, 50, 50, .39);
 @timelineEvenColor: rgba(226, 227, 229, .43);
+@overviewTimelineColor: rgba(86, 86, 86, .21);
 
 @largeText:         6.25em;
 @mediumText:        3.224em;
@@ -20,10 +21,16 @@
 @smallestText:      .917em;
 @navText:           1.54em;
 
+@timelineNavText: 2.4225em;
+
 @timelineLargeText: 2.64em;
 @timelineImagePaginationWidth: 200px;
 @timelineImagePaginationHeight: 40px;
 @timelineImagePaginationArrowWidth: 40px;
+
+@timelineListWidth: 710px;
+@timelineImageBlipWidth: @timelineListWidth / 288;
+@personTimelineHeight: 64px;
 
 @import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
 
@@ -124,18 +131,20 @@ header{
 
 header:after { .clear-floats; }
 
-nav {
+nav ul {
+    list-style: none;
+    margin: 0;
+}
+
+nav#primary-navigation {
     .center-content;
     padding-bottom: 0;
     margin-top: -10px;
     height: 45px;
 
     ul {
-        list-style: none;
-        margin: 0;
         float:right;
         padding-right: 5px;
-        
         
         li {
             line-height: 1em;
@@ -172,16 +181,16 @@ nav:after { .clear-floats; }
         }
     }
 
-    nav {
+    nav#primary-navigation {
         ul {
             a, a:visited {
                 color: @footerTextColor;
-                padding-bottom:23px;
+                padding-bottom:21px;
             }
-            a:hover {
+            a:hover, a.selected {
                 text-decoration: none;
-                color: @fontGray;
-                background-color: @footerTextColor;
+                color: @footerColor;
+                background-color: #c4c4c6;
             }
         }
     }
@@ -483,6 +492,155 @@ div#aditl-data {
     }
 }
 
+#aditl-timelines {
+    .center-content;
+    padding-bottom: 2em;
+    nav#secondary-navigation {
+        margin-top: 1.8em;
+        position: relative;
+        height: 40px;
+        h2 {
+            font-size: @timelineNavText;
+            font-weight: 200;
+            position: absolute;
+            left: @columnSpacing;
+            top: 0;
+            margin: 0;
+            padding: @columnSpacing/2 0;
+        }
+        
+        a, a:visited {
+            display:block;
+            color: @fontGray;
+            padding: @columnSpacing/2 0;
+            font-size: @timelineNavText;
+            font-weight: 800;
+        }
+        a:hover {
+            text-decoration: none;
+            background-color: @footerColor;
+            color: @footerTextColor;
+        }
+        
+        ul {
+            position: absolute;
+            left: 160px;
+            
+            li {
+                float:left;
+                width: 60px;
+                text-align:center;
+                margin-right: @columnSpacing*2;
+            }
+            a, a:visited {
+                width: 100%;
+            }
+        }
+        
+        a.random, a.random:visited {
+            float:right;
+            margin-right: @columnSpacing/2;
+            padding: @columnSpacing/2;
+        }
+        
+    }
+    
+    nav#secondary-navigation:after {
+        .clear-floats;
+    }
+    
+    .overview-time-placement (@itemNum) {
+        left: (@timelineListWidth/6)*@itemNum - (@timeNumWidth/2);
+    }
+    
+    #overview {
+        width: @timelineListWidth;
+        margin-left: 240px;
+        margin-top: 25px;
+        .times {
+            position: relative;
+            height: 20px;
+            div {
+                position: absolute;
+                top: 0;
+                width:@timeNumWidth;
+                text-align:center;
+                font-weight: 800;
+                font-size: @smallerText;
+            }
+            .t-0 {
+                left: 0;
+                text-align: left;
+            }
+            .t-4 { .overview-time-placement(1); }
+            .t-8 { .overview-time-placement(2); }
+            .t-12 { .overview-time-placement(3); }
+            .t-16 { .overview-time-placement(4); }
+            .t-20 { .overview-time-placement(5); }
+            .t-24 {
+                left: @timelineListWidth - @timeNumWidth;
+                text-align:right;
+             }
+        }
+        
+        .line {
+            height: 6px;
+            background-color: @timelineBgcolor;
+        }
+    }
+    
+    .person {
+        position: relative;
+        height: @personTimelineHeight;
+        margin: 1em @columnSpacing;
+        
+        h2 {
+            font-size: @timelineNavText;
+            font-weight: 200;
+            width: @documentWidth - @columnSpacing*2 - @timelineListWidth;
+            padding-top: 0.12em;
+            margin: 0;
+        }
+        
+        h3 {
+            font-size: @smallerText;
+            margin-left: 60px;
+        }
+        
+        .full-timeline {
+            float: right;
+            position: relative;
+            width: @timelineListWidth;
+            height: @personTimelineHeight;
+            background-color: @overviewTimelineColor;
+            
+            img {
+                position: absolute;
+                height: @personTimelineHeight;
+                width: @timelineImageBlipWidth;
+            }
+        }
+        a.follow, a.follow:visited{
+            display:block;
+            position: absolute;
+            /*background-color: rgba(255,255,255,0.8);*/
+            height: @personTimelineHeight;
+            width: 100%;
+            top:0;
+            left: 0;
+            color: #0884c4;
+            
+            span {
+                display: block;
+                margin-top: 38px;
+                font-size: @smallerText;
+                font-weight: 800;
+            }
+        }
+    }
+    
+    
+}
 
 
 #push {

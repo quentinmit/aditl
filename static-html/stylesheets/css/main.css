@@ -72,27 +72,29 @@ header:after {
   clear: both;
   visibility: hidden;
 }
-nav {
+nav ul {
+  list-style: none;
+  margin: 0;
+}
+nav#primary-navigation {
   width: 960px;
   margin: 0 auto;
   padding-bottom: 0;
   margin-top: -10px;
   height: 45px;
 }
-nav ul {
-  list-style: none;
-  margin: 0;
+nav#primary-navigation ul {
   float: right;
   padding-right: 5px;
 }
-nav ul li {
+nav#primary-navigation ul li {
   line-height: 1em;
   display: inline;
   padding-left: 18px;
   font-size: 1.54em;
   font-weight: 700;
 }
-nav ul li a, nav ul li a:visited {
+nav#primary-navigation ul li a, nav#primary-navigation ul li a:visited {
   display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
@@ -117,14 +119,14 @@ nav:after {
 #header-wrapper header h1 a, #header-wrapper header h1 a:visited, #header-wrapper header h1 a:hover {
   color: #cccccc;
 }
-#header-wrapper nav ul a, #header-wrapper nav ul a:visited {
+#header-wrapper nav#primary-navigation ul a, #header-wrapper nav#primary-navigation ul a:visited {
   color: #e2e3e5;
-  padding-bottom: 23px;
+  padding-bottom: 21px;
 }
-#header-wrapper nav ul a:hover {
+#header-wrapper nav#primary-navigation ul a:hover, #header-wrapper nav#primary-navigation ul a.selected {
   text-decoration: none;
-  color: #565656;
-  background-color: #e2e3e5;
+  color: #323232;
+  background-color: #c4c4c6;
 }
 #content {
   width: 100%;
@@ -394,6 +396,151 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item.even .image {
   background-color: rgba(226, 227, 229, 0.43);
+}
+#aditl-timelines {
+  width: 960px;
+  margin: 0 auto;
+  padding-bottom: 2em;
+}
+#aditl-timelines nav#secondary-navigation {
+  margin-top: 1.8em;
+  position: relative;
+  height: 40px;
+}
+#aditl-timelines nav#secondary-navigation h2 {
+  font-size: 2.4225em;
+  font-weight: 200;
+  position: absolute;
+  left: 10px;
+  top: 0;
+  margin: 0;
+  padding: 5px 0;
+}
+#aditl-timelines nav#secondary-navigation a, #aditl-timelines nav#secondary-navigation a:visited {
+  display: block;
+  color: #565656;
+  padding: 5px 0;
+  font-size: 2.4225em;
+  font-weight: 800;
+}
+#aditl-timelines nav#secondary-navigation a:hover {
+  text-decoration: none;
+  background-color: #323232;
+  color: #e2e3e5;
+}
+#aditl-timelines nav#secondary-navigation ul {
+  position: absolute;
+  left: 160px;
+}
+#aditl-timelines nav#secondary-navigation ul li {
+  float: left;
+  width: 60px;
+  text-align: center;
+  margin-right: 20px;
+}
+#aditl-timelines nav#secondary-navigation ul a, #aditl-timelines nav#secondary-navigation ul a:visited {
+  width: 100%;
+}
+#aditl-timelines nav#secondary-navigation a.random, #aditl-timelines nav#secondary-navigation a.random:visited {
+  float: right;
+  margin-right: 5px;
+  padding: 5px;
+}
+#aditl-timelines nav#secondary-navigation:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+#aditl-timelines #overview {
+  width: 710px;
+  margin-left: 240px;
+  margin-top: 25px;
+}
+#aditl-timelines #overview .times {
+  position: relative;
+  height: 20px;
+}
+#aditl-timelines #overview .times div {
+  position: absolute;
+  top: 0;
+  width: 50px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.27em;
+}
+#aditl-timelines #overview .times .t-0 {
+  left: 0;
+  text-align: left;
+}
+#aditl-timelines #overview .times .t-4 {
+  left: 93.33333333333333px;
+}
+#aditl-timelines #overview .times .t-8 {
+  left: 211.66666666666666px;
+}
+#aditl-timelines #overview .times .t-12 {
+  left: 330px;
+}
+#aditl-timelines #overview .times .t-16 {
+  left: 448.3333333333333px;
+}
+#aditl-timelines #overview .times .t-20 {
+  left: 566.6666666666666px;
+}
+#aditl-timelines #overview .times .t-24 {
+  left: 660px;
+  text-align: right;
+}
+#aditl-timelines #overview .line {
+  height: 6px;
+  background-color: rgba(50, 50, 50, 0.39);
+}
+#aditl-timelines .person {
+  position: relative;
+  height: 64px;
+  margin: 1em 10px;
+}
+#aditl-timelines .person h2 {
+  font-size: 2.4225em;
+  font-weight: 200;
+  width: 230px;
+  padding-top: 0.12em;
+  margin: 0;
+}
+#aditl-timelines .person h3 {
+  font-size: 1.27em;
+  margin-left: 60px;
+}
+#aditl-timelines .person .full-timeline {
+  float: right;
+  position: relative;
+  width: 710px;
+  height: 64px;
+  background-color: rgba(86, 86, 86, 0.21);
+}
+#aditl-timelines .person .full-timeline img {
+  position: absolute;
+  height: 64px;
+  width: 2.4652777777777777px;
+}
+#aditl-timelines .person a.follow, #aditl-timelines .person a.follow:visited {
+  display: block;
+  position: absolute;
+  /*background-color: rgba(255,255,255,0.8);*/
+
+  height: 64px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  color: #0884c4;
+}
+#aditl-timelines .person a.follow span, #aditl-timelines .person a.follow:visited span {
+  display: block;
+  margin-top: 38px;
+  font-size: 1.27em;
+  font-weight: 800;
 }
 #push {
   clear: both;
