@@ -16,7 +16,7 @@ use Digest::MD5;
 our %SIZES = (
 	      small => "50x50",
 	      medium => "x225",
-	      large => "600x350",
+	      large => "900x500",
 	     );
 
 sub process_upload {
