@@ -332,8 +332,8 @@ div#aditl-data .timeline .scrollview-container {
 div#aditl-data .timeline .scrollview-container .scrollview-content {
   position: relative;
   background-color: transparent;
-  background-image: url('images/scrollview-bg.png');
-  background-repeat: repeat;
+  background-image: url('../../images/scrollview-bg.png');
+  background-repeat: repeat-x;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item {
   width: 380px;
