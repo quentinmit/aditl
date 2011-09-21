@@ -28,7 +28,7 @@
                 <ul>
                     <li><a href="<TMPL_VAR EXPR="settings('selectUserURL')">">Follow Someone</a></li>
                     <li><a href="<TMPL_VAR EXPR="settings('aboutURL')">">About ADITL</a></li>
-                    <li><a href="<TMPL_VAR NAME="LoginUploadURL">"><TMPL_VAR NAME="LoginUploadText"></a></li>
+                    <li><TMPL_IF NAME="uid"><a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a><TMPL_ELSE><a href="<TMPL_VAR EXPR="settings('loginURL')">">Login</a></TMPL_IF></li>
                 </ul>
             </nav>
             <div role="content" id="content">
@@ -41,12 +41,30 @@
                     <TMPL_VAR NAME="Time">
                 </section>
                 <section id="caption">
+		  <TMPL_IF NAME="EditCaption">
+		    <form method="post">
+		      <textarea cols="40" rows="3" name="caption"><TMPL_VAR NAME="Caption" ESCAPE="HTML"></textarea>
+		      <input type="hidden" name="phid" value="<TMPL_VAR NAME="phid">">
+		      <br><input type="submit" name="setcaption" value="update caption">
+		    </form>
+		  <TMPL_ELSE>
                     <p><TMPL_VAR NAME="Caption" ESCAPE="HTML"></p>
+		    <TMPL_IF NAME="CanEditCaption">
+		      <a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="Phid">&editcaption=1">[edit caption]</a>
+		    </TMPL_IF>
+		  </TMPL_IF>
                 </section>
                 <section id="person">
                     <h1><TMPL_VAR NAME="Photog" ESCAPE="HTML"></h1>
                     <h2>1 of <TMPL_VAR NAME="NumPhotos"> photos</h2>
-                    <p><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
+		    <TMPL_IF EXPR="prev || next">
+		      <p>
+			<TMPL_IF NAME="prev"><a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="prev">">prev</a></TMPL_IF>
+			<TMPL_IF NAME="next"><a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="next">">next</a></TMPL_IF>
+		      </p>
+		    <TMPL_ELSE>
+                      <p><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
+		    </TMPL_IF>
                 </section>
             </article>
             <div id="push"></div>

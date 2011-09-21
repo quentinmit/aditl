@@ -10,7 +10,6 @@ use Colors;
 use Utils;
 use Cookie;
 
-use HTML::Entities;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
@@ -34,11 +33,10 @@ $phid = int($phid);
 
 $db->photoInfo($phid, \%image);
 
-
 my $setcaption = $cgi->param("setcaption");
 if($setcaption && $visitoruid == $image{uid}) {
     my $caption = $cgi->param("caption");
-    $db->setCaption($phid, encode_entities($caption));
+    $db->setCaption($phid, $caption);
 }
 
 
@@ -46,7 +44,7 @@ my @photographer = $db->getinfo($image{uid});
 my $fn = $photographer[0];
 my $ln = $photographer[1];
 
-my $photogName = lc($fn) . " " . lc($ln);
+my $photogName = "$fn $ln";
 
 my @time = Utils::sqlTime($image{time});
 my $tstring = "$time[0]:$time[1]:$time[2]";
@@ -56,58 +54,37 @@ my @numphotos = $db->getinfo2($image{uid});
 
 my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
-my $lightness = Settings::settings("colorManipLightness");
-my $sat = Settings::settings("colorManipSat");
-my @bgColor = Colors::slightGray(@color, $lightness, $sat);
-
-my $wbgcolor = Utils::toWebColor(@bgColor);
 my $wcolor = Utils::toWebColor(@color);
-
-my ($width, $height) = Utils::imagesize(Utils::imagePath(\%image, "large"));
 
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
-my $aditlLeft = 550 - $width;
-
-my @vals = (Utils::imageURL(\%image, "large"), $wcolor, $wbgcolor, $tstring, $photogName, $personURL,
-	    $aditlLeft, $width, $image{phid}, $numphotos[0]);
-
-
-if($visitoruid == $image{uid} && !$doedit) {
-    push(@vals, "<a style=\"color:#333333\" href=\"" . Settings::settings("photoURL") . "?editcaption=1&phid=" . $image{phid} . "\">[edit caption]</a>");
-} else {
-    push(@vals, "");
-}
-
-my $caption = "";
-
-{
-    my $caption = $db->getCaption($image{phid});
-    my $html = "";
-    if($doedit) {
-	$html .= "<form method=\"post\"><textarea cols=\"40\" rows=\"3\" name=\"caption\">$caption</textarea>";
-	$html .= "<input type=\"hidden\" name=\"phid\" value=\"" . $image{phid} . "\">";
-	$html .= "<input type=\"hidden\" name=\"setcaption\" value=\"1\">";
-	$html .= "<br><input type=\"submit\" value=\"update caption\"></form>";
-    } else {
-	$html = $caption;
-    }
-
-    push(@vals, $html);
-}
+my $caption = $db->getCaption($image{phid});
 
 my $prev = $db->getPreviousPhoto($image{uid}, $image{phid});
 my $next = $db->getNextPhoto($image{uid}, $image{phid});
 
-if ($prev) {
-  push @vals, sprintf('<a href="%s?phid=%d">&lt; prev</a> ', Settings::settings("photoURL"), $prev);
-} else { push @vals, "" };
+my $html = Template::fillTemplateNew
+  (
+   Settings::settings("templateLib") . "/front.tmpl",
+  {
+   Image => Utils::imageURL(\%image, "large"),
+   personDay => $personURL,
+   Caption => $caption,
+   EditCaption => $doedit,
+   CanEditCaption => ($visitoruid == $image{uid} && !$doedit),
+   Time => $tstring,
+   Photog => $photogName,
+   NumPhotos => $numphotos[0],
+   uid => $visitoruid,
+   Color => $wcolor,
+   Phid => $image{phid},
 
-if ($next) {
-  push @vals, sprintf(' <a href="%s?phid=%d">next &gt;</a>', Settings::settings("photoURL"), $next);
-} else { push @vals, "" };
+   prev => $prev,
+   next => $next,
 
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/photo.html", \@vals);
+   voteURL => undef, # unused
+  }
+  );
 
 print $html;
 exit;

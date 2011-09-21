@@ -50,13 +50,6 @@ my $wcolor = Utils::toWebColor(@color);
 
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
-my $loginURL = Settings::settings("loginURL")."?redirect=".Settings::settings("frontURL");
-my $loginText = "Login";
-if ($uid) {
-  $loginURL = Settings::settings("uploadURL");
-  $loginText = "Upload";
-}
-
 my $html = Template::fillTemplateNew
   (
    Settings::settings("templateLib") . "/front.tmpl",
@@ -67,12 +60,11 @@ my $html = Template::fillTemplateNew
    Time => $tstring,
    Photog => $photogName,
    NumPhotos => $numphotos[0],
-   LoginUploadURL => $loginURL,
-   LoginUploadText => $loginText,
+   uid => $uid,
    Color => $wcolor,
+   Phid => $image{phid},
 
    voteURL => undef, # unused
-   Phid => $image{phid},
   }
   );
 
