@@ -20,7 +20,7 @@ body {
   font-size: 12px;
 }
 a, a:visited {
-  color: #1c7681;
+  color: #111111;
   text-decoration: none;
 }
 a:hover {
@@ -100,7 +100,7 @@ div#content {
 }
 div#content .stripe {
   height: 20px;
-  background-color: #1c7681;
+  background-color: #111111;
   position: absolute;
   width: 100%;
   z-index: -1;
