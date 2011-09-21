@@ -532,7 +532,7 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
   width: 230px;
   padding-top: 0.12em;
   margin: 0;
-  height: 1.3em;
+  height: 1.2em;
   overflow: hidden;
 }
 #aditl-timelines .person h3 {
@@ -562,7 +562,7 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
 }
 #aditl-timelines .person a.follow span, #aditl-timelines .person a.follow:visited span {
   display: block;
-  margin-top: 38px;
+  margin-top: 37px;
   font-size: 1.27em;
   font-weight: 800;
 }
