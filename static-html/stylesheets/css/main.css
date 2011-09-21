@@ -23,7 +23,7 @@ img {
   border: 0;
 }
 a, a:visited {
-  color: #111111;
+  color: #1c7681;
   text-decoration: none;
 }
 a:hover {
@@ -98,7 +98,7 @@ nav ul li a, nav ul li a:visited {
   vertical-align: middle;
   padding: 0 5px;
   padding-top: 10px;
-  padding-bottom: 23px;
+  padding-bottom: 10px;
 }
 nav:after {
   content: ".";
@@ -119,31 +119,32 @@ nav:after {
 }
 #header-wrapper nav ul a, #header-wrapper nav ul a:visited {
   color: #e2e3e5;
+  padding-bottom: 23px;
 }
 #header-wrapper nav ul a:hover {
   text-decoration: none;
   color: #565656;
   background-color: #e2e3e5;
 }
-div#content {
+#content {
   width: 100%;
   position: relative;
   padding: 7px 0;
 }
-div#content .stripe {
+#content .stripe {
   height: 20px;
-  background-color: #111111;
+  background-color: #1c7681;
   position: absolute;
   width: 100%;
   z-index: -1;
 }
-div#content .stripe.below {
+#content .stripe.below {
   bottom: 0px;
 }
-div#content .stripe.above {
+#content .stripe.above {
   top: 0;
 }
-div#content .image-background {
+#content .image-background {
   background-color: rgba(181, 197, 200, 0.41);
   text-align: center;
   line-height: 0.8em;
