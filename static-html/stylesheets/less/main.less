@@ -32,6 +32,8 @@
 @timelineImageBlipWidth: @timelineListWidth / 288;
 @personTimelineHeight: 64px;
 
+@primaryLinkColor:  #0884c4;
+
 @import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
 
 .center-content () {
@@ -74,7 +76,7 @@ html, body {
 
 body {
     background: url('../../images/bg.png') repeat;
-    font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Arial', sans-serif;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Open Sans', 'Arial', sans-serif;
     color: @fontGray;
     padding: 0;
     margin: 0;
@@ -86,7 +88,7 @@ img {
 }
 
 a, a:visited {
-    color: @accentColor;
+    color: @primaryLinkColor;
     text-decoration: none;
 }
 
@@ -628,7 +630,7 @@ div#aditl-data {
             width: 100%;
             top:0;
             left: 0;
-            color: #0884c4;
+            color: @primaryLinkColor;
             
             span {
                 display: block;
@@ -642,6 +644,51 @@ div#aditl-data {
     
 }
 
+#about-aditl {
+    .center-content;
+    
+    padding-bottom: 6em;
+    
+    h2 {
+        font-size: @mediumText;
+        font-weight: 200;
+        margin-top: 1em;
+    }
+    
+    p {
+        font-size: @smallerText;
+        line-height: 1.5em;
+        margin: .5em 0;
+        margin-bottom: .8em;
+    }
+    
+    article {
+        width: 600px;
+        float:left;
+        margin-left: @columnSpacing;
+    }
+    
+    aside {
+        width: 290px;
+        float: right;
+        margin-right: @columnSpacing;
+        
+        dl {
+            text-align: left;
+            dt {
+                font-weight: 200;
+                font-size: @timelineNavText*.9;
+            }
+            dd {
+                font-weight: 800;
+                font-size: @smallerText;
+                margin-bottom: 1em;
+            }
+        }
+    }
+}
+
+#about-aditl:after { .clear-floats; }
 
 #push {
     clear: both;

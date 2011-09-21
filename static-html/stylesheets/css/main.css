@@ -13,7 +13,7 @@ html, body {
 }
 body {
   background: url('../../images/bg.png') repeat;
-  font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Arial', sans-serif;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Verdana', 'Open Sans', 'Arial', sans-serif;
   color: #565656;
   padding: 0;
   margin: 0;
@@ -23,7 +23,7 @@ img {
   border: 0;
 }
 a, a:visited {
-  color: #1c7681;
+  color: #0884c4;
   text-decoration: none;
 }
 a:hover {
@@ -541,6 +541,51 @@ div#aditl-data .timeline .scrollview-container .scrollview-item.even .image {
   margin-top: 38px;
   font-size: 1.27em;
   font-weight: 800;
+}
+#about-aditl {
+  width: 960px;
+  margin: 0 auto;
+  padding-bottom: 6em;
+}
+#about-aditl h2 {
+  font-size: 3.224em;
+  font-weight: 200;
+  margin-top: 1em;
+}
+#about-aditl p {
+  font-size: 1.27em;
+  line-height: 1.5em;
+  margin: .5em 0;
+  margin-bottom: .8em;
+}
+#about-aditl article {
+  width: 600px;
+  float: left;
+  margin-left: 10px;
+}
+#about-aditl aside {
+  width: 290px;
+  float: right;
+  margin-right: 10px;
+}
+#about-aditl aside dl {
+  text-align: left;
+}
+#about-aditl aside dl dt {
+  font-weight: 200;
+  font-size: 2.18025em;
+}
+#about-aditl aside dl dd {
+  font-weight: 800;
+  font-size: 1.27em;
+  margin-bottom: 1em;
+}
+#about-aditl:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }
 #push {
   clear: both;
