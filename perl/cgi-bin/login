@@ -14,7 +14,7 @@ use HTML::Entities;
 
 $CGI::DISABLE_UPLOADS = 1;
 use vars qw($cgi $redirect $db);
-$cgi = CGI->new();
+$cgi = new CGI;
 
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
@@ -24,9 +24,9 @@ $redirect = "";
 
 my $email = "";
 my $password = "";
-if(defined($cgi->param("redirect"))) {
-    $redirect = $cgi->param("redirect");
-}
+#if(defined($cgi->param("redirect"))) {
+#    $redirect = $cgi->param("redirect");
+#}
 
 my $uid = Cookie::isUserLoggedIn($cgi, $db);
 if($uid) {
@@ -36,7 +36,7 @@ if($uid) {
 	exit;
     } else {
 	my $email = $db->getEmail($uid);
-	print Utils::message("you are already logged in as $email.");
+	print Utils::message("You are already logged in as $email.");
 	exit;
     }
 }
@@ -56,8 +56,26 @@ if(defined($cgi->param("message"))) {
 }
 
 print $cgi->header();
-my $templateroot = Settings::settings("templateLib");
-my $html = Template::fillTemplate("$templateroot/login.html", ["Login", $message, "", $redirect]);
+
+my $bgcolor = $cgi->param("bgc") or "ffffff";
+my $fgcolor = $cgi->param("fgc") or "333333";
+
+my $html = Template::fillTemplateNew(
+    Settings::settings("templateLib") . "/login.tmpl",
+       {
+        bgColor => $bgcolor,
+        Color => $fgcolor,
+        page_login => 1,
+        LoginRedirectValue => $redirect
+       }
+    );
+    
+#my $templateroot = Settings::settings("templateLib");
+#my $html = Template::fillTemplateNew(
+#    "$templateroot/login.tmpl", 
+#    
+#    ["Login", $message, "", $redirect]
+#    );
 
 print $html;
 exit;
@@ -73,8 +91,22 @@ sub processLogin {
 	doLogin($email, $db);
 	exit;
     } else {
-	my $templateroot = Settings::settings("templateLib");
-	my $html = Template::fillTemplate("$templateroot/login.html", ["Login", "email and password do not match. make sure you didn't forget \'<b>\@mit.edu</b>\'.", "$email", $redirect]);
+        my $bgcolor = $cgi->param("bgc") or "ffffff";
+        my $fgcolor = $cgi->param("fgc") or "333333";
+    
+        my $html = Template::fillTemplateNew(
+        Settings::settings("templateLib") . "/login.tmpl",
+           {
+            bgColor => $bgcolor,
+            Color => $fgcolor,
+            page_login => 1,
+            LoginRedirectValue => $redirect,
+            LoginNoticeMessge => "Your email and password do not match. Please make sure you didn't forget <strong>\@mit.edu</strong>.",
+            LoginFilledEmail => $email
+           }
+        );
+	#my $templateroot = Settings::settings("templateLib");
+	#my $html = Template::fillTemplateNew("$templateroot/login.tmpl", ["Login", "email and password do not match. make sure you didn't forget \'<b>\@mit.edu</b>\'.", "$email", $redirect]);
 	print $cgi->header();
 	print $html;
 	exit;
@@ -110,7 +142,7 @@ sub doLogin {
     if($redirect) {
 	$html = Utils::redirect($redirect);
     } else {
-	$html = Utils::message("you have successfully logged in with the email $email.");
+	$html = Utils::message("You have successfully logged in with the email $email.");
     }
 
     print $html;

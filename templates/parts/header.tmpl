@@ -11,12 +11,10 @@
                     <li><a href="<TMPL_VAR EXPR="settings('aboutURL')">"<TMPL_IF NAME="page_about"> class="selected"</TMPL_IF>>About ADITL</a></li>
                     <li>
 		      <TMPL_IF NAME="uid">
-			<a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a>
+			             <a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a>
 		      <TMPL_ELSE>
-		        <a href="<TMPL_VAR EXPR="settings('registerURL')">">Register</a>
-			</li><li>
-			<a href="<TMPL_VAR EXPR="settings('loginURL')">">Login</a>
+		                 <a href="<TMPL_VAR EXPR="settings('loginURL')">"<TMPL_IF NAME="page_login"> class="selected"</TMPL_IF>>Login / Register</a>
 		      </TMPL_IF>
-		    </li>
+		          </li>
                 </ul>
             </nav>

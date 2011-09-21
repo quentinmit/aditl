@@ -34,11 +34,11 @@ if($fn =~ /[^\w-]/ || $ln =~ /[^\w-]/) {
 }
 
 if($fn eq "" || $ln eq "") {
-    formatError("your first and last name cannot be empty.", $fn, $ln, $email);
+    formatError("Your first and last name cannot be empty.", $fn, $ln, $email);
 }
 
 if(length($fn) > 30 || length($ln) > 30) {
-    formatError("your first and last names cannot be longer than 30 characters", $fn, $ln, $email);
+    formatError("Your first and last names cannot be longer than 30 characters, sorry.", $fn, $ln, $email);
 }
 
 unless($affiliation eq "undergrad" ||
@@ -48,46 +48,46 @@ unless($affiliation eq "undergrad" ||
        $affiliation eq "admin" ||
        $affiliation eq "alum" ||
        $affiliation eq "other") {
-    formatError("please select an affiliation", $fn, $ln, $email);
+    formatError("Please select an affiliation.", $fn, $ln, $email);
 }
 
 if($email =~ /\'/ || $email =~ /\"/) {
-    formatError("your email address doesn't look valid", $fn, $ln, $email);
+    formatError("Your email address doesn't look valid.", $fn, $ln, $email);
 }
 
 unless(valid($email)) {
-    formatError("your email address doesn't look valid", $fn, $ln, $email);
+    formatError("Your email address doesn't look valid.", $fn, $ln, $email);
 }
 
 unless($email =~ /mit\.edu$/i) {
-    formatError("you must have an email address that ends in mit.edu", $fn, $ln, $email);
+    formatError("You must have an email address that ends in mit.edu.", $fn, $ln, $email);
 }
 
 if($pw =~ /\W/) {
-    formatError("your password must contain only letters and numbers (and no spaces).", $fn, $ln, $email);
+    formatError("Your password must contain only letters and numbers (and no spaces).", $fn, $ln, $email);
 }
 
 if(length($pw) < 5) {
-    formatError("your password must be at least 5 characters long.", $fn, $ln, $email);
+    formatError("Your password must be at least 5 characters long.", $fn, $ln, $email);
 }
 
 if(length($pw) > 30) {
-    formatError("your password cannot be longer than 30 characters.", $fn, $ln, $email);
+    formatError("Your password cannot be longer than 30 characters.", $fn, $ln, $email);
 }
 
 if($pw ne $pw2) {
-    formatError("the passwords you entered do not match.", $fn, $ln, $email);
+    formatError("The passwords you entered do not match.", $fn, $ln, $email);
 }
 
 my $db = Database->new();
 my $status = $db->connect(Settings::settings("dbName"));
 unless($status) {
-    formatError("there was an error in processing your registration. it's not you, it's me. really.", $fn, $ln, $email);
+    formatError("There was an error in processing your registration. It's not you, it's me. Really.", $fn, $ln, $email);
 }
 
 if($db->userExists($email)) {
-    formatError("a user with this email address has already registered.<br>If you've forgotten your password, you're in trouble.<br>
-(just kidding, email " . Settings::settings("email") . " to recover your password.)", $fn, $ln, $email);
+    formatError("A user with this email address has already registered. If you've forgotten your password, you're in trouble. 
+(Just kidding, email " . Settings::settings("email") . " to recover your password.)", $fn, $ln, $email);
 }
 
 my $validateToken = Cookie::createAuthToken();
@@ -105,11 +105,22 @@ print Utils::message("Your information looks good. We have sent an email to $ema
 exit;
 
 sub noParams {
-    my $template = Settings::settings("templateLib") . "\/createprofile.html";
-    my $msg = "registering with ADITL lets you upload your photos after the event and post comments. 
-you will also receive reminder emails before the day of the event in september. you must have a valid email ending in mit.edu to register. please note
-that this site does not use encryption, so you probably don't want to use your athena password.";
-    my $html = Template::fillTemplate($template, [$msg, "", "", ""]);
+    #my $template = Settings::settings("templateLib") . "\/createprofile.html";
+    ##my $msg = "registering with ADITL lets you upload your photos after the event and post comments. 
+#you will also receive reminder emails before the day of the event in september. you must have a valid email ending in mit.edu to register. #please note
+#that this site does not use encryption, so you probably don't want to use your athena password.";
+    #my $html = Template::fillTemplate($template, [$msg, "", "", ""]);
+    my $bgcolor = $cgi->param("bgc") or "ffffff";
+    my $fgcolor = $cgi->param("fgc") or "333333";
+
+    my $html = Template::fillTemplateNew(
+        Settings::settings("templateLib") . "/login.tmpl",
+           {
+            bgColor => $bgcolor,
+            Color => $fgcolor,
+            page_login => 1
+           }
+        );
     print $html;
     exit;
 }
@@ -119,8 +130,24 @@ sub formatError {
     my $fn = shift;
     my $ln = shift;
     my $email = shift;
-    my $template = Settings::settings("templateLib") . "\/createprofile.html";
-    my $html = Template::fillTemplate($template, [$msg, $fn, $ln, $email]);
+    #my $template = Settings::settings("templateLib") . "\/createprofile.html";
+    #my $html = Template::fillTemplate($template, [$msg, $fn, $ln, $email]);
+
+    my $bgcolor = $cgi->param("bgc") or "ffffff";
+    my $fgcolor = $cgi->param("fgc") or "333333";
+
+    my $html = Template::fillTemplateNew(
+        Settings::settings("templateLib") . "/login.tmpl",
+           {
+            bgColor => $bgcolor,
+            Color => $fgcolor,
+            page_login => 1,
+            RegisterNoticeMessge => $msg,
+            RegisterFilledEmail => $email,
+            RegisterFilledFirstName => $fn,
+            RegisterFilledLastName => $ln
+           }
+        );
     print $html;
     exit;
 }

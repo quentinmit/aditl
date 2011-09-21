@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADITL: A day in the life of MIT. September 22, 2011</title>
+        <link rel="stylesheet" href="<TMPL_VAR EXPR="settings('staticURLBase')">/stylesheets/css/main.css" />
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+	        <TMPL_INCLUDE NAME="parts/header.tmpl">
+            </div>
+            <div id="about-aditl" class="login" role="content">
+                <article>
+                    <h2>Login</h2>
+                    <p>Please login to upload photos.</p>
+
+                    <TMPL_IF NAME="LoginNoticeMessge">
+                        <p class="notice"><TMPL_VAR NAME="LoginNoticeMessge"></p>
+                    </TMPL_IF>
+
+                    <form method="POST" action="<TMPL_VAR EXPR="settings('loginURL')">">
+                        <label for="aditl-email">Email:</label><input type="text" id="aditl-email" name="email" value="<TMPL_VAR NAME="LoginFilledEmail" ESCAPE="HTML">" />
+                        <label for="aditl-password">Password:</label><input type="password" id="aditl-password" name="password" value="" />
+                        <input type="hidden" name="redirect" value="<TMPL_VAR NAME="LoginRedirectValue" ESCAPE="HTML">" />
+                        <input type="submit" value="Login" />
+                    </form>
+                </article>
+                <aside>
+                    <h2>Register</h2>
+                    <p>Don't have an ADITL 2011 account? Registering with ADITL lets you upload your photos during and after the event on September 22nd.</p>
+
+                    <TMPL_IF NAME="RegisterNoticeMessge">
+                        <p class="notice"><TMPL_VAR NAME="RegisterNoticeMessge"></p>
+                    </TMPL_IF>
+
+                    <form method="POST" action="<TMPL_VAR EXPR="settings('registerURL')">">
+                        <label for="reg-first-name">First Name:</label><input type="text" id="reg-first-name" value="<TMPL_VAR NAME="RegisterFilledFirstName" ESCAPE="HTML">" name="firstname" />
+                        <label for="reg-last-name">Last Name:</label><input type="text" id="reg-last-name" name="lastname" value="<TMPL_VAR NAME="RegisterFilledLastName" ESCAPE="HTML">" />
+                        <label for="reg-email">Email Address:</label><input type="text" id="reg-last-name" name="email" value="<TMPL_VAR NAME="RegisterFilledEmail" ESCAPE="HTML">" />
+                        <label for="reg-affiliation">MIT Affiliation:</label>
+                        <select id="reg-affiliation" name="affiliation">
+                            <option value="---" selected="selected">---</option>
+                            <option value="undergrad">undergrad</option>
+                            <option value="gradstudent">grad student</option>
+                            <option value="faculty">faculty</option>
+                            <option value="staff">staff</option>
+                            <option value="admin">administration</option>
+                            <option value="alum">alum</option>
+                            <option value="other">other</option>
+                        </select>
+                        <label for="reg-password">Password:</label><input type="password" id="reg-password" value="" name="password" />
+                        <label for="reg-verify-password">Verify Password:</label><input type="password" id="reg-verify-password" value="" name="password2" />
+                        <input type="submit" value="Register" />
+                    </form>
+                    <p class="note">Note One: You must use a valid email ending in <strong>mit.edu</strong> email to register (yes, alum.mit.edu is a qualified email).</p>
+                    <p class="note">Note Two: This site does not use encryption, so you probably don't want to use your athena password.</p>
+                    <p class="note">Our privacy policy: We will not give away, sell, pander, or otherwise release your personal information. Your first &amp; last name will be visible to other registered users. Email addresses will be hidden.</p>
+                </aside>
+            </div>  
+            <div id="push"></div>
+        </div>
+
+	<TMPL_INCLUDE NAME="parts/footer.tmpl">
+    </body>
+</html>
