@@ -308,7 +308,7 @@ div#aditl-data .timeline .scrollview-bg {
   position: absolute;
   top: -1px;
   left: 10px -1;
-  background: rgba(50, 50, 50, 0.39);
+  background: transparent;
   width: 940px;
   height: 266px;
   border: 1px solid #565656;
@@ -331,6 +331,9 @@ div#aditl-data .timeline .scrollview-container {
 }
 div#aditl-data .timeline .scrollview-container .scrollview-content {
   position: relative;
+  background-color: transparent;
+  background-image: url('images/scrollview-bg.png');
+  background-repeat: repeat;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item {
   width: 380px;
@@ -393,9 +396,6 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
   margin: .3em 0;
   font-size: 0.917em;
   line-height: 1.4em;
-}
-div#aditl-data .timeline .scrollview-container .scrollview-item.even .image {
-  background-color: rgba(226, 227, 229, 0.43);
 }
 #aditl-timelines {
   width: 960px;

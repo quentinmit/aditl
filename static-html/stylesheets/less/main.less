@@ -387,7 +387,7 @@ div#aditl-data {
             position: absolute;
             top: -1px;
             left: @columnSpacing -1 ;
-            background: @timelineBgcolor;
+            background: transparent;
             width: @documentWidth - (2*@columnSpacing);
             height: @indivTimeItemHeight;
             border: 1px solid @fontGray;
@@ -414,6 +414,9 @@ div#aditl-data {
             
             .scrollview-content {
                 position: relative;
+                background-color: transparent;
+                background-image: url('images/scrollview-bg.png');
+                background-repeat: repeat;
             }
             .scrollview-item {
                 width: @indivTimeItemWidth;
@@ -483,13 +486,7 @@ div#aditl-data {
                     }
                     
                 }
-            }
-            
-            .scrollview-item.even {
-                .image {
-                    background-color: @timelineEvenColor;
-                }
-            }  
+            } 
         }
     }
 }
