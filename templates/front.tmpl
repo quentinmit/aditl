@@ -63,7 +63,7 @@
 			<TMPL_IF NAME="next"><a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="next">">next</a></TMPL_IF>
 		      </p>
 		    <TMPL_ELSE>
-                      <p><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
+                      <p><TMPL_IF NAME="voteURL"><a href="<TMPL_VAR NAME="voteURL">">vote</a> </TMPL_IF><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
 		    </TMPL_IF>
                 </section>
             </article>
