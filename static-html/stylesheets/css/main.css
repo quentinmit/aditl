@@ -373,13 +373,13 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info .paginatio
   float: right;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item .info .pagination a.prev.inactive {
-  background-position-x: -40px;
+  background-position: -40px center;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item .info .pagination a.next {
-  background-position-x: -120px;
+  background-position: -120px center;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item .info .pagination a.next.inactive {
-  background-position-x: -80px;
+  background-position: -80px center;
 }
 div#aditl-data .timeline .scrollview-container .scrollview-item .info .pagination a:hover {
   background-color: #000000;
