@@ -623,6 +623,11 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
 #about-aditl.login p.note {
   font-size: 0.917em;
 }
+#about-aditl.login p.notice {
+  background-color: #565656;
+  color: #e2e3e5;
+  padding: .4em .7em;
+}
 #about-aditl.login form {
   font-size: 1.27em;
 }
