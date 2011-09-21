@@ -36,6 +36,10 @@
 
 @import url('http://html5resetcss.googlecode.com/files/html5reset-1.6.1.css');
 
+nav, article, aside, header, hgroup, footer {
+    display: block;
+}
+
 .center-content () {
     width: @documentWidth;
     margin: 0 auto;
@@ -128,6 +132,9 @@ header{
         font-size: @smallerText;
         clear:right;
         .header-tagline;
+        width: 400px;
+        margin-right: 300px;
+        
     }
 }
 
@@ -141,12 +148,12 @@ nav ul {
 nav#primary-navigation {
     .center-content;
     padding-bottom: 0;
-    margin-top: -10px;
-    height: 45px;
+    height: 34px;
 
     ul {
         float:right;
         padding-right: 5px;
+        margin-top: -10px;
         
         li {
             line-height: 1em;
@@ -162,6 +169,10 @@ nav#primary-navigation {
                 padding: 0 5px;
                 padding-top: 10px;
                 padding-bottom:10px;
+            }
+            
+            a:hover {
+                color: @fontGray;
             }
         }
     }
@@ -229,6 +240,10 @@ nav:after { .clear-floats; }
     .center-content;
     padding-bottom: 4em;
     
+    a:hover {
+        color: @fontGray;
+    }
+    
     #time {
         width: 300px;
         font-size: @largeText;
@@ -264,10 +279,13 @@ nav:after { .clear-floats; }
         width: 220px;
         margin-right: @columnSpacing;
         float: right;
-        font-size: .917em;
+        font-size: @smallerText;
         line-height: 1.4em;
         p {
             margin-top: 2.1em;
+        }
+        form {
+            padding-top: 26px;
         }
     }
 }
@@ -284,6 +302,7 @@ nav:after { .clear-floats; }
 
 div#aditl-data {
     .center-content;
+    padding-top: 1em;
     
     #overview {
         margin: @columnSpacing*2 @columnSpacing;
@@ -467,6 +486,9 @@ div#aditl-data {
                         }
                         a:hover {
                             background-color: #000000;
+                        }
+                        a.inactive:hover, {
+                            background-color: transparent;
                         }
                         
                     }
