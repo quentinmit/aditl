@@ -621,6 +621,8 @@ div#aditl-data {
             width: @documentWidth - @columnSpacing*2 - @timelineListWidth;
             padding-top: 0.12em;
             margin: 0;
+            height: 1.3em;
+            overflow: hidden;
         }
         
         h3 {
@@ -706,6 +708,78 @@ div#aditl-data {
 }
 
 #about-aditl:after { .clear-floats; }
+
+#about-aditl.login {
+
+    article {
+        width: 400px;
+    }
+    aside {
+        width: 470px;
+    }
+    
+    p { clear:right; }
+    
+    p.note {
+        font-size: @smallestText;
+    }
+    
+    form {
+        font-size: @smallerText;
+        
+        label {
+            font-weight: 800;
+            width:150px;
+            display:block;
+            float:left;
+            line-height: 2.3em;
+            clear: left;
+        }
+        input[type='text'], input[type='password'] {
+            display: block;
+            font-size: 1.3em;
+            margin: .5em 0;
+            padding: .3em;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid @fontGray;
+        }
+        select {
+            display: block;
+            font-size: 1.3em;
+            margin: 0.9em 0;
+            width: 300px;
+        }
+    }
+    
+    input[type='submit'] {
+        -moz-border-radius: .5em;
+        border-radius: .3em;
+        background-color: @fontGray;
+        color: @footerTextColor;
+        font-size: @timelineNavText*.8;
+        padding: .3em .6em;
+        border: none;
+        display: block;
+        float: right;
+        margin-top: .3em;
+        margin-bottom: 1em;
+    }
+    
+    article form {
+        input[type='text'], input[type='password'] {
+            width: 296px;
+        }
+        label {
+            width: 90px;
+        }
+    }
+        
+    aside form {
+        input[type='text'], input[type='password'] {
+            width: 306px;
+        }
+    }
+}
 
 #push {
     clear: both;

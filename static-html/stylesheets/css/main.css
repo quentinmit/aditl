@@ -532,6 +532,8 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
   width: 230px;
   padding-top: 0.12em;
   margin: 0;
+  height: 1.3em;
+  overflow: hidden;
 }
 #aditl-timelines .person h3 {
   font-size: 1.27em;
@@ -608,6 +610,65 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
   height: 0;
   clear: both;
   visibility: hidden;
+}
+#about-aditl.login article {
+  width: 400px;
+}
+#about-aditl.login aside {
+  width: 470px;
+}
+#about-aditl.login p {
+  clear: right;
+}
+#about-aditl.login p.note {
+  font-size: 0.917em;
+}
+#about-aditl.login form {
+  font-size: 1.27em;
+}
+#about-aditl.login form label {
+  font-weight: 800;
+  width: 150px;
+  display: block;
+  float: left;
+  line-height: 2.3em;
+  clear: left;
+}
+#about-aditl.login form input[type='text'], #about-aditl.login form input[type='password'] {
+  display: block;
+  font-size: 1.3em;
+  margin: .5em 0;
+  padding: .3em;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid #565656;
+}
+#about-aditl.login form select {
+  display: block;
+  font-size: 1.3em;
+  margin: 0.9em 0;
+  width: 300px;
+}
+#about-aditl.login input[type='submit'] {
+  -moz-border-radius: .5em;
+  border-radius: .3em;
+  background-color: #565656;
+  color: #e2e3e5;
+  font-size: 1.938em;
+  padding: .3em .6em;
+  border: none;
+  display: block;
+  float: right;
+  margin-top: .3em;
+  margin-bottom: 1em;
+}
+#about-aditl.login article form input[type='text'], #about-aditl.login article form input[type='password'] {
+  width: 296px;
+}
+#about-aditl.login article form label {
+  width: 90px;
+}
+#about-aditl.login aside form input[type='text'], #about-aditl.login aside form input[type='password'] {
+  width: 306px;
 }
 #push {
   clear: both;
