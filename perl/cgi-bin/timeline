@@ -17,10 +17,10 @@ $CGI::DISABLE_UPLOADS = 1;
 
 use vars qw($cgi $db);
 
-$cgi = new CGI;
-
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
+
+$cgi = new CGI;
 
 my $visitoruid = Cookie::isUserLoggedIn($cgi, $db);
 

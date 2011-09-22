@@ -46,15 +46,14 @@
                 </section>
                 <section id="person">
                     <h1><TMPL_VAR NAME="Photog" ESCAPE="HTML"></h1>
-                    <h2>1 of <TMPL_VAR NAME="NumPhotos"> photos</h2>
+                    <h2><TMPL_VAR NAME="NumPhotos"> photos</h2>
 		    <TMPL_IF EXPR="prev || next">
 		      <p>
 			<TMPL_IF NAME="prev"><a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="prev">">prev</a></TMPL_IF>
 			<TMPL_IF NAME="next"><a href="<TMPL_VAR EXPR="settings('photoURL')">?phid=<TMPL_VAR NAME="next">">next</a></TMPL_IF>
 		      </p>
-		    <TMPL_ELSE>
-                      <p><TMPL_IF NAME="voteURL"><a href="<TMPL_VAR NAME="voteURL">">vote</a> </TMPL_IF><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
 		    </TMPL_IF>
+                    <p><TMPL_IF NAME="voteURL"><a href="<TMPL_VAR NAME="voteURL">">vote</a> </TMPL_IF><a href="<TMPL_VAR NAME="personDay">">follow</a></p>
                 </section>
             </article>
             <div id="push"></div>

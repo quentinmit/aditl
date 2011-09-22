@@ -56,7 +56,7 @@ my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
 my ($wcolor, $wbgcolor) = Utils::getWebColors(Utils::imagePath(\%image, "small"));
 
-my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
+my $personURL = Settings::settings("timelineURL") . "?uid=" . $image{uid};
 
 my $caption = $db->getCaption($image{phid});
 
