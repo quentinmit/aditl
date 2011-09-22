@@ -28,7 +28,13 @@
                 <ul>
                     <li><a href="<TMPL_VAR EXPR="settings('selectUserURL')">">Follow Someone</a></li>
                     <li><a href="<TMPL_VAR EXPR="settings('aboutURL')">">About ADITL</a></li>
-                    <li><TMPL_IF NAME="uid"><a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a><TMPL_ELSE><a href="<TMPL_VAR EXPR="settings('loginURL')">">Login</a></TMPL_IF></li>
+                    <li>
+		      <TMPL_IF NAME="uid">
+			<a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a>
+		      <TMPL_ELSE>
+			<a href="<TMPL_VAR EXPR="settings('loginURL')">">Login</a>
+		      </TMPL_IF>
+		    </li>
                 </ul>
             </nav>
             <div role="content" id="content">
