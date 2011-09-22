@@ -277,7 +277,7 @@ div#aditl-data #overview .line img {
   top: 0;
 }
 div#aditl-data #overview #timeline-slider-wrapper {
-  width: 940px;
+  width: 920px;
   position: absolute;
   top: 0;
 }
@@ -298,7 +298,6 @@ div#aditl-data #overview #timeline-slider-wrapper .ui-slider .ui-slider-handle {
 }
 div#aditl-data #overview #timeline-slider-wrapper .ui-slider-horizontal .ui-slider-handle {
   top: 37px;
-  margin-left: -0.6em;
 }
 div#aditl-data a.pagination-arrow {
   width: 120px;
