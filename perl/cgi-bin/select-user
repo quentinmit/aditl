@@ -110,11 +110,9 @@ sub selectRandom() {
 
     my @uids = $db->randomUsersWithPhotos(1);
 
-    my @selected = getUids(\@uids, $cgi);
-
     my $url = Settings::settings("timelineURL");
 
-    $url .= "?uid=" . $selected[0];
+    $url .= "?uid=" . $uids[0];
 
     print $cgi->header();
     print Utils::redirect($url);
