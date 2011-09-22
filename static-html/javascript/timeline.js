@@ -23,9 +23,8 @@ function update_timeline(scroll_position) {
 		scrollview_item.css("left", ""+bucket.xoff+"px");
 
 		$.each(bucket.photos, function(index, photo) {
-		    var this_image = $('<div id="photo-'+photo.phid+'"><div class="image"><img src="'+photo.image+'"></div><div class="info"><article><h2>'+photo.time+'</h2></article></div></div>');
-		    var article = this_image.find("article");
-		    article.append($("<p></p>").text(photo.caption));
+		    var this_image = $('<div id="photo-'+photo.phid+'"><div class="image"><img src="'+photo.image+'"></div><div class="info"><article><h2>'+photo.time+'</h2><p></p></article></div></div>');
+		    this_image.find("article p").text(photo.caption);
 
 		    if (index > 0) {
 			this_image.css("display", "none");

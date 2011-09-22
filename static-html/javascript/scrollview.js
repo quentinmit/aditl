@@ -224,8 +224,10 @@ var scrollview={
 				}
 			}
 		}
-	    e.preventDefault();
-		if (consumed)  e.stopPropagation();
+	    if (consumed) {
+		e.preventDefault();
+		e.stopPropagation();
+	    }
 	},
 	// Content handler
 	cancelspring:function(obj) {
