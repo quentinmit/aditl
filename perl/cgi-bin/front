@@ -48,7 +48,7 @@ my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
 my $wcolor = Utils::toWebColor(@color);
 
-my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
+my $personURL = Settings::settings("timelineURL") . "?uid=" . $image{uid};
 
 my $html = Template::fillTemplateNew
   (

@@ -74,7 +74,7 @@ my $wcolor = Utils::toWebColor(@color);
 
 my $voteURL = Settings::settings("frontURL") . "2" . "?vote=" . $image{phid};
 
-my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
+my $personURL = Settings::settings("timelineURL") . "?uid=" . $image{uid};
 
 my $html = Template::fillTemplateNew
   (

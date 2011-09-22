@@ -42,7 +42,7 @@
                     <div class="scrollview-bg"></div>
                     <div class="v-stripe left"></div>
                     <div class="v-stripe right"></div>
-                    <div scrollviewenabledscrolly="no" scrollviewmode="table" scrollviewbars="none" class="scrollview-container">
+                    <div id="timeline-container" scrollviewenabledscrolly="no" scrollviewenabledscrollx="yes" scrollviewmode="table" scrollviewbars="none" class="scrollview-container">
                         <div class="scrollview-content">
                             <div class="scrollview-item even">
                                 <div class="image">
@@ -100,7 +100,9 @@
         <script src="<TMPL_VAR EXPR="settings('staticURLBase')">/javascript/vanillaos.js" type="text/javascript"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
         <script type="text/javascript">
-                $("#timeline-slider").slider();
+var timeline_images = <TMPL_VAR NAME="scroller_js">;
+
         </script>
+        <script src="<TMPL_VAR EXPR="settings('staticURLBase')">/javascript/timeline.js" type="text/javascript"></script>
     </body>
 </html>

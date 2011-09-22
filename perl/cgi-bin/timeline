@@ -10,6 +10,8 @@ use Utils;
 use Colors;
 use Cookie;
 
+use JSON;
+
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
@@ -42,16 +44,16 @@ my $photogName = "$fn $ln";
 
 my @allimages = getPhotos(\@uids);
 
-my @navline = getNavlineContent(\@uids, @allimages);
+my @navline = getNavlineContent(@allimages);
 
-#push(@initFrags, navlineClickable());
-#push(@initFrags, lc($mainPhotogInfo[0]));
+my @timeline = getScrollerContent(@allimages);
 
 my $html = Template::fillTemplateNew
   (
    Settings::settings("templateLib") . "/timeline.tmpl",
   {
    navline => \@navline,
+   scroller_js => encode_json(\@timeline),
 
    Photog => $photogName,
 
@@ -71,18 +73,48 @@ sub getPhotos {
   my @allimages;
   foreach (@$uidref) {
     #comes back sorted.
-    my @p = $db->getPhotosBetween($_, $start, $end);
-    foreach(@p) {
-      my %photo;
-      $db->photoInfo($_, \%photo);
-      push(@allimages, \%photo);
-    }
+    push @allimages, $db->getPhotoInfoBetween($_, $start, $end);
   }
   return @allimages;
 }
 
+sub getScrollerContent {
+  my (@allimages) = @_;
+
+  my %bucketized;
+
+  bucketize(\@allimages, \%bucketized, 12);
+
+  my @timeline;
+
+  foreach my $bucket (sort keys %bucketized) {
+    my $xoff = $bucket * 380;
+    my $even = ($bucket % 2);
+    my @photos;
+    foreach (@{$bucketized{$bucket}}) {
+      my @time = Utils::sqlTime($_->{time});
+      my $tstring = "$time[0]:$time[1]:$time[2]";
+      delete $_->{"original_path"};
+
+      push @photos,
+	{
+	 %{$_},
+	 image => Utils::imageURL($_, "medium"),
+	 time => $tstring,
+	};
+    }
+    push @timeline,
+      {
+       xoff => $xoff,
+       even => $even,
+       photos => \@photos,
+      };
+  }
+  return @timeline;
+}
+
 sub getNavlineContent {
-    my ($uidref, @allimages) = @_;
+    my (@allimages) = @_;
 
     my %bucketized;
     #takes only first image per bucket
