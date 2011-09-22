@@ -10,6 +10,7 @@ require Exporter;
 
 use lib "./";
 
+use POSIX;
 use Imager;
 use strict;
 
@@ -21,8 +22,8 @@ sub makeSmallTimeline {
 
     #derived options
     $options{numberEvents} = int(($options{endTime} - $options{startTime}) / $options{eventWidth});
-    $options{pixelsPerEvent} = int(($options{timelineWidth} / $options{numberEvents}));
-    $options{actualTimelineWidth} = $options{pixelsPerEvent} * $options{numberEvents};
+    $options{pixelsPerEvent} = ceil(($options{timelineWidth} / $options{numberEvents}));
+    $options{actualTimelineWidth} = $options{timelineWidth}; #$options{pixelsPerEvent} * $options{numberEvents};
 
     $options{totalWidth} = $options{actualTimelineWidth};
 

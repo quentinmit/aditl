@@ -546,8 +546,6 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
 }
 #aditl-timelines .person .full-timeline img {
   position: absolute;
-  height: 64px;
-  width: 2.4652777777777777px;
 }
 #aditl-timelines .person a.follow, #aditl-timelines .person a.follow:visited {
   display: block;
