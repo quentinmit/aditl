@@ -16,29 +16,19 @@ use Cookie;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
-use vars qw($cgi $db $ENTRIES_PER_PAGE);
-
-$ENTRIES_PER_PAGE = 500;
+use vars qw($cgi $db);
 
 $cgi = new CGI;
 
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
+my $visitoruid = Cookie::isUserLoggedIn($cgi, $db);
+
 my $majorid = $cgi->param("majorid");
-my $minorid = $cgi->param("minorid");
 
-
-$cgi->delete("majorid");
-$cgi->delete("minorid");
-
-unless($minorid) {
-    $minorid = 0;
-}
-
-unless(defined($majorid) && defined($minorid)) {
+unless(defined($majorid)) {
     $majorid = 0;
-    $minorid = 0;
 }
 
 my @users = $db->userInfoWithPhotos();
@@ -51,108 +41,45 @@ if($cgi->param("random")) {
 my @sorted;
 Utils::alphaSplitList(1, \@users, \@sorted);
 
-#{ use Data::Dumper;
-#print $cgi->header, Dumper(\@uids);
-#exit
-#}
-
 @sorted = @{$sorted[0]}; #see alphaSplitlist
 
 my @subsorted;
 majorList($majorid, \@sorted, \@subsorted);
 
-my $offset = $ENTRIES_PER_PAGE * $minorid;
-
-my $more = 0;
-my @spliced = splice(@subsorted, $offset);
-if(scalar(@spliced) > $ENTRIES_PER_PAGE) {
-    $more = 1;
-    @spliced = splice(@spliced, 0, $ENTRIES_PER_PAGE);
-}
-
-
 my $barcodeBase = Settings::settings("tinyBarcodeURL");
 
-my $max = scalar(@spliced);
+my @users;
 
-my $userlist = "";
-for(my $i = 0; $i < $max; $i++) {
-    my $barcode = $barcodeBase . "/" . $spliced[$i]->{uid} . "\.jpg";
-    my $uid = $spliced[$i]->{uid};
-    my $name = $spliced[$i]->{fn} . " " . $spliced[$i]->{ln};
+foreach my $user (@subsorted) {
+  my $uid = $user->{uid};
+  my $barcode = $barcodeBase . "/" . $uid . "\.jpg";
 
-    my $url = Settings::settings("timelineURL") . "?uid=" . $uid;
+  my $name = $user->{fn} . " " . $user->{ln};
 
-    my @num = $db->getinfo2($uid);
+  my $url = Settings::settings("timelineURL") . "?uid=" . $uid;
 
-    my $yoff = $i * 45;
+  my @num = $db->getinfo2($uid);
 
-    $userlist .= '<div style="margin-bottom: 23px; border: 1px solid #A19E95; height:22px; font-size:15px;"><a style="font-size: 15px"href="'.$url.'"><img style="margin-top:-1px; margin-bottom: -1px;" border="0" src="'.$barcode.'"><span style="position:relative;font-size:15px;width:18em;top:2px; padding: 0 8px; vertical-align: top;">'."$name ($num[0] photos)".'</span></a></div>'
-
-#    $userlist .= "<div style=\"position:absolute; left:576px; top:" . $yoff . "px;
-#font-size:15px; width:18em; border-top: 1px solid #A19E95; height:20px;
-#border-right: 1px solid #A19E95; border-bottom:1px solid #A19E95; padding-top:2px; padding-left:8px;\">";
-
-#    $userlist .= "<a href=\"$url\" style=\"font-size:15px;\">$name ($num[0] photos)</a></div>\n";
-
-#    $userlist .= "<div style=\"position:absolute; left:0px; top:" . $yoff . "px;\"
-#<a href=\"$url\"><img border=\"0\" src=\"" . $barcode . "\" alt = \"\"></img></a></div>\n";
-
+  push @users, 
+    {
+     uid => $uid,
+     barcode => $barcode,
+     name => $name,
+     url => $url,
+     numphotos => $num[0],
+    };
 
 }
-
-my @text;
-
-push(@text, $userlist);
-
-
-my $moretext = "";
-if($minorid > 0) {
-    my $url = Settings::settings("selectUserURL") . "?majorid=" . $majorid . "&minorid=" . ($minorid - 1);
-    $url .= "&" . moreURL($cgi);
-    $moretext .= "<a class=\"next\" href=\"$url\">back</a>";
-} else {
-    $moretext .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-}
-
-$moretext .= "&nbsp;&nbsp;&nbsp;&nbsp;";
-
-if($more) {
-    my $url = Settings::settings("selectUserURL") . "?majorid=" . $majorid . "&minorid=" . ($minorid + 1);
-    $url .= "&" . moreURL($cgi);
-    $moretext .= "<a class=\"next\" href=\"$url\">next</a>";
-}
-
-push(@text, $moretext);
-
-
-push(@text, "&" . moreURL($cgi));
-
-
-my @tSelColors;
-for(my $i = 0; $i < 5; $i++) {
-    push(@tSelColors, "letters");
-}
-
-$tSelColors[$majorid] = "letters2";
-
-push(@text, @tSelColors);
-
-my $message = "";
-my $pos;
-if($pos = $cgi->param("position")) {
-    $message = "Choose someone for timeline position [$pos].";
-} else {
-    $message = "Choose someone to follow their day.";
-}
-    
-
-push(@text, $message);
-
-    
 
 print $cgi->header();
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/select-user.html", \@text);
+my $html = Template::fillTemplateNew
+  (
+   Settings::settings("templateLib") . "/select-user.tmpl",
+   {
+    users => \@users,
+    uid => $visitoruid,
+   }
+  );
 
 print $html;
 exit;
@@ -181,61 +108,14 @@ sub selectRandom() {
     my $uids = shift;
     my $cgi = shift;
 
-    my @uids = $db->randomUsersWithPhotos(4);
+    my @uids = $db->randomUsersWithPhotos(1);
 
     my @selected = getUids(\@uids, $cgi);
 
     my $url = Settings::settings("timelineURL");
 
-    $url .= "?uid1=" . $selected[0] . "&uid2=" . $selected[1] . "&uid3=" .
-	$selected[2] . "&uid4=" . $selected[3];
+    $url .= "?uid=" . $selected[0];
 
     print $cgi->header();
     print Utils::redirect($url);
 }
-    
-
-sub getUids {
-    my $uids = shift;
-    my $cgi = shift;
-
-    my @uids;
-
-    my $position = $cgi->param("position");
-    $position = int($position);
-    unless($position) {
-	push(@uids, @$uids);
-
-	#my @friends = $db->getFriends($primaryUid);
-	#@friends = splice(@friends, 0, 3);
-        #push(@uids, @friends);
-
-	push(@uids, (-1, -1, -1, -1));
-	return @uids;
-    }
-
-    my @replace;
-
-    $replace[0] = $cgi->param("uid1");
-    $replace[1] = $cgi->param("uid2");
-    $replace[2] = $cgi->param("uid3");
-    $replace[3] = $cgi->param("uid4");
-
-    my $position = $cgi->param("position") - 1;
-
-    $replace[$position] = $uids->[0];
-
-    return @replace;
-}
-    
-sub moreURL {
-    my $cgi = shift;
-
-    my $string = $cgi->query_string();
-
-    $string =~ s/;/\&/g;
-
-    return $string;
-}
-
-    

@@ -33,8 +33,8 @@ foreach(@uids) {
     my %options;
     Timeline::defaultOptions(\%options);
 
-    $options{timelineWidth} = 600;
-    $options{timelineHeight} = 24;
+    $options{timelineWidth} = 710;
+    $options{timelineHeight} = 64;
     my $path = Settings::settings("tinyBarcodePath");
     $options{outputFile} = "$path/$_.jpg";
     $options{imageData} = \@photos;

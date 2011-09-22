@@ -252,7 +252,7 @@ sub defaultOptions {
     $options->{imageWidth} = 100;
 
 #height in pixels of timeline
-    $options->{timelineHeight} = 33;
+    $options->{timelineHeight} = 64;
 
 #height of lines section.
     $options->{lineHeight} = 250;
