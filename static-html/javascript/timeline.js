@@ -88,7 +88,7 @@ $(function() {
     var container_width = $("#timeline-container").outerWidth();
     slider = $("#timeline-slider").slider({
 	min: 0,
-	max: MINUTES_PER_DAY / MINUTES_PER_ITEM * ITEM_SIZE,
+	max: MINUTES_PER_DAY / MINUTES_PER_ITEM * ITEM_SIZE - container_width,
 	slide: function (event, ui) {
 	    container.moveTo({x:-ui.value, y:0});
 	    update_timeline(ui.value);
