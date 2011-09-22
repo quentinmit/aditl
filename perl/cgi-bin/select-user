@@ -12,7 +12,7 @@ use Cookie;
 #good random seed. from programming perl.
 #srand ( time() ^ ($$ + ($$ << 15)) ); 
 
-
+use HTML::Entities;
 use CGI qw(-debug :standard);
 $CGI::DISABLE_UPLOADS = 1;
 
@@ -54,7 +54,10 @@ foreach my $user (@subsorted) {
   my $uid = $user->{uid};
   my $barcode = $barcodeBase . "/" . $uid . "\.jpg";
 
-  my $name = $user->{fn} . " " . $user->{ln};
+  my $name = encode_entities($user->{fn}) . " "
+      . encode_entities(substr($user->{ln}, 0, 1))
+      ."<wbr>"
+      . encode_entities(substr($user->{ln}, 1));
 
   my $url = Settings::settings("timelineURL") . "?uid=" . $uid;
 
