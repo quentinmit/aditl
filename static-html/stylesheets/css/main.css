@@ -448,7 +448,7 @@ div#aditl-data .timeline .scrollview-container .scrollview-item .info article p 
   font-size: 2.4225em;
   font-weight: 800;
 }
-#aditl-timelines nav#secondary-navigation a:hover {
+#aditl-timelines nav#secondary-navigation a:hover, #aditl-timelines nav#secondary-navigation a.selected {
   text-decoration: none;
   background-color: #323232;
   color: #e2e3e5;
