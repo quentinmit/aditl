@@ -18,6 +18,8 @@ function bucket_switch(e) {
 	parent.css("display", "none");
 	switchTo.css("display", "block");
     }
+    e.preventDefault();
+    e.stopPropagation();
     return false;
 }
 
@@ -77,6 +79,7 @@ function update_timeline(scroll_position) {
 }
 
 $(function() {
+    scrollview.init();
     var container = $("#timeline-container")[0];
     var container_width = $("#timeline-container").outerWidth();
     slider = $("#timeline-slider").slider({

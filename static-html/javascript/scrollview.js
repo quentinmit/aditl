@@ -819,4 +819,4 @@ var scrollview={
 	}
 }
 
-scrollview.addEventListener(window,"load",scrollview.init);
+/*scrollview.addEventListener(window,"load",scrollview.init);*/
