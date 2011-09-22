@@ -174,7 +174,7 @@ sub getPixelOffset {
     # num of seconds into this fifteen minute window that we are.
     my $secondsOff = $seconds - ($start * 60);
 
-    my $pixOff = int( ($secondsOff / 86400) * 930);
+    my $pixOff = int( ($secondsOff / 86400) * 940);
     
     return $pixOff;
 }
