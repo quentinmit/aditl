@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADITL: A day in the life of MIT. September 22, 2011</title>
+        <link rel="stylesheet" href="<TMPL_VAR EXPR="settings('staticURLBase')">/stylesheets/css/main.css" />
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+	        <TMPL_INCLUDE NAME="parts/header.tmpl">
+            </div>
+            <div id="aditl-timelines" role="content">
+                <nav id="secondary-navigation" role="secondary-navigation">
+                    <h2>Last Name</h2>
+                    <ul>
+                        <li><a href="select-user?majorid=0"<TMPL_IF NAME="majorid_0"> class="selected"</TMPL_IF>>A-E</a></li>
+                        <li><a href="select-user?majorid=1"<TMPL_IF NAME="majorid_1"> class="selected"</TMPL_IF>>F-I</a></li>
+                        <li><a href="select-user?majorid=2"<TMPL_IF NAME="majorid_2"> class="selected"</TMPL_IF>>J-N</a></li>
+                        <li><a href="select-user?majorid=3"<TMPL_IF NAME="majorid_3"> class="selected"</TMPL_IF>>O-S</a></li>
+                        <li><a href="select-user?majorid=4"<TMPL_IF NAME="majorid_4"> class="selected"</TMPL_IF>>T-Z</a></li>
+                    </ul>
+                    <a href="select-user?random=1" class="random">Random</a>
+                </nav>
+                <div id="overview">
+                    <div class="times">
+                        <div class="t-0">00:00</div>
+                        <div class="t-4">04:00</div>
+                        <div class="t-8">08:00</div>
+                        <div class="t-12">12:00</div>
+                        <div class="t-16">16:00</div>
+                        <div class="t-20">20:00</div>
+                        <div class="t-24">23:59</div>
+                    </div>
+                    <div class="line"></div>
+                </div>
+                
+		<TMPL_LOOP NAME="users">
+                  <article class="person">
+                    <div class="full-timeline">
+                      <img src="<TMPL_VAR NAME="barcode">" alt="<TMPL_VAR NAME="numphotos"> photos" />
+                    </div>
+                    <h2><TMPL_VAR NAME="name" ESCAPE="HTML"></h2>
+                    <a href="<TMPL_VAR NAME="url">" class="follow"><span>Follow</span></a><h3><TMPL_VAR NAME="numphotos"> Photos</h3>
+                  </article>
+                </TMPL_LOOP>
+            </div>    
+            <div id="push"></div>
+        </div>
+
+	<TMPL_INCLUDE NAME="parts/footer.tmpl">
+    </body>
+</html>
