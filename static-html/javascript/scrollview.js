@@ -410,13 +410,6 @@ var scrollview={
 		var elem = document.body.getElementsByTagName('a');
 		for (var i=0;i<elem.length;i++) {
 			scrollview.disableDrag(elem[i]);
-			scrollview.addEventListener(elem[i],"click",function(e) {
-				if (scrollview.clickCancelled(this)) {
-					scrollview._disabledrag(e);
-					return false;
-				}
-				else return true;
-			});
 		}
 		
 		scrollview.disableDrag(document.body);
@@ -815,7 +808,14 @@ var scrollview={
 		if (value.toLowerCase()!="none") this.broadcastRelayout(a);
 	},
 	disableDrag:function(obj) {
-		this.addEventListener(obj,"mousedown",this._disabledrag);
+	    this.addEventListener(obj,"mousedown",this._disabledrag);
+	    this.addEventListener(obj,"click",function(e) {
+		if (scrollview.clickCancelled(this)) {
+		    scrollview._disabledrag(e);
+		    return false;
+		}
+		else return true;
+	    });
 	}
 }
 

@@ -60,6 +60,10 @@ function update_timeline(scroll_position) {
 			this_image.find(".info").prepend(pagination);
 		    }
 
+		    $.each(scrollview_item.find("a"), function(i, el) {
+			scrollview.disableDrag(el);
+		    });
+
 		    scrollview_item.append(this_image);
 		});
 
