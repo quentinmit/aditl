@@ -70,7 +70,7 @@ my @numphotos = $db->getinfo2($image{uid});
 
 my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
-my $wcolor = Utils::toWebColor(@color);
+my ($wcolor, $wbgcolor) = Utils::getWebColors(Utils::imagePath(\%image, "small"));
 
 my $voteURL = Settings::settings("frontURL") . "2" . "?vote=" . $image{phid};
 
@@ -88,6 +88,7 @@ my $html = Template::fillTemplateNew
    NumPhotos => $numphotos[0],
    uid => $uid,
    Color => $wcolor,
+   bgColor => $wbgcolor,
    Phid => $image{phid},
 
    voteURL => $voteURL, # unused

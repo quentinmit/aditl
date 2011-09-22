@@ -54,7 +54,7 @@ my @numphotos = $db->getinfo2($image{uid});
 
 my @color = Colors::grabColor(Utils::imagePath(\%image, "small"));
 
-my $wcolor = Utils::toWebColor(@color);
+my ($wcolor, $wbgcolor) = Utils::getWebColors(Utils::imagePath(\%image, "small"));
 
 my $personURL = Settings::settings("timelineURL") . "?uid1=" . $image{uid};
 
@@ -77,6 +77,7 @@ my $html = Template::fillTemplateNew
    NumPhotos => $numphotos[0],
    uid => $visitoruid,
    Color => $wcolor,
+   bgColor => $wbgcolor,
    Phid => $image{phid},
 
    prev => $prev,

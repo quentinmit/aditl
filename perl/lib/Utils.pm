@@ -296,6 +296,21 @@ sub toWebColor {
 
 }
 
+sub getWebColors {
+  my ($path) = @_;
+  my @color = Colors::grabColor($path);
+
+  my $wcolor = "#".Utils::toWebColor(@color);
+
+  my $lightness = Settings::settings("colorManipLightness");
+  my $sat = Settings::settings("colorManipSat");
+  my @bgColor = Colors::slightGray(@color, $lightness, $sat);
+
+  my $wbgcolor = sprintf("rgba(%d, %d, %d, .41)", @bgColor);
+
+  return $wcolor, $wbgcolor;
+}
+
 sub summary {
     my $text = shift;
     my $size = shift;
