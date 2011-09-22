@@ -5,6 +5,22 @@ var MINUTES_PER_DAY=1440;
 
 var shown_xoffs = [];
 
+function bucket_switch(e) {
+    var el = $(this);
+    var parent = el.closest(".bucket-item");
+    var switchTo;
+    if (el.hasClass("next")) {
+	switchTo = parent.next();
+    } else {
+	switchTo = parent.prev();
+    }
+    if (switchTo.length) {
+	parent.css("display", "none");
+	switchTo.css("display", "block");
+    }
+    return false;
+}
+
 function update_timeline(scroll_position) {
     var container = $("#timeline-container");
 
@@ -23,12 +39,25 @@ function update_timeline(scroll_position) {
 		scrollview_item.css("left", ""+bucket.xoff+"px");
 
 		$.each(bucket.photos, function(index, photo) {
-		    var this_image = $('<div id="photo-'+photo.phid+'"><div class="image"><img src="'+photo.image+'"></div><div class="info"><article><h2>'+photo.time+'</h2><p></p></article></div></div>');
+		    var this_image = $('<div id="photo-'+photo.phid+'" class="bucket-item"><div class="image"><a href="photo?phid='+photo.phid+'"><img src="'+photo.image+'"></a></div><div class="info"><article><h2>'+photo.time+'</h2><p></p></article></div></div>');
 		    this_image.find("article p").text(photo.caption);
 
 		    if (index > 0) {
 			this_image.css("display", "none");
 		    }
+
+		    if (bucket.photos.length > 1) {
+			var pagination = $('<div class="pagination"><a href="#" class="next">next</a> <a href="#" class="prev">previous</a><p>'+(index+1)+' of '+bucket.photos.length+'</p></div>');
+			pagination.find("a").click(bucket_switch);
+			if (index == 0) {
+			    pagination.find(".prev").addClass("inactive");
+			}
+			if (index == bucket.photos.length-1) {
+			    pagination.find(".next").addClass("inactive");
+			}
+			this_image.find(".info").prepend(pagination);
+		    }
+
 		    scrollview_item.append(this_image);
 		});
 
@@ -71,4 +100,12 @@ $(function() {
     $(".pagination-arrow.prev").click(function (e) {
 	container.scrollTo({x:container.getX()+container_width, y:0});
     });
+    /*
+    if (timeline_images.length) {
+	$(window).load(function() {
+	    setTimeout(function() {
+		container.scrollTo({x:-timeline_images[0].xoff, y:0});
+	    },1000);
+	});
+    }*/
 });
