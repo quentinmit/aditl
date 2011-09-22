@@ -369,6 +369,7 @@ var scrollview={
 		if (s.WebkitTransform !== undefined) scrollview._hardware.transform={js:"WebkitTransform",style:"-webkit-transform"}; else
 		if (s.MozTransform !== undefined) scrollview._hardware.transform={js:"MozTransform",style:"-moz-transform"};
 		if (s.OTransform !== undefined) scrollview._hardware.transform={js:"OTransform",style:"-o-transform"}; // Opera translations are slower than moving?
+	        if (s.msTransform !== undefined) scrollview._hardware.transform={js:"msTransform",style:"-ms-transform"};
 		
 		// Detect CSS BorderRadius	
 		if (s.borderRadius !== undefined) scrollview._hardware.borderradius={js:"borderRadius",style:"border-radius"}; else
