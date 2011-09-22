@@ -36,13 +36,22 @@ if(defined($start)) {
     $start = 720;
 }
 
-my @photographer = $db->getinfo($uids[0]);
-my $fn = $photographer[0];
-my $ln = $photographer[1];
+my $photogName;
 
-my $photogName = "$fn $ln";
+my @allimages;
 
-my @allimages = getPhotos(\@uids);
+if ($cgi->param("everyone")) {
+  @allimages = $db->getAllPhotoInfoBetween(toSqlTime(0), toSqlTime(1439));
+  $photogName = "Everyone";
+} else {
+  my @photographer = $db->getinfo($uids[0]);
+  my $fn = $photographer[0];
+  my $ln = $photographer[1];
+
+  $photogName = "$fn $ln";
+
+  @allimages = getPhotos(\@uids);
+}
 
 my @navline = getNavlineContent(@allimages);
 
