@@ -19,14 +19,13 @@ $cgi = new CGI;
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
-
-$redirect = "";
+$redirect = Settings::settings("uploadURL");
 
 my $email = "";
 my $password = "";
-#if(defined($cgi->param("redirect"))) {
-#    $redirect = $cgi->param("redirect");
-#}
+if(defined($cgi->param("redirect"))) {
+    $redirect = $cgi->param("redirect");
+}
 
 my $uid = Cookie::isUserLoggedIn($cgi, $db);
 if($uid) {
