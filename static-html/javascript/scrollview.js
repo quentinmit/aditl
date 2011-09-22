@@ -21,7 +21,12 @@ var scrollview={
 	// Utils
 	_mth:function(w,z) { return (w/2)-(w*z/2)},
 	displaceobj:function(obj,x,y,zoom) {
+	    if (this._hardware.transform) {
 		obj.style[this._hardware.transform.js]="translate("+(x-this._mth(obj.offsetWidth,zoom))+"px,"+(y-this._mth(obj.offsetHeight,zoom))+"px) scale("+zoom+")";
+	    } else {
+		//obj.style.left = ""+(x-this._mth(obj.offsetWidth,zoom))+"px";
+		//obj.style.top = ""+(y-this._mth(obj.offsetHeight,zoom))+"px";
+	    }
 	},
 
 	applyTouchEvents:function(dest,touchstart,touchmove,touchend,idlecheck,applyto) {
@@ -370,6 +375,11 @@ var scrollview={
 		if (s.MozTransform !== undefined) scrollview._hardware.transform={js:"MozTransform",style:"-moz-transform"};
 		if (s.OTransform !== undefined) scrollview._hardware.transform={js:"OTransform",style:"-o-transform"}; // Opera translations are slower than moving?
 	        if (s.msTransform !== undefined) scrollview._hardware.transform={js:"msTransform",style:"-ms-transform"};
+
+	    // IE8 hacks
+	    if (Event.prototype.stopPropagation === undefined) {
+		Event.prototype.stopPropagation = function() {};
+	    }
 		
 		// Detect CSS BorderRadius	
 		if (s.borderRadius !== undefined) scrollview._hardware.borderradius={js:"borderRadius",style:"border-radius"}; else
