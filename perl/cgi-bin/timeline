@@ -20,15 +20,9 @@ $cgi = new CGI;
 $db = Database->new();
 $db->connect(Settings::settings("dbName"));
 
-my @uids;
-for(my $i = 0; $i < 4; $i++) {
-    my $j = $i+1;
-    $uids[$i] = $cgi->param("uid$j");
-    unless($uids[$i]) {
-	$uids[$i] = -1;
-    }
-    $uids[$i] = int($uids[$i]);
-}
+my $visitoruid = Cookie::isUserLoggedIn($cgi, $db);
+
+my @uids = map { int($_) } split(",", $cgi->param("uid"));
 
 my $start = $cgi->param("start");
 if(defined($start)) {
@@ -39,111 +33,91 @@ if(defined($start)) {
 } else {
     $start = 720;
 }
-    
 
+my @photographer = $db->getinfo($uids[0]);
+my $fn = $photographer[0];
+my $ln = $photographer[1];
 
+my $photogName = "$fn $ln";
 
-#720
-my $uidstring = "uid1=$uids[0]\&uid2=$uids[1]\&uid3=$uids[2]\&uid4=$uids[3]";
+my @allimages = getPhotos(\@uids);
 
-my @initFrags;
+my @navline = getNavlineContent(\@uids, @allimages);
 
-push(@initFrags, $start);
-push(@initFrags, Settings::settings("htmlFragmentURL") . "?" . $uidstring);
-push(@initFrags, Settings::settings("jsFragmentURL") . "?" . $uidstring);
+#push(@initFrags, navlineClickable());
+#push(@initFrags, lc($mainPhotogInfo[0]));
 
-my $index = 1;
-my @photognames;
+my $html = Template::fillTemplateNew
+  (
+   Settings::settings("templateLib") . "/timeline.tmpl",
+  {
+   navline => \@navline,
 
+   Photog => $photogName,
 
-
-foreach(@uids) {
-    my $selectURL = Settings::settings("selectUserURL");
-    my @photographer = $db->getinfo($_);
-
-    my $uidvalue;
-    my $name;
-    if(@photographer) {
-	$name = $photographer[0] . " " . $photographer[1];
-	$name = lc($name);
-    } else {
-	$name = "nobody";
-    }
-
-    $selectURL .= "?uid1=" . $uids[0] . "&uid2=" . $uids[1] . "&uid3=" . $uids[2] . "&uid4=" . $uids[3] .
-	"&position=" . $index;
-
-    my $html = "<span style=\"font-size:15px; color:#646b76;\">[$index] $name</span>
-<a style=\"text-decoration:none; color:#646b76; font-size:15px;\" href=\"$selectURL\">[change]</a>";
-
-    push(@photognames, $html);
-    $index++;
-}
-
-push(@initFrags, join("&nbsp; &nbsp; &nbsp;", @photognames));
-
-
-my @mainPhotogInfo = $db->getinfo($uids[0]);
-
-
-my @navlineUIDs = @uids;#($uids[0]);
-push(@initFrags, getNavlineContent(\@navlineUIDs));
-push(@initFrags, navlineClickable());
-push(@initFrags, lc($mainPhotogInfo[0]));
-
-
-
-my $html = Template::fillTemplate(Settings::settings("templateLib") . "/timeline.html", \@initFrags);
+   uid => $visitoruid,
+  }
+  );
 
 print $cgi->header();
 print $html;
 exit;
 
+sub getPhotos {
+  my $uidref = shift;
+
+  my ($start, $end) = (toSqlTime(0), toSqlTime(1439));
+
+  my @allimages;
+  foreach (@$uidref) {
+    #comes back sorted.
+    my @p = $db->getPhotosBetween($_, $start, $end);
+    foreach(@p) {
+      my %photo;
+      $db->photoInfo($_, \%photo);
+      push(@allimages, \%photo);
+    }
+  }
+  return @allimages;
+}
+
 sub getNavlineContent {
-    my $uidref = shift;
+    my ($uidref, @allimages) = @_;
 
-    my @allimages;
-    foreach(@$uidref) {
-	#comes back sorted.
-	my @p = $db->getPhotosBetween($_, toSqlTime(0), toSqlTime(1439));
-	foreach(@p) {
-	    my %photo;
-	    $db->photoInfo($_, \%photo);
-	    push(@allimages, \%photo);
-	}
-    }
-
-    my @bucketized;
+    my %bucketized;
     #takes only first image per bucket
-    bucketize(\@allimages, \@bucketized);
+    bucketize(\@allimages, \%bucketized, 2);
 
-    my $html = "";
+    my @navline;
 
-    foreach(@bucketized) {
-	my $xoff = getPixelOffset(0, $_->{time});
-	$html .= "<img alt=\"\" style=\"position:absolute; top:0px; left:" . $xoff . "px;\" src=\"" .
-	    Utils::imageURL($_, "small") . "\" width=\"3\" height=\"10\"></img>\n";
+    foreach (sort keys %bucketized) {
+      $_ = $bucketized{$_}[0];
+      my $xoff = getPixelOffset(0, $_->{time});
+      my @time = Utils::sqlTime($_->{time});
+      my $tstring = "$time[0]:$time[1]:$time[2]";
 
+      push @navline,
+	{
+	 xoff => $xoff,
+	 Image => Utils::imageURL($_, "small"),
+	 Time => $tstring,
+	};
     }
 
-    return $html;
+    return @navline;
 }
 
 sub bucketize {
     my $listref = shift;
     my $outref = shift;
-
-    my %buckets;
+    my $minsperbucket = shift;
 
     foreach(@$listref) {
 	my @time = Utils::sqlTime($_->{time});
 	my $mins = $time[0]*60 + $time[1];
-	my $bucket = int($mins / 2);
+	my $bucket = int($mins / $minsperbucket);
 
-	unless(exists($buckets{$bucket})) {
-	    $buckets{$bucket} = 1;
-	    push(@$outref, $_);
-	}
+	push @{$outref->{$bucket}}, $_;
     }
 }
 
@@ -172,16 +146,4 @@ sub toSqlTime {
     my $minute = $dayminute % 60;
     
     return "$day $hour:$minute:00";
-}
-
-sub navlineClickable {
-
-    my $html = "";
-    for(my $i = 0; $i < 24; $i++) {
-	my $min = $i * 60;
-	my $off = 33 * $i;
-	$html .= "<div style=\"z-index:3; position:absolute; top:-40px; left:" . $off . "px;\">";
-	$html .= "<a class=\"navclick\" href=\"#\" onclick=\"gotoTime($min)\"></a></div>\n";
-    }
-    return $html;
 }

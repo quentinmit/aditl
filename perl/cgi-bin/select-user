@@ -81,17 +81,7 @@ for(my $i = 0; $i < $max; $i++) {
     my $uid = $spliced[$i]->{uid};
     my $name = $spliced[$i]->{fn} . " " . $spliced[$i]->{ln};
 
-    
-    my $uid1;
-    my $uid2;
-    my $uid3;
-    my $uid4;
-
-    ($uid1, $uid2, $uid3, $uid4) = getUids([$uid], $cgi);
-
-    my $url = Settings::settings("timelineURL") . "?uid1=" . $uid1 . "&uid2=" . $uid2 .
-	"&uid3=" . $uid3 . "&uid4=" . $uid4;
-    
+    my $url = Settings::settings("timelineURL") . "?uid=" . $uid;
 
     my @num = $db->getinfo2($uid);
 

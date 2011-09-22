@@ -15,7 +15,7 @@ use Digest::MD5;
 
 our %SIZES = (
 	      small => "50x50",
-	      medium => "x225",
+	      medium => "380x266",
 	      large => "900x500",
 	     );
 
