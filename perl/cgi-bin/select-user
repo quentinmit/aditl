@@ -76,6 +76,8 @@ my $html = Template::fillTemplateNew
   (
    Settings::settings("templateLib") . "/select-user.tmpl",
    {
+    page_select_user => 1,
+
     users => \@users,
     uid => $visitoruid,
    }

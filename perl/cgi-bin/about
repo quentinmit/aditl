@@ -26,6 +26,7 @@ my $html = Template::fillTemplateNew
    {
     bgColor => $bgcolor,
     Color => $fgcolor,
+    page_about => 1
    }
   );
 

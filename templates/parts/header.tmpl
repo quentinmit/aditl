@@ -7,8 +7,8 @@
             </header>
             <nav id="primary-navigation" role="primary-navigation">
                 <ul>
-                    <li><a href="<TMPL_VAR EXPR="settings('selectUserURL')">">Follow Someone</a></li>
-                    <li><a href="<TMPL_VAR EXPR="settings('aboutURL')">">About ADITL</a></li>
+                    <li><a href="<TMPL_VAR EXPR="settings('selectUserURL')">"<TMPL_IF NAME="page_select_user"> class="selected"</TMPL_IF>>Follow Someone</a></li>
+                    <li><a href="<TMPL_VAR EXPR="settings('aboutURL')">"<TMPL_IF NAME="page_about"> class="selected"</TMPL_IF>>About ADITL</a></li>
                     <li>
 		      <TMPL_IF NAME="uid">
 			<a href="<TMPL_VAR EXPR="settings('uploadURL')">">Upload</a>
